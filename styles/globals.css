@@ -1,0 +1,217 @@
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/Rubik-Light.ttf");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/Rubik-Medium.ttf");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/Rubik-Bold.ttf");
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
+
+html {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  flex-grow: 1;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  /* min-height: 100vh; */
+  font-family: "Rubik", sans-serif;
+  font-weight: 300;
+  font-size: 0.6rem;
+  background: var(--background-color);
+
+  --accent-color: #0ca896;
+  --background-color: #222222;
+  --button-background: #484848;
+  --font-color: #f5f5f5;
+  --button-color: #f5f5f5;
+  --button-border-color: #646464;
+  --button-background: #484848;
+  --lock-icon-base: #a9f3ea;
+  --lock-icon-lock: #0ca896;
+  --submit-button-color: #646464;
+  --submit-button-background: #2e2e2e;
+  --input-border-color: #484848;
+  --input-placeholder-color: #646464;
+  --score-background: #3c3c3c;
+  --score-border: #646464;
+  --score-trail-color: #484848;
+}
+
+a {
+  color: var(--accent-color);
+  font-size: 1.6rem;
+  font-weight: 300;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2.6rem;
+  /* font-family: "Rubik", sans-serif; */
+  font-weight: 800;
+  color: var(--font-color);
+  margin-top: 15px;
+  /* line-height: 36px; */
+}
+
+h4 {
+  font-size: 1.6rem;
+  color: var(--font-color);
+  font-weight: 300;
+  margin-bottom: 10px;
+  /* line-height: 19px; */
+}
+
+span,
+label {
+  font-size: 1.6rem;
+}
+
+.score-bar-text {
+  color: var(--font-color) !important;
+  font-weight: 600;
+}
+
+#score-bar > svg > path:first-child {
+  stroke: var(--score-trail-color);
+}
+
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div {
+  height: 100%;
+}
+
+div#__next > div {
+  overflow: auto;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    --accent-color: #18d0ba;
+    --background-color: #ffffff;
+    --font-color: #000000;
+    --button-color: #646464;
+    --button-border-color: #ebebeb;
+    --button-background: #f5f5f5;
+    --lock-icon-base: #18d0ba;
+    --lock-icon-lock: #455a64;
+    --submit-button-color: #ebebeb;
+    --submit-button-background: #d5d5d5;
+    --input-border-color: #b2b2b2;
+    --input-placeholder-color: #b2b2b2;
+    --score-background: #f9f9f9;
+    --score-border: #ebebeb;
+    --score-trail-color: #f5f5f5;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    --accent-color: #0ca896;
+    --background-color: #222222;
+    --button-background: #484848;
+    --font-color: #f5f5f5;
+    --button-color: #f5f5f5;
+    --button-border-color: #646464;
+    --button-background: #484848;
+    --lock-icon-base: #a9f3ea;
+    --lock-icon-lock: #0ca896;
+    --submit-button-color: #646464;
+    --submit-button-background: #2e2e2e;
+    --input-border-color: #484848;
+    --input-placeholder-color: #646464;
+    --score-background: #3c3c3c;
+    --score-border: #646464;
+    --score-trail-color: #484848;
+  }
+}
+
+input {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 1.6rem;
+  font-family: "Rubik", sans-serif;
+}
+
+input,
+input:hover,
+input:active {
+  border: 1px solid var(--input-border-color);
+  color: var(--font-color);
+  background: none;
+  box-shadow: none;
+  outline: none;
+}
+input::placeholder {
+  color: var(--input-placeholder-color);
+}
+
+input.invalid {
+  color: #000000;
+  background-color: #f8e9ee;
+  border: 1px solid #eaaec1;
+}
+
+@media (max-width: 320px) {
+  html {
+    font-size: 8px;
+  }
+}
+
+@media (min-width: 1080px) {
+  h1 {
+    font-size: 3.2rem;
+  }
+  h4,
+  a,
+  span,
+  label {
+    font-size: 2.2rem;
+    line-height: 30px;
+    margin-bottom: 40px;
+  }
+}
+
+@media (min-width: 1920px) {
+  h1 {
+    font-size: 3.6rem;
+    margin-bottom: 40px;
+  }
+  h4,
+  a,
+  span,
+  label {
+    font-size: 2.6rem;
+    margin-bottom: 80px;
+  }
+}
