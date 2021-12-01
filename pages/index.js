@@ -4,11 +4,13 @@ import { incrementCount, decrementCount } from '../redux/counter'
 import Page from '../components/Page/Page'
 import BaseContentLayout from '../components/BaseContentLayout/BaseContentLayout'
 import OnboardingStep from '../components/Onboarding/Step1/OnboardingStep'
+import WalletConnector from "../components/WalletConnector/WalletConnector"
 
 export default function Home() {
   const t = useTranslations("onboarding");
   const dispatch = useDispatch()
   const activeStep = useSelector(state => state.counter)
+  const walletConnected = useSelector(state => state.wallet)
   const totalSteps = 5;
 
   const onNextPress = () => {
@@ -23,17 +25,18 @@ export default function Home() {
     <Page >
       <BaseContentLayout  {...{
         submitButtonProps: {
-          onClick: onNextPress
+          onClick: onNextPress,
+          disabled: !walletConnected
         },
         activeStep,
         totalSteps,
         onBackPress
       }} >
-        {activeStep === 1 && <OnboardingStep {...{label: t("page1.title")}} />}
-        {activeStep === 2 && <h1>{t("page2.title")}</h1>}
-        {activeStep === 3 && <h1>{t("page3.title")}</h1>}
-        {activeStep === 4 && <h1>{t("page4.title")}</h1>}
-        {activeStep === 5 && <h1>{t("page5.title")}</h1>}
+        {activeStep === 1 && <WalletConnector {...{label: t("page1.title")}} />}
+        {activeStep === 2 && <OnboardingStep {...{label: t("page2.title")}} />}
+        {activeStep === 3 && <OnboardingStep {...{label: t("page3.title")}} />}
+        {activeStep === 4 && <OnboardingStep {...{label: t("page4.title")}} />}
+        {activeStep === 5 && <OnboardingStep {...{label: t("page5.title")}} />}
       </BaseContentLayout>
     </ Page>
   )
