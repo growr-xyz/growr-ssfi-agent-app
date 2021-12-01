@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "next": "12.0.4",
+    "next-intl": "^2.3.0",
     "progressbar.js": "^1.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
