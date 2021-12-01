@@ -8,7 +8,7 @@ const BaseContent = ({
   children,
   submitButtonProps,
   renderCustomButton,
-  currStep,
+  activeStep,
   totalSteps,
   onBackPress
 }) => {
@@ -16,7 +16,7 @@ const BaseContent = ({
     <div className={styles.container}>
       <ProgressHeader {...{
         progress : {
-          step: currStep,
+          step: activeStep,
           total: totalSteps
         },
         onBackPress
