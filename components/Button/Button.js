@@ -1,13 +1,12 @@
 import styles from "./Button.module.css";
-// import { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 const Button = ({ label, onClick, disabled = false, loading }) => {
-  // const commonT = useTranslations("common");
+  const t = useTranslations("onboarding");
 
-  // let activeLabel = !label ? commonT("continue") : label;
-  let activeLabel = "Label";
+  let activeLabel = !label ? t("submitBtn") : label;
 
-  if (loading) {
+  if (loading) {npm 
     return (
       <button className={`${styles.button} ${styles.loading}`}>
         <div className={styles.loader}></div>

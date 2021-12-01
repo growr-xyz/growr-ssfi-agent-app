@@ -1,10 +1,13 @@
 import '../styles/globals.css'
 import CustomHead from '../components/CustomHead/CustomHead'
+import { NextIntlProvider } from "next-intl";
 
 function MyApp({ Component, pageProps }) {
   return  <>
-    <CustomHead />
-    <Component {...pageProps} />
+    <NextIntlProvider messages={pageProps.messages}>
+      <CustomHead />
+      <Component {...pageProps} />
+    </NextIntlProvider>
   </>
 }
 

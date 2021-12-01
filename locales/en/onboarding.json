@@ -1,0 +1,23 @@
+{
+    "submitBtn": "Continue",
+    "page1": {
+        "title":"Hi! 👋 Let’s start by connecting your wallet."
+    },
+    "page2": {
+        "title":"Now, some personal details.",
+        "full_name":"Full name",
+        "birth_date":"Date of birth",
+        "education":"Education",
+        "family_status":"Family status",
+        "location":"Location",
+        "confirmCheck":"I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy"
+    },
+    "page3": {
+        "title":"Then, some financial details.",
+        "official_income":"Your official income (USD)",
+        "other_income":"Other official household income (USD)",
+        "unofficial_income":"Household unofficial income (USD)",
+        "expenses":"Household expenses (USD)",
+        "dependants":"Dependants"
+    }
+}
