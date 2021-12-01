@@ -5,7 +5,7 @@ const CustomHead = () => {
     <Head>
       <title>Growr Onchain App</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      <link
+      {/* <link
         rel="preload"
         href="/fonts/Rubic-Light.ttf"
         as="font"
@@ -22,7 +22,7 @@ const CustomHead = () => {
         href="/fonts/Rubic-Bold.ttf"
         as="font"
         crossOrigin=""
-      />
+      /> */}
     </Head>
   );
 };
