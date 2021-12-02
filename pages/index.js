@@ -4,6 +4,8 @@ import { incrementCount, decrementCount } from '../redux/counter'
 import Page from '../components/Page/Page'
 import BaseContentLayout from '../components/BaseContentLayout/BaseContentLayout'
 import OnboardingStep from '../components/Onboarding/Step1/OnboardingStep'
+import OnboardingStepTwo from '../components/Onboarding/Step2/OnboardingStepTwo'
+import OnboardingStepThree from "../components/Onboarding/Step3/OnboardingStepThree";
 import WalletConnector from "../components/WalletConnector/WalletConnector"
 
 export default function Home() {
@@ -33,8 +35,8 @@ export default function Home() {
         onBackPress
       }} >
         {activeStep === 1 && <WalletConnector {...{label: t("page1.title")}} />}
-        {activeStep === 2 && <OnboardingStep {...{label: t("page2.title")}} />}
-        {activeStep === 3 && <OnboardingStep {...{label: t("page3.title")}} />}
+        {activeStep === 2 && <OnboardingStepTwo {...{label: t("page2.title")}} />}
+        {activeStep === 3 && <OnboardingStepThree {...{label: t("page3.title")}} />}
         {activeStep === 4 && <OnboardingStep {...{label: t("page4.title")}} />}
         {activeStep === 5 && <OnboardingStep {...{label: t("page5.title")}} />}
       </BaseContentLayout>
