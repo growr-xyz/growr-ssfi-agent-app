@@ -4,12 +4,12 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import LeftArrow from "../Icons/LeftArrow";
 import styles from "./ProgressHeader.module.css";
 
-const Header = ({ progress }) => {
+const Header = ({ progress, hidden }) => {
   const dispatch = useDispatch()
   const onBackPress = () => dispatch(decrementStep())
 
   return (
-    <div className={styles.container}>
+    <div className={hidden ? styles.hidden : styles.container}>
       <div onClick={onBackPress} className={styles.backButton}>
         <LeftArrow />
       </div>

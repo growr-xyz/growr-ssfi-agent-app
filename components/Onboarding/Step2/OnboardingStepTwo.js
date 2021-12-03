@@ -33,11 +33,11 @@ class OnboardingStepTwo extends React.Component {
         const { name, birthDate, education, status, location, terms } = this.state
 
         const isValid = terms
-        && name !== '' 
-        && birthDate !== ''
-        && education !== ''
-        && status !== ''
-        && location !== ''
+          && name !== '' 
+          && birthDate !== ''
+          && education !== ''
+          && status !== ''
+          && location !== ''
 
         this.setState({formErrors: !isValid})
     }

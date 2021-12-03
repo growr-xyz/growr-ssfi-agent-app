@@ -15,6 +15,7 @@ export default function Home() {
   const nextStep = () => dispatch(incrementStep())
   const step = useSelector(state => state.steps.step)
   const total = useSelector(state => state.steps.total)
+  const hidden = step === 0
   const progress = {
     step,
     total
@@ -22,12 +23,12 @@ export default function Home() {
 
   return (
     <Page >
-      <ProgressHeader {...{ progress }}/>
-        {step === 1 && <WalletConnector {...{label: t("page1.title"), onNext: nextStep}} />}
-        {step === 2 && <OnboardingStepTwo {...{label: t("page2.title"), onNext: nextStep}} />}
-        {step === 3 && <OnboardingStepThree {...{label: t("page3.title"), onNext: nextStep}} />}
-        {step === 4 && <OnboardingStep {...{label: t("page4.title"), onNext: nextStep}} />}
-        {step === 5 && <OnboardingStep {...{label: t("page5.title"), onNext: nextStep}} />}
+      <ProgressHeader {...{ progress, hidden }}/>
+        {step === 0 && <WalletConnector {...{label: t("page1.title"), onNext: nextStep}} />}
+        {step === 1 && <OnboardingStepTwo {...{label: t("page2.title"), onNext: nextStep}} />}
+        {step === 2 && <OnboardingStepThree {...{label: t("page3.title"), onNext: nextStep}} />}
+        {step === 3 && <OnboardingStep {...{label: t("page4.title"), onNext: nextStep}} />}
+        {step === 4 && <OnboardingStep {...{label: t("page5.title"), onNext: nextStep}} />}
     </ Page>
   )
 }

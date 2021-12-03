@@ -8,7 +8,7 @@ export const decrementStep = () => ({ type: DECREMENT_STEP })
 
 // Reducer
 export const initialState = {
-  step: 1,
+  step: 0,
   total: 5
 }
 
@@ -26,7 +26,7 @@ const stepsReducer = (state = initialState, {type}) => {
       }
 
     case DECREMENT_STEP:
-      if (step < 2) {
+      if (step < 1) {
         return state
       }
       return {
