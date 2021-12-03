@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
-import counter from './counter'
+import steps from './steps'
 import wallet from './wallet'
 
 const reducers = combineReducers({
-  counter,
+  steps,
   wallet
 })
 

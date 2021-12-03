@@ -1,9 +1,12 @@
 import { useEffect } from "react";
+import { useSelector } from 'react-redux'
 import useProgressBar from "./useProgressBar";
 import styles from "./ProgressBar.module.css";
 
-const ProgressBar = ({ step, total }) => {
+const ProgressBar = () => {
   let { barContainerRef, progressBar } = useProgressBar();
+  const step = useSelector(state => state.steps.step)
+  const total = useSelector(state => state.steps.total)
 
   useEffect(() => {
     if (progressBar) {

@@ -1,26 +1,16 @@
 import styles from "./BaseContentLayout.module.css";
 import Button from "../Button/Button";
 import ProgressHeader from "../ProgressHeader/ProgressHeader";
-// import ProgressBar from "@/components/ProgressBar";
-// import { ReactNode } from "react";
 
 const BaseContent = ({
   children,
   submitButtonProps,
-  renderCustomButton,
-  activeStep,
-  totalSteps,
-  onBackPress
+  renderCustomButton
 }) => {
+
   return (
     <div className={styles.container}>
-      <ProgressHeader {...{
-        progress : {
-          step: activeStep,
-          total: totalSteps
-        },
-        onBackPress
-      }}  />
+      <ProgressHeader />
       <div className={styles.content}>{children}</div>
       <div>
         {submitButtonProps && (
