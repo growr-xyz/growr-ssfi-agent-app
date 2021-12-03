@@ -24,14 +24,13 @@ class OnboardingStepTwo extends React.Component {
     }
 
     handleInputChange(event) {
-        const {name, value, type, checked} = event.target
+        const { name, value, type, checked } = event.target
         const newValue = type !== "checkbox" ? value : checked
-
         this.setState({[name]: newValue}, this.validateForm)
     }
 
     validateForm() {
-        const {name, birthDate, education, status, location, terms, formErrors} = this.state
+        const { name, birthDate, education, status, location, terms } = this.state
 
         const isValid = terms
         && name !== '' 
@@ -65,8 +64,7 @@ class OnboardingStepTwo extends React.Component {
                             // placeholder: t("page2.full_name"),
                             name: 'name',
                             placeholder: 'Name',
-                            onChange: this.handleInputChange,
-                            onBlur: this.formCheck
+                            onChange: this.handleInputChange
                         }} />
                         <Input {...{
                             // placeholder: t("page2.birth_date"),

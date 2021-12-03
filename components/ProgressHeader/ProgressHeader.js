@@ -4,7 +4,7 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import LeftArrow from "../Icons/LeftArrow";
 import styles from "./ProgressHeader.module.css";
 
-const Header = () => {
+const Header = ({ progress }) => {
   const dispatch = useDispatch()
   const onBackPress = () => dispatch(decrementStep())
 
@@ -13,7 +13,7 @@ const Header = () => {
       <div onClick={onBackPress} className={styles.backButton}>
         <LeftArrow />
       </div>
-      <ProgressBar />
+      <ProgressBar {...progress} />
     </div>
   );
 };

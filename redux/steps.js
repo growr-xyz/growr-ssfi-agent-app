@@ -1,10 +1,10 @@
 // Actions
-export const INCREMENT = 'INCREMENT'
-export const DECREMENT = 'DECREMENT'
+export const INCREMENT_STEP = 'INCREMENT_STEP'
+export const DECREMENT_STEP = 'DECREMENT_STEP'
 
 // Action Creators
-export const incrementStep = () => ({ type: INCREMENT })
-export const decrementStep = () => ({ type: DECREMENT })
+export const incrementStep = () => ({ type: INCREMENT_STEP })
+export const decrementStep = () => ({ type: DECREMENT_STEP })
 
 // Reducer
 export const initialState = {
@@ -12,11 +12,11 @@ export const initialState = {
   total: 5
 }
 
-const stepsReducer = (state = initialState, action) => {
+const stepsReducer = (state = initialState, {type}) => {
   const { step, total } = state
 
-  switch (action.type) {
-    case INCREMENT:
+  switch (type) {
+    case INCREMENT_STEP:
       if (step >= total) {
         return state
       }
@@ -25,7 +25,7 @@ const stepsReducer = (state = initialState, action) => {
         step: step + 1
       }
 
-    case DECREMENT:
+    case DECREMENT_STEP:
       if (step < 2) {
         return state
       }

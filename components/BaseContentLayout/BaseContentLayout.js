@@ -1,6 +1,6 @@
 import styles from "./BaseContentLayout.module.css";
 import Button from "../Button/Button";
-import ProgressHeader from "../ProgressHeader/ProgressHeader";
+// import ProgressHeader from "../ProgressHeader/ProgressHeader";
 
 const BaseContent = ({
   children,
@@ -10,7 +10,13 @@ const BaseContent = ({
 
   return (
     <div className={styles.container}>
-      <ProgressHeader />
+      {/* <ProgressHeader {...{
+        progress: {
+          step: progress.step,
+          total: progress.total
+        }
+      }}
+      /> */}
       <div className={styles.content}>{children}</div>
       <div>
         {submitButtonProps && (

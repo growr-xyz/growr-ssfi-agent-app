@@ -2,25 +2,32 @@ import { useTranslations } from "next-intl";
 import { useSelector, useDispatch } from 'react-redux'
 import { incrementStep } from '../redux/steps'
 import Page from '../components/Page/Page'
-import BaseContentLayout from '../components/BaseContentLayout/BaseContentLayout'
 import WalletConnector from "../components/WalletConnector/WalletConnector"
 import OnboardingStep from '../components/Onboarding/Step1/OnboardingStep'
 import OnboardingStepTwo from '../components/Onboarding/Step2/OnboardingStepTwo'
 import OnboardingStepThree from "../components/Onboarding/Step3/OnboardingStepThree";
+
+import ProgressHeader from "../components/ProgressHeader/ProgressHeader";
 
 export default function Home() {
   const t = useTranslations("onboarding");
   const dispatch = useDispatch()
   const nextStep = () => dispatch(incrementStep())
   const step = useSelector(state => state.steps.step)
+  const total = useSelector(state => state.steps.total)
+  const progress = {
+    step,
+    total
+  }
 
   return (
     <Page >
-        {step === 1 && <WalletConnector {...{label: t("page1.title")}} onNext={nextStep} />}
-        {step === 2 && <OnboardingStepTwo label={t("page2.title")} onNext={nextStep} />}
-        {step === 3 && <OnboardingStepThree {...{label: t("page3.title")}} />}
-        {step === 4 && <OnboardingStep {...{label: t("page4.title")}} />}
-        {step === 5 && <OnboardingStep {...{label: t("page5.title")}} />}
+      <ProgressHeader {...{ progress }}/>
+        {step === 1 && <WalletConnector {...{label: t("page1.title"), onNext: nextStep}} />}
+        {step === 2 && <OnboardingStepTwo {...{label: t("page2.title"), onNext: nextStep}} />}
+        {step === 3 && <OnboardingStepThree {...{label: t("page3.title"), onNext: nextStep}} />}
+        {step === 4 && <OnboardingStep {...{label: t("page4.title"), onNext: nextStep}} />}
+        {step === 5 && <OnboardingStep {...{label: t("page5.title"), onNext: nextStep}} />}
     </ Page>
   )
 }
