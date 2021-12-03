@@ -1,40 +1,43 @@
 import React from 'react'
 import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout'
-import StepTwoForm from './StepTwoForm'
+import StepOneForm from './StepOneForm'
 
-class OnboardingStepTwo extends React.Component {
+class OnboardingStepOne extends React.Component {
     constructor(props) {
       super(props);
 
       this.state = {
-        income: '',
-        other: '',
-        unofficial: '',
-        expenses: '',
-        dependants: '',
+        name: '',
+        birthDate: '',
+        education: '',
+        status: '',
+        location: '',
+        terms: false,
         formErrors: true
       }
-
+  
       this.handleInputChange = this.handleInputChange.bind(this)
       this.validateForm = this.validateForm.bind(this)
       this.onSubmit = this.onSubmit.bind(this)
     }
 
     handleInputChange(event) {
-        const { name, value  } = event.target
-        this.setState({ [name]: value }, this.validateForm)
+        const { name, value, type, checked } = event.target
+        const newValue = type !== "checkbox" ? value : checked
+        this.setState({[name]: newValue}, this.validateForm)
     }
 
     validateForm() {
-        const { income, other, unofficial, expenses, dependants } = this.state
+        const { name, birthDate, education, status, location, terms } = this.state
 
-        const isValid = income > 0
-        && other > 0
-        && unofficial > 0
-        && expenses > 0
-        && dependants > 0
+        const isValid = terms
+          && name !== '' 
+          && birthDate !== ''
+          && education !== ''
+          && status !== ''
+          && location !== ''
 
-        this.setState({ formErrors: !isValid })
+        this.setState({formErrors: !isValid})
     }
 
     onSubmit() {
@@ -47,19 +50,19 @@ class OnboardingStepTwo extends React.Component {
                 submitButtonProps: {
                   onClick: this.onSubmit,
                   disabled: this.state.formErrors
-                },
-                progress: this.props.progress
+                }
               }} >
 
                 <div>
                     <h1>{this.props.label}</h1>
 
-                    <StepTwoForm onChange={this.handleInputChange} />
+                    <StepOneForm 
+                        onChange={this.handleInputChange}
+                    />
                 </div> 
-
             </BaseContentLayout>
         )
     }
 }
 
-export default OnboardingStepTwo
+export default OnboardingStepOne

@@ -6,7 +6,7 @@ import { connectWallet, disconnectWallet } from '../../redux/wallet'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
 
-export default function WalletConnector({ label, step, total, onNext }) {
+export default function WalletConnector({ label, onNext }) {
   const { active, account, library, connector, activate, deactivate } = useWeb3React()
   const dispatch = useDispatch()
 
@@ -34,7 +34,7 @@ export default function WalletConnector({ label, step, total, onNext }) {
     const accountString = account.split('')
     const firstPart = accountString.filter((letter, index) => index < 5)
     const lastPart = accountString.filter((letter, index) => index > accountString.length - 3)
-    return [...firstPart, '...', ...lastPart]
+    return [...firstPart, '...', ...lastPart].join('')
   }
 
   return (
@@ -48,8 +48,7 @@ export default function WalletConnector({ label, step, total, onNext }) {
     <div className={styles.container}>
       <h1>{ label }</h1>
 
-      {
-      active ?
+      { active ?
         <div
           className={styles.connected}
           onClick={disconnect}
