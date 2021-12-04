@@ -12,7 +12,7 @@ const OnboardingStep = ({label, config}) => {
     return <div>
         <h1>{label}</h1>
         <Input {...{
-            placeholder: t("page2.full_name"),
+            placeholder: t("page7.full_name"),
 
         }} />
     </div>

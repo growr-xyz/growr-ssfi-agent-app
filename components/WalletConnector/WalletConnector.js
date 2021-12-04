@@ -1,19 +1,22 @@
 import Image from 'next/image'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useTranslations } from "next-intl"
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../wallet/connectors"
-import { connectWallet, disconnectWallet } from '../../redux/wallet'
+import { connectWallet, disconnectWallet, acceptTerms, rejectTerms } from '../../redux/wallet'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
 
 export default function WalletConnector({ label, onNext }) {
   const { active, account, library, connector, activate, deactivate } = useWeb3React()
+  const termsAccepted = useSelector(state => state.wallet.termsAccepted)
+  const t = useTranslations("onboarding")
   const dispatch = useDispatch()
 
   async function connect() {
     try {
       await activate(injected)
-      dispatch(connectWallet())
+      // dispatch(connectWallet())
     } catch (ex) {
       console.log(ex)
     }
@@ -22,13 +25,15 @@ export default function WalletConnector({ label, onNext }) {
   async function disconnect() {
     try {
       deactivate()
-      dispatch(disconnectWallet())
+      // dispatch(disconnectWallet())
     } catch (ex) {
       console.log(ex)
     }
   }
 
   const onSubmit = () => active && account && onNext()
+
+  const onChangeCheckbox = ({ target }) => target.checked ? dispatch(acceptTerms()) : dispatch(rejectTerms())
 
   const truncateAccount = () => {
     const accountString = account.split('')
@@ -41,7 +46,7 @@ export default function WalletConnector({ label, onNext }) {
     <BaseContentLayout  {...{
       submitButtonProps: {
         onClick: onSubmit,
-        disabled: !active || !account
+        disabled: !active || !account || !termsAccepted
       }
     }}>
 
@@ -65,6 +70,17 @@ export default function WalletConnector({ label, onNext }) {
           onClick={connect}
         />
       }
+
+      <div className={styles.terms}>
+        <input
+          className={styles.checkbox}
+            type="checkbox" 
+            id="terms"
+            name="terms"
+            onChange={onChangeCheckbox}
+          />
+        <label htmlFor="terms">{t("page7.confirmCheck")}</label>
+      </div>
     </div>
 
     </BaseContentLayout>

@@ -1,8 +1,8 @@
 import Input from '../../Input/Input'
 import { useTranslations } from "next-intl"
-import styles from "./StepTwoForm.module.css"
+import styles from "./FinancialStepForm.module.css"
 
-const StepTwoForm = ({ onChange }) => {
+const FinancialStepForm = ({ onChange }) => {
   const t = useTranslations("onboarding")
 
   const formInputs = [{
@@ -36,4 +36,4 @@ const StepTwoForm = ({ onChange }) => {
     </div>
 )}
 
-export default StepTwoForm
+export default FinancialStepForm

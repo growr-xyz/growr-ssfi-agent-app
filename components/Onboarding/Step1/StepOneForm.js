@@ -7,19 +7,19 @@ const StepOneForm = ({ onChange }) => {
   
   const formInputs = [{
     name: 'name',
-    placeholder: 'page2.full_name'
+    placeholder: 'page7.full_name'
   }, {
     name: 'birthDate',
-    placeholder: 'page2.birth_date',
+    placeholder: 'page7.birth_date',
   }, {
     name: 'education',
-    placeholder: 'page2.education',
+    placeholder: 'page7.education',
   }, {
     name: 'status',
-    placeholder: 'page2.family_status',
+    placeholder: 'page7.family_status',
   }, {
     name: 'location',
-    placeholder: 'page2.location',
+    placeholder: 'page7.location',
   }]
 
   return (
@@ -41,7 +41,7 @@ const StepOneForm = ({ onChange }) => {
             name="terms"
             onChange={onChange}
           />
-        <label htmlFor="terms">{t("page2.confirmCheck")}</label>
+        <label htmlFor="terms">{t("page7.confirmCheck")}</label>
       </div>
     </div>
   )

@@ -1,23 +1,44 @@
 {
     "submitBtn": "Continuar",
      "page1": {
-         "title": "¡Hola! 👋 Comencemos conectando tu billetera"
-     },
-     "page2": {
-         "title": "Ahora, algunos detalles personales.",
-         "full_name": "Nombre completo",
-         "birth_date": "Fecha de nacimiento",
-         "education":"Educación",
-         "family_status": "Estado familiar",
-         "location": "Ubicación",
+         "title": "¡Hola! 👋 Comencemos conectando tu billetera",
          "confirmCheck": "Acepto que mis datos se procesarán de acuerdo con los Términos de uso y la Política de privacidad de Growr"
-     },
-     "page3": {
+    },
+    "page2": {
+        "title":"Please connect your bank account.",
+        "access_note": "Please enter your access credentials for the Banco Hipotecario e-Banking, in order to connect your bank account to Peseta.",
+        "data_note": "We use your transactional data to perform risk scoring on the fly and we do not store any of this data. So your data remains yours.",
+        "username": "User name",
+        "password": "Password"
+    },
+    "page3": {
          "title": "Luego, algunos detalles financieros.",
          "official_income": "Tus ingresos oficiales (USD)",
          "other_income": "Otros ingresos familiares oficiales (USD)",
          "unofficial_income": "Ingresos no oficiales del hogar (USD)",
          "expenses": "Gastos del hogar (USD)",
          "dependants": "Dependientes"
-     }
+    },
+    "page4": {
+        "title":"What goal would you like to achieve?",
+        "goal_type": "Select a goal type",
+        "amount_saved": "Amount saved (USD)",
+        "amount_needed": "Amount needed to borrow (USD)",
+        "loan_duration": "Loan durartion (months)"
+    },
+    "page5": {
+        "title":"Hurray! You have been approved for $1200. 🎉"
+    },
+    "page6": {
+        "title":"You can receive up to $101.73 back on your loan! 🤑"
+    },
+    "page7": {
+        "title": "Ahora, algunos detalles personales.",
+        "full_name": "Nombre completo",
+        "birth_date": "Fecha de nacimiento",
+        "education":"Educación",
+        "family_status": "Estado familiar",
+        "location": "Ubicación",
+        "confirmCheck": "Acepto que mis datos se procesarán de acuerdo con los Términos de uso y la Política de privacidad de Growr"
+    }
 }

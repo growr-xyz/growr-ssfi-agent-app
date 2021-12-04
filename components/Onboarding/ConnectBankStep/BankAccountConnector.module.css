@@ -1,0 +1,17 @@
+.wrapper {
+  max-width: 420px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.formwrapper {
+  margin: 40px 0;
+}
+
+.skip {
+  padding: 20px;
+  text-align: center;
+  color: #18D0BA;
+  cursor: pointer;
+}
