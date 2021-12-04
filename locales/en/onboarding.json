@@ -28,7 +28,7 @@
         "loan_duration": "Loan durartion (months)"
     },
     "page5": {
-        "title": "Hurray! You have been approved for $",
+        "title": "Hurray! You have been approved for ",
         "congratulations": "Congratulations you have been approved for a loan with the following conditions:",
         "amount": "Amount:",
         "apr": "APR:",

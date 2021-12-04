@@ -27,7 +27,7 @@
         "loan_duration": "Loan durartion (months)"
     },
     "page5": {
-        "title": "Hurray! You have been approved for $1200. 🎉",
+        "title": "Hurray! You have been approved for ",
         "congratulations": "Congratulations you have been approved for a loan with the following conditions:",
         "amount": "Amount:",
         "apr": "APR:",
@@ -40,10 +40,13 @@
         "loan_details": "This loan will disbursed from the Growr protocol Lending Pool after your signature of the transaction. The disbursement and repayment transactions leave a permanent on-chain track record of your credit history that can be publicly verified.",
         "agreement_check": "I agree with the Growr Lending Pool terms and conditions.",
         "skip": "Skip for now",
-        "apply": "Apply"
+        "button_label": "Apply"
     },
     "page6": {
-        "title":"You can receive up to $101.73 back on your loan! 🤑"
+        "title": "You can receive up to $101.73 back on your loan! 🤑",
+        "subtitle": "Get on just 1 learning quest per week throughout the duration of the loan, and you can earn up 50% of the total interest paid.",
+        "start_learning": "Start learning today and earn!",
+        "button_label": "Go to my dashboard"
     },
     "page7": {
         "title": "Ahora, algunos detalles personales.",
