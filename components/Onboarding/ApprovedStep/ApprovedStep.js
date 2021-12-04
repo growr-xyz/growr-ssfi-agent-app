@@ -1,16 +1,15 @@
 import { useTranslations } from "next-intl"
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux';
 import { acceptGrowrTerms, rejectGrowrTerms } from '../../../redux/wallet'
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
 import styles from "./ApprovedStep.module.css"
 
-const ApprovedStep = ({ onNext }) => {
-  const termsAccepted = useSelector(state => state.wallet.GrowrTermsAccepted)
-  const loan = useSelector(state => state.wallet.loan)
+function ApprovedStep (props) {
+  const { termsAccepted, loan, acceptGrowrTerms, rejectGrowrTerms, onNext } = props
+  
   const t = useTranslations("onboarding")
-  const dispatch = useDispatch()
 
-  const onChangeCheckbox = ({ target }) => target.checked ? dispatch(acceptGrowrTerms()) : dispatch(rejectGrowrTerms())
+  const onChangeCheckbox = ({ target }) => target.checked ? acceptGrowrTerms() : rejectGrowrTerms()
 
   const onSubmit = () => {
     console.log('onSubmit')
@@ -62,4 +61,16 @@ const ApprovedStep = ({ onNext }) => {
   </BaseContentLayout>
 )}
 
-export default ApprovedStep
+const mapStateToProps = function(state) {
+  return {
+    termsAccepted: state.wallet.GrowrTermsAccepted,
+    loan: state.wallet.loan
+  }
+}
+
+const mapDispatchToProps = {
+  acceptGrowrTerms,
+  rejectGrowrTerms
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ApprovedStep)

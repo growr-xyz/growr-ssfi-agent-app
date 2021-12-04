@@ -1,17 +1,18 @@
 import Image from 'next/image'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux';
 import { useTranslations } from "next-intl"
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../wallet/connectors"
-import { acceptTerms, rejectTerms } from '../../redux/wallet'
+import { setId, acceptTerms, rejectTerms } from '../../redux/wallet'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
 
-export default function WalletConnector({ label, onNext }) {
+function WalletConnector(props) {
+  const { termsAccepted, label, onNext, setId, acceptTerms, rejectTerms } = props
+
   const { active, account, library, connector, activate, deactivate } = useWeb3React()
-  const termsAccepted = useSelector(state => state.wallet.termsAccepted)
+
   const t = useTranslations("onboarding")
-  const dispatch = useDispatch()
 
   async function connect() {
     try {
@@ -29,9 +30,14 @@ export default function WalletConnector({ label, onNext }) {
     }
   }
 
-  const onSubmit = () => active && account && onNext()
+  const onSubmit = () => {
+    if (active && account) {
+      setId(account)
+      onNext()
+    }
+  }
 
-  const onChangeCheckbox = ({ target }) => target.checked ? dispatch(acceptTerms()) : dispatch(rejectTerms())
+  const onChangeCheckbox = ({ target }) => target.checked ? acceptTerms() : rejectTerms()
 
   const truncateAccount = () => {
     const accountString = account.split('')
@@ -92,3 +98,17 @@ export default function WalletConnector({ label, onNext }) {
     </BaseContentLayout>
   )
 }
+
+const mapStateToProps = function(state) {
+  return {
+    termsAccepted: state.wallet.termsAccepted
+  }
+}
+
+const mapDispatchToProps = {
+  setId,
+  acceptTerms,
+  rejectTerms
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WalletConnector)

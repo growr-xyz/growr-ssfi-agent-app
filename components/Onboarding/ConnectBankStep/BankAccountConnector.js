@@ -1,25 +1,45 @@
 import Image from 'next/image'
+import { connect } from 'react-redux';
+import React, { useState } from 'react';
 import { useTranslations } from "next-intl"
+import { useQuery, useMutation, useSubscription,  gql } from "@apollo/client"
 import Input from '../../Input/Input'
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
 import styles from "./BankAccountConnector.module.css"
 
-const BankAccountConnector = ({ onNext }) => {
+const BankAccountConnector = ({ wallet, onNext }) => {
   const t = useTranslations("onboarding")
 
-  const onInputChange = (e) => {
-      console.log('onChange', e.target.name, e.target.value)
+  const [user, setUser] = useState({
+    username: '',
+    password: ''
+  });
+
+  const updateInput = e => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value
+    })
   }
 
+  const CONNECT_BANK = gql`
+    mutation connectBank {
+      connectBank(, username:"${user.username}", password:"${user.password}", wallet:"${wallet}"){success}
+    }
+  `
+  const [connectBankMutation, { data, loading, error }] = useMutation(CONNECT_BANK) //, {errorPolicy: 'all'})
+
   const onLoginClick = () => {
-    console.log('onLoginClick')
+    connectBankMutation()
+      .then(() => onNext())
+      .catch(err => err)
   }
 
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
         onClick: onLoginClick,
-        disabled: false
+        disabled: !user.username || !user.password || !wallet
       }
     }} >
       <div className={styles.wrapper}>
@@ -47,17 +67,16 @@ const BankAccountConnector = ({ onNext }) => {
 
         <div>
           <Input
-            name='username'
-            type='text'
+            type="text"
+            name="username"
             placeholder={t('page2.username')}
-            onChange={onInputChange}
-          />
+            onChange={updateInput} />
 
           <Input
-            name='password'
             type='password'
+            name='password'
             placeholder={t('page2.password')}
-            onChange={onInputChange}
+            onChange={updateInput}
           />
         </div>
 
@@ -69,6 +88,13 @@ const BankAccountConnector = ({ onNext }) => {
         </div>
     </div> 
   </BaseContentLayout>
-)}
+  )
+}
 
-export default BankAccountConnector
+const mapStateToProps = function(state) {
+  return {
+    wallet: state.wallet.id
+  }
+}
+
+export default connect(mapStateToProps)(BankAccountConnector)

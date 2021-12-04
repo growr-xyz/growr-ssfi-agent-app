@@ -1,10 +1,13 @@
 // Actions
+export const SET_ID = 'SET_ID'
 export const ACCEPT_TERMS = 'ACCEPT_TERMS'
 export const REJECT_TERMS = 'REJECT_TERMS'
 export const ACCEPT_GROWR_TERMS = 'ACCEPT_GROWR_TERMS'
 export const REJECT_GROWR_TERMS = 'REJECT_GROWR_TERMS'
 
 // Action Creators
+export const setId = (query) => ({ type: SET_ID, query})
+
 export const acceptTerms = () => ({ type: ACCEPT_TERMS })
 
 export const rejectTerms = () => ({ type: REJECT_TERMS })
@@ -15,6 +18,7 @@ export const rejectGrowrTerms = () => ({ type: REJECT_GROWR_TERMS })
 
 // Reducer
 export const initialState = {
+  id: '',
   loan: {
     amount: '$1200',
     apr: '29.95%',
@@ -29,8 +33,13 @@ export const initialState = {
   GrowrTermsAccepted: false
 }
 
-const connectWalletReducer = (state = initialState, { type }) => {
+const connectWalletReducer = (state = initialState, { type, query }) => {
   switch (type) {
+    case SET_ID:
+      return {
+        ...state,
+        id: query
+      }
     case ACCEPT_TERMS:
       return {
         ...state,

@@ -8,8 +8,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.5",
+    "@apollo/react-hooks": "^4.0.0",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
+    "graphql": "^16.0.1",
     "next": "12.0.4",
     "next-intl": "^2.3.0",
     "progressbar.js": "^1.1.0",
