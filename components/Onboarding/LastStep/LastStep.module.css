@@ -5,13 +5,7 @@
   font-weight: 400;
 }
 
-.lockparagraph {
-  margin-bottom: 40px;
-  display: flex;
-}
-
-.skip {
+.imagewrapper {
   text-align: center;
-  color: #18D0BA;
-  cursor: pointer;
+  margin: 40px 0 30px 0;
 }

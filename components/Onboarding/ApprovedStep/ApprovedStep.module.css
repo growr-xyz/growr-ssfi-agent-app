@@ -5,9 +5,14 @@
   font-weight: 400;
 }
 
-.lockparagraph {
-  margin-bottom: 40px;
-  display: flex;
+.terms {
+  margin: 20px 0;
+  width: 315px;
+}
+
+.checkbox {
+  width: auto;
+  margin-right: 9px;
 }
 
 .skip {

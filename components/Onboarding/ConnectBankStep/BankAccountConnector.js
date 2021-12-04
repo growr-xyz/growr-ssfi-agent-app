@@ -15,10 +15,6 @@ const BankAccountConnector = ({ onNext }) => {
     console.log('onLoginClick')
   }
 
-  const onNextClick = () => {
-    onNext()
-  }
-
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
@@ -30,7 +26,7 @@ const BankAccountConnector = ({ onNext }) => {
         <h1>{t('page2.title')}</h1>
 
         <Image
-          src="/bank.png"
+          src="/bank.svg"
           height={143}
           width={315}
           alt="Banco Hipotecario"
@@ -38,9 +34,18 @@ const BankAccountConnector = ({ onNext }) => {
 
         <h4>{t('page2.access_note')}</h4>
 
-        <h4>{t('page2.data_note')}</h4>
+        <div className={styles.lockparagraph}>
+          <h4>{t('page2.data_note')}</h4>
+          <Image
+            src="/lock.svg"
+            className={styles.bar}
+            height={160}
+            width={80}
+            alt="Banco Hipotecario"
+          />
+        </div>
 
-        <div className={styles.formwrapper}>
+        <div>
           <Input
             name='username'
             type='text'
@@ -58,9 +63,9 @@ const BankAccountConnector = ({ onNext }) => {
 
         <div
           className={styles.skip}
-          onClick={onNextClick}
+          onClick={() => onNext()}
         >
-          Skip for now
+          {t('page2.skip')}
         </div>
     </div> 
   </BaseContentLayout>

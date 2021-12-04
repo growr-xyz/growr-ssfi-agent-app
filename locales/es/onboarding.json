@@ -27,7 +27,20 @@
         "loan_duration": "Loan durartion (months)"
     },
     "page5": {
-        "title":"Hurray! You have been approved for $1200. 🎉"
+        "title": "Hurray! You have been approved for $1200. 🎉",
+        "congratulations": "Congratulations you have been approved for a loan with the following conditions:",
+        "amount": "Amount:",
+        "apr": "APR:",
+        "duration": "Duration:",
+        "instalment": "Instalment:",
+        "next_instalment": "Next instalment due:",
+        "last_instalment": "Last instalment due:",
+        "total_to_repay": "Total to repay:",
+        "total_interest": "Total interest:",
+        "loan_details": "This loan will disbursed from the Growr protocol Lending Pool after your signature of the transaction. The disbursement and repayment transactions leave a permanent on-chain track record of your credit history that can be publicly verified.",
+        "agreement_check": "I agree with the Growr Lending Pool terms and conditions.",
+        "skip": "Skip for now",
+        "apply": "Apply"
     },
     "page6": {
         "title":"You can receive up to $101.73 back on your loan! 🤑"

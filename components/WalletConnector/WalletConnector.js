@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useTranslations } from "next-intl"
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../wallet/connectors"
-import { connectWallet, disconnectWallet, acceptTerms, rejectTerms } from '../../redux/wallet'
+import { acceptTerms, rejectTerms } from '../../redux/wallet'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
 
@@ -16,7 +16,6 @@ export default function WalletConnector({ label, onNext }) {
   async function connect() {
     try {
       await activate(injected)
-      // dispatch(connectWallet())
     } catch (ex) {
       console.log(ex)
     }
@@ -25,7 +24,6 @@ export default function WalletConnector({ label, onNext }) {
   async function disconnect() {
     try {
       deactivate()
-      // dispatch(disconnectWallet())
     } catch (ex) {
       console.log(ex)
     }
@@ -58,25 +56,33 @@ export default function WalletConnector({ label, onNext }) {
           className={styles.connected}
           onClick={disconnect}
         >
-          {truncateAccount()}
+          <span className={styles.usernumber}>{truncateAccount()}</span>
+          <Image
+            src="/logout.svg"
+            height={32}
+            width={32}
+            alt="Logout"
+          />
         </div>
         :
-        <Image
-          src="/mm.png"
-          className={styles.disconnected}
-          height={143}
-          width={315}
-          alt="MetaMask"
-          onClick={connect}
-        />
+        <div className={styles.disconnected}>
+          <Image
+            src="/metamask.svg"
+            height={95}
+            width={304}
+            alt="MetaMask"
+            onClick={connect}
+          />
+        </div>
       }
 
       <div className={styles.terms}>
         <input
           className={styles.checkbox}
-            type="checkbox" 
             id="terms"
             name="terms"
+            type="checkbox"
+            checked={termsAccepted}
             onChange={onChangeCheckbox}
           />
         <label htmlFor="terms">{t("page7.confirmCheck")}</label>
