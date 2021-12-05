@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useTranslations } from "next-intl"
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../wallet/connectors"
-import { setId, acceptTerms, rejectTerms } from '../../redux/wallet'
+import { setId, acceptTerms, rejectTerms } from '../../redux/user'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
 
@@ -101,7 +101,7 @@ function WalletConnector(props) {
 
 const mapStateToProps = function(state) {
   return {
-    termsAccepted: state.wallet.termsAccepted
+    termsAccepted: state.user.termsAccepted
   }
 }
 

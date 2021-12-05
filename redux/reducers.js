@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import steps from './steps'
-import wallet from './wallet'
+import user from './user'
 
 const reducers = combineReducers({
   steps,
-  wallet
+  user
 })
 
 export default reducers

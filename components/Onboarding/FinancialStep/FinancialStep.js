@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useTranslations } from "next-intl"
 import { useMutation,  gql } from "@apollo/client"
+import { setUserId } from '../../../redux/user'
 import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout'
 import Input from '../../Input/Input'
 import styles from './FinancialStep.module.css'
 
 function FinancialStep (props) {
-  const { wallet, onNext } = props
+  const { wallet, setUserId, onNext } = props
 
   const t = useTranslations("onboarding")
 
@@ -53,6 +54,7 @@ function FinancialStep (props) {
           householdExpenses:"${finances.expenses}",
           dependants:${finances.dependants}
         }, address:"${wallet}"){
+        _id,
         officialPersonalIncome,
         officialHouseholdIncome,
         unofficialHouseholdIncome,
@@ -65,7 +67,10 @@ function FinancialStep (props) {
 
   const onFormSubmit = () => {
     updateUserFinances()
-      .then(() => onNext())
+      .then(res => {
+        res.data.updateUser._id && setUserId(res.data.updateUser._id)
+        onNext()
+      })
       .catch(err => err)
   }
 
@@ -101,8 +106,12 @@ function FinancialStep (props) {
 
 const mapStateToProps = function(state) {
   return {
-    wallet: state.wallet.id
+    wallet: state.user.wallet_id
   }
 }
 
-export default connect(mapStateToProps)(FinancialStep)
+const mapDispatchToProps = {
+  setUserId
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FinancialStep)

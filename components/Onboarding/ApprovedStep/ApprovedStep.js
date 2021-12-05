@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl"
 import { connect } from 'react-redux';
-import { acceptGrowrTerms, rejectGrowrTerms } from '../../../redux/wallet'
+import { acceptGrowrTerms, rejectGrowrTerms } from '../../../redux/user'
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
 import styles from "./ApprovedStep.module.css"
 
@@ -63,8 +63,8 @@ function ApprovedStep (props) {
 
 const mapStateToProps = function(state) {
   return {
-    termsAccepted: state.wallet.GrowrTermsAccepted,
-    loan: state.wallet.loan
+    termsAccepted: state.user.GrowrTermsAccepted,
+    loan: state.user.loan
   }
 }
 

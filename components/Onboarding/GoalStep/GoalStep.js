@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import { useTranslations } from "next-intl"
-import { useMutation,  gql } from "@apollo/client"
+import { useMutation, gql } from "@apollo/client"
 import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout'
 import Input from '../../Input/Input'
 import styles from './GoalStep.module.css'
 
-function GoalStep ({ onNext }) {
+function GoalStep ({ user_id, onNext }) {
   const t = useTranslations("onboarding")
 
   const [goals, setGoals] = useState({
@@ -15,14 +16,7 @@ function GoalStep ({ onNext }) {
     loan_duration: 0
   })
 
-  const updateInput = e => {
-    setGoals({
-      ...goals,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const formInputs = [{
+  const inputFields = [{
     type: 'text',
     name: 'goal_type',
     placeholder: 'page4.goal_type'
@@ -36,8 +30,6 @@ function GoalStep ({ onNext }) {
     name: 'loan_duration',
     placeholder: 'page4.loan_duration',
   }]
-
-  const user_id = '61ab9dbbd52730d9c0c77f63' // replace
 
   const UPDATE_USER_GOAL = gql`
     mutation updateGoal{
@@ -55,7 +47,14 @@ function GoalStep ({ onNext }) {
     }
   `
 
-  const [updateUserGoal, { data, loading, error }] = useMutation(UPDATE_USER_GOAL)
+  const [updateUserGoal] = useMutation(UPDATE_USER_GOAL)
+
+  const updateInput = e => {
+    setGoals({
+      ...goals,
+      [e.target.name]: e.target.value
+    })
+  }
 
   const onFormSubmit = () => {
     updateUserGoal()
@@ -77,7 +76,7 @@ function GoalStep ({ onNext }) {
         <h1>{t('page4.title')}</h1>
 
         <div className={styles.formwrapper}>
-          {formInputs.map((f, i) =>
+          {inputFields.map((f, i) =>
             <Input
               key = {i}
               name = {f.name}
@@ -92,4 +91,10 @@ function GoalStep ({ onNext }) {
   )
 }
 
-export default GoalStep
+const mapStateToProps = function(state) {
+  return {
+    user_id: state.user.user_id
+  }
+}
+
+export default connect(mapStateToProps)(GoalStep)

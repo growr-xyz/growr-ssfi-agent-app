@@ -107,7 +107,7 @@ const BankAccountConnector = ({ wallet, decrementStep, onNext }) => {
 
 const mapStateToProps = function(state) {
   return {
-    wallet: state.wallet.id
+    wallet: state.user.wallet_id
   }
 }
 
