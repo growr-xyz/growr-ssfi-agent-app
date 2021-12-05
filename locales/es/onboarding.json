@@ -9,7 +9,10 @@
         "access_note": "Please enter your access credentials for the Banco Hipotecario e-Banking, in order to connect your bank account to Peseta.",
         "data_note": "We use your transactional data to perform risk scoring on the fly and we do not store any of this data. So your data remains yours.",
         "username": "User name",
-        "password": "Password"
+        "password": "Password",
+        "skip": "Skip for now",
+        "try_again": "Try again",
+        "connection_error": "Error connecting account"
     },
     "page3": {
          "title": "Luego, algunos detalles financieros.",

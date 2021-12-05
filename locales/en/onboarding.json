@@ -10,7 +10,9 @@
         "data_note": "We use your transactional data to perform risk scoring on the fly and we do not store any of this data. So your data remains yours.",
         "username": "User name",
         "password": "Password",
-        "skip": "Skip for now"
+        "skip": "Skip for now",
+        "try_again": "Try again",
+        "connection_error": "Error connecting account"
     },
     "page3": {
         "title": "Then, some financial details.",

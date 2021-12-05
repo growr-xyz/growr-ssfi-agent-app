@@ -10,8 +10,40 @@
   display: flex;
 }
 
+.errorconnecting {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #AF5353;
+}
+
+.errorcircle {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: #AF5353;
+}
+
 .skip {
   text-align: center;
   color: #18D0BA;
   cursor: pointer;
+}
+
+.customButton {
+  font-family: Rubik, sans-serif;
+  height: 50px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  width: 100%;
+  max-width: 350px;
+  border: none;
+  padding: 15px;
+  background-color: #AF5353;
+  color: #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 0px;
 }

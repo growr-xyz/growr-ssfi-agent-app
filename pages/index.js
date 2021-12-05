@@ -29,10 +29,10 @@ export default function Home() {
     <Page >
       <ProgressHeader {...{ progress, hidden }}/>
         {step === 0 && <WalletConnector {...{label: t("page1.title"), onNext: nextStep}} />}
-        {step === 1 && <BankAccountConnector onNext={nextStep} />}
+        {step === 1 && <BankAccountConnector {...{onNext: nextStep}} />}
         {step === 2 && <FinancialStep {...{label: t("page3.title"), onNext: nextStep}} />}
         {step === 3 && <GoalStep {...{label: t("page4.title"), onNext: nextStep}} />}
-        {step === 4 && <ApprovedStep onNext={nextStep} />}
+        {step === 4 && <ApprovedStep {...{onNext: nextStep}} />}
         {step === 5 && <LastStep />}
         {/* {step === 5 && <OnboardingStep {...{label: t("page6.title"), onNext: nextStep}} />} */}
         {/* {step === 6 && <OnboardingStepOne {...{label: t("page7.title"), onNext: nextStep}} />} */}
