@@ -10,9 +10,6 @@ import GoalStep from "../components/Onboarding/GoalStep/GoalStep"
 import ApprovedStep from "../components/Onboarding/ApprovedStep/ApprovedStep"
 import LastStep from "../components/Onboarding/LastStep/LastStep"
 
-import OnboardingStep from "../components/Onboarding/OriginalStep/OnboardingStep"
-import OnboardingStepOne from '../components/Onboarding/Step1/OnboardingStepOne'
-
 export default function Home() {
   const t = useTranslations("onboarding");
   const dispatch = useDispatch()
@@ -31,11 +28,9 @@ export default function Home() {
         {step === 0 && <WalletConnector {...{label: t("page1.title"), onNext: nextStep}} />}
         {step === 1 && <BankAccountConnector {...{onNext: nextStep}} />}
         {step === 2 && <FinancialStep {...{onNext: nextStep}} />}
-        {step === 3 && <GoalStep {...{label: t("page4.title"), onNext: nextStep}} />}
+        {step === 3 && <GoalStep {...{onNext: nextStep}} />}
         {step === 4 && <ApprovedStep {...{onNext: nextStep}} />}
         {step === 5 && <LastStep />}
-        {/* {step === 5 && <OnboardingStep {...{label: t("page6.title"), onNext: nextStep}} />} */}
-        {/* {step === 6 && <OnboardingStepOne {...{label: t("page7.title"), onNext: nextStep}} />} */}
     </Page>
   )
 }
@@ -53,18 +48,18 @@ export function getStaticProps({ locale }) {
   };
 }  
 
-      {/* <BaseContentLayout  {...{
-        submitButtonProps: {
-          onClick: onNextPress,
-          disabled: !walletConnected // || activeStep === 2
-        },
-        activeStep,
-        totalSteps,
-        onBackPress
-      }} >
-        {activeStep === 1 && <WalletConnector {...{label: t("page1.title")}} />}
-        {activeStep === 2 && <OnboardingStepTwo label={t("page2.title")} onSubmit={onSubmit} />}
-        {activeStep === 3 && <OnboardingStepThree {...{label: t("page3.title")}} />}
-        {activeStep === 4 && <OnboardingStep {...{label: t("page4.title")}} />}
-        {activeStep === 5 && <OnboardingStep {...{label: t("page5.title")}} />}
-      </BaseContentLayout> */}
+{/* <BaseContentLayout  {...{
+  submitButtonProps: {
+    onClick: onNextPress,
+    disabled: !walletConnected // || activeStep === 2
+  },
+  activeStep,
+  totalSteps,
+  onBackPress
+}} >
+  {activeStep === 1 && <WalletConnector {...{label: t("page1.title")}} />}
+  {activeStep === 2 && <OnboardingStepTwo label={t("page2.title")} onSubmit={onSubmit} />}
+  {activeStep === 3 && <OnboardingStepThree {...{label: t("page3.title")}} />}
+  {activeStep === 4 && <OnboardingStep {...{label: t("page4.title")}} />}
+  {activeStep === 5 && <OnboardingStep {...{label: t("page5.title")}} />}
+</BaseContentLayout> */}

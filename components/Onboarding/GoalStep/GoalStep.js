@@ -1,61 +1,95 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { useTranslations } from "next-intl"
+import { useMutation,  gql } from "@apollo/client"
 import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout'
-import GoalStepForm from './GoalStepForm'
+import Input from '../../Input/Input'
 import styles from './GoalStep.module.css'
 
-class GoalsStep extends React.Component {
-  constructor(props) {
-    super(props);
+function GoalStep ({ onNext }) {
+  const t = useTranslations("onboarding")
 
-    this.state = {
-      goal: '',
-      savings: 0,
-      loan: 0,
-      duration: 0,
-      formErrors: true
+  const [goals, setGoals] = useState({
+    goal_type: '',
+    amount_saved: 0,
+    amount_needed: 0,
+    loan_duration: 0
+  })
+
+  const updateInput = e => {
+    setGoals({
+      ...goals,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const formInputs = [{
+    type: 'text',
+    name: 'goal_type',
+    placeholder: 'page4.goal_type'
+  }, {
+    name: 'amount_saved',
+    placeholder: 'page4.amount_saved',
+  }, {
+    name: 'amount_needed',
+    placeholder: 'page4.amount_needed',
+  }, {
+    name: 'loan_duration',
+    placeholder: 'page4.loan_duration',
+  }]
+
+  const user_id = '61ab9dbbd52730d9c0c77f63' // replace
+
+  const UPDATE_USER_GOAL = gql`
+    mutation updateGoal{
+      updateGoal(goalData:{
+        name:"${goals.goal_type}",
+        duration:"${goals.loan_duration}",
+        availableAmount:"${goals.amount_saved}",
+        amountToBorrow:"${goals.amount_needed}"
+      }, userId:"${user_id}"){
+        name,
+        duration,
+        availableAmount,
+        amountToBorrow
+      }
     }
+  `
 
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.validateForm = this.validateForm.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+  const [updateUserGoal, { data, loading, error }] = useMutation(UPDATE_USER_GOAL)
+
+  const onFormSubmit = () => {
+    updateUserGoal()
+      .then(() => onNext())
+      .catch(err => err)
   }
 
-  handleInputChange(event) {
-    const { name, value  } = event.target
-    this.setState({ [name]: value }, this.validateForm)
-  }
+  return (
+    <BaseContentLayout  {...{
+      submitButtonProps: {
+        onClick: onFormSubmit,
+        disabled: goals.goal_type === '' 
+        || goals.amount_saved < 1
+        || goals.amount_needed < 1
+        || goals.loan_duration < 1
+      }
+    }}>
+      <div className={styles.wrapper}>
+        <h1>{t('page4.title')}</h1>
 
-  validateForm() {
-    const { goal, savings, loan, duration } = this.state
-
-    const isValid = goal !== ''
-    && savings > 0
-    && loan > 0
-    && duration > 0
-
-    this.setState({ formErrors: !isValid })
-  }
-
-  onSubmit() {
-    !this.state.formErrors && this.props.onNext()
-  }
-
-  render() {
-    return (
-      <BaseContentLayout  {...{
-        submitButtonProps: {
-          onClick: this.onSubmit,
-          disabled: this.state.formErrors
-        }
-      }}>
-        <div className={styles.wrapper}>
-          <h1>{this.props.label}</h1>
-
-           <GoalStepForm onChange={this.handleInputChange} />
-        </div> 
-      </BaseContentLayout>
-    )
-  }
+        <div className={styles.formwrapper}>
+          {formInputs.map((f, i) =>
+            <Input
+              key = {i}
+              name = {f.name}
+              type = {f.type || 'number'}
+              placeholder = {t(f.placeholder)}
+              onChange={updateInput}
+              />
+            )}
+        </div>
+      </div> 
+    </BaseContentLayout>
+  )
 }
 
-export default GoalsStep
+export default GoalStep

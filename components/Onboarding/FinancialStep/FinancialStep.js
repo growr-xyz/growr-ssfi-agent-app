@@ -6,7 +6,6 @@ import BaseContentLayout from '../../../components/BaseContentLayout/BaseContent
 import Input from '../../Input/Input'
 import styles from './FinancialStep.module.css'
 
-
 function FinancialStep (props) {
   const { wallet, onNext } = props
 
