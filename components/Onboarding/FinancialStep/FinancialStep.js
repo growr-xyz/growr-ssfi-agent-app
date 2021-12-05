@@ -1,63 +1,109 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { useTranslations } from "next-intl"
+import { useMutation,  gql } from "@apollo/client"
 import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout'
-import FinancialStepForm from './FinancialStepForm'
+import Input from '../../Input/Input'
 import styles from './FinancialStep.module.css'
 
-class FinancialStep extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      income: '',
-      other: '',
-      unofficial: '',
-      expenses: '',
-      dependants: '',
-      formErrors: true
+function FinancialStep (props) {
+  const { wallet, onNext } = props
+
+  const t = useTranslations("onboarding")
+
+  const [finances, setFinances] = useState({
+      income: 0,
+      other: 0,
+      unofficial: 0,
+      expenses: 0,
+      dependants: 0,
+  })
+
+  const updateInput = e => {
+    setFinances({
+      ...finances,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const formInputs = [{
+    name: 'income',
+    placeholder: 'page3.official_income'
+  }, {
+    name: 'other',
+    placeholder: 'page3.other_income',
+  }, {
+    name: 'unofficial',
+    placeholder: 'page3.unofficial_income',
+  }, {
+    name: 'expenses',
+    placeholder: 'page3.expenses',
+  }, {
+    name: 'dependants',
+    placeholder: 'page3.dependants',
+  }]
+
+  const UPDATE_USER_FINANCES = gql`
+    mutation updateUser{
+      updateUser(
+        userData:{
+          officialPersonalIncome:"${finances.income}",
+          officialHouseholdIncome:"${finances.other}",
+          unofficialHouseholdIncome:"${finances.unofficial}",
+          householdExpenses:"${finances.expenses}",
+          dependants:${finances.dependants}
+        }, address:"${wallet}"){
+        officialPersonalIncome,
+        officialHouseholdIncome,
+        unofficialHouseholdIncome,
+        householdExpenses,
+        dependants
+      }
     }
+  `
+  const [updateUserFinances, { data, loading, error }] = useMutation(UPDATE_USER_FINANCES)
 
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.validateForm = this.validateForm.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+  const onFormSubmit = () => {
+    updateUserFinances()
+      .then(() => onNext())
+      .catch(err => err)
   }
 
-  handleInputChange(event) {
-    const { name, value  } = event.target
-    this.setState({ [name]: value }, this.validateForm)
-  }
+  return (
+    <BaseContentLayout  {...{
+      submitButtonProps: {
+        onClick: onFormSubmit,
+        disabled: finances.income < 1 
+        || finances.other < 1
+        || finances.unofficial < 1
+        || finances.expenses < 1
+        || finances.dependants <1
+      }
+    }}>
+      <div className={styles.wrapper}>
+        <h1>{t('page3.title')}</h1>
 
-  validateForm() {
-    const { income, other, unofficial, expenses, dependants } = this.state
+        <div className={styles.formwrapper}>
+          {formInputs.map((f, i) =>
+            <Input
+              key = {i}
+              name = {f.name}
+              type = 'number'
+              placeholder = {t(f.placeholder)}
+              onChange={updateInput}
+              />
+            )}
+        </div>
+      </div> 
+    </BaseContentLayout>
+  )
+}
 
-    const isValid = income > 0
-    && other > 0
-    && unofficial > 0
-    && expenses > 0
-    && dependants > 0
-
-    this.setState({ formErrors: !isValid })
-  }
-
-  onSubmit() {
-    !this.state.formErrors && this.props.onNext()
-  }
-
-  render() {
-    return (
-      <BaseContentLayout  {...{
-        submitButtonProps: {
-          onClick: this.onSubmit,
-          disabled: this.state.formErrors
-        }
-      }}>
-        <div className={styles.wrapper}>
-          <h1>{this.props.label}</h1>
-
-           <FinancialStepForm onChange={this.handleInputChange} />
-        </div> 
-      </BaseContentLayout>
-    )
+const mapStateToProps = function(state) {
+  return {
+    wallet: state.wallet.id
   }
 }
 
-export default FinancialStep
+export default connect(mapStateToProps)(FinancialStep)

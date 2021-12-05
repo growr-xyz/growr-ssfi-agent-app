@@ -94,12 +94,12 @@ const BankAccountConnector = ({ wallet, decrementStep, onNext }) => {
           </div>
         }
 
-        {/* <div
+        <div
           className={styles.skip}
           onClick={() => onNext()}
         >
           {t('page2.skip')}
-        </div> */}
+        </div>
     </div> 
   </BaseContentLayout>
   )
