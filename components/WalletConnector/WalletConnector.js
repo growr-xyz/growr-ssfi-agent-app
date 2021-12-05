@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { useTranslations } from "next-intl"
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../wallet/connectors"
-import { setId, acceptTerms, rejectTerms } from '../../redux/user'
+import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
 
 function WalletConnector(props) {
-  const { termsAccepted, label, onNext, setId, acceptTerms, rejectTerms } = props
+  const { termsAccepted, label, onNext, setWalletId, acceptTerms, rejectTerms } = props
 
   const { active, account, library, connector, activate, deactivate } = useWeb3React()
 
@@ -32,7 +32,7 @@ function WalletConnector(props) {
 
   const onSubmit = () => {
     if (active && account) {
-      setId(account)
+      setWalletId(account)
       onNext()
     }
   }
@@ -106,7 +106,7 @@ const mapStateToProps = function(state) {
 }
 
 const mapDispatchToProps = {
-  setId,
+  setWalletId,
   acceptTerms,
   rejectTerms
 }

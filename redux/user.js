@@ -1,15 +1,15 @@
 // Actions
-export const SET_ID = 'SET_ID'
 export const SET_USER_ID = "SET_USER_ID"
+export const SET_WALLET_ID = 'SET_WALLET_ID'
 export const ACCEPT_TERMS = 'ACCEPT_TERMS'
 export const REJECT_TERMS = 'REJECT_TERMS'
 export const ACCEPT_GROWR_TERMS = 'ACCEPT_GROWR_TERMS'
 export const REJECT_GROWR_TERMS = 'REJECT_GROWR_TERMS'
 
 // Action Creators
-export const setId = (query) => ({ type: SET_ID, query})
-
 export const setUserId = query => ({ type: SET_USER_ID, query})
+
+export const setWalletId = (query) => ({ type: SET_WALLET_ID, query})
 
 export const acceptTerms = () => ({ type: ACCEPT_TERMS })
 
@@ -21,8 +21,8 @@ export const rejectGrowrTerms = () => ({ type: REJECT_GROWR_TERMS })
 
 // Reducer
 export const initialState = {
-  id: '',
   user_id: '',
+  wallet_id: '',
   termsAccepted: false,
   GrowrTermsAccepted: false,
   loan: {
@@ -39,10 +39,10 @@ export const initialState = {
 
 const userReducer = (state = initialState, { type, query }) => {
   switch (type) {
-    case SET_ID:
+    case SET_WALLET_ID:
       return {
         ...state,
-        id: query
+        wallet_id: query
       }
     case SET_USER_ID:
       return {
