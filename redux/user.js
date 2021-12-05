@@ -1,6 +1,7 @@
 // Actions
 export const SET_USER_ID = "SET_USER_ID"
 export const SET_WALLET_ID = 'SET_WALLET_ID'
+export const SET_GOAL_ID = 'SET_GOAL_ID'
 export const ACCEPT_TERMS = 'ACCEPT_TERMS'
 export const REJECT_TERMS = 'REJECT_TERMS'
 export const ACCEPT_GROWR_TERMS = 'ACCEPT_GROWR_TERMS'
@@ -10,6 +11,8 @@ export const REJECT_GROWR_TERMS = 'REJECT_GROWR_TERMS'
 export const setUserId = query => ({ type: SET_USER_ID, query})
 
 export const setWalletId = (query) => ({ type: SET_WALLET_ID, query})
+
+export const setGoalId = (query) => ({ type: SET_GOAL_ID, query})
 
 export const acceptTerms = () => ({ type: ACCEPT_TERMS })
 
@@ -23,6 +26,7 @@ export const rejectGrowrTerms = () => ({ type: REJECT_GROWR_TERMS })
 export const initialState = {
   user_id: '',
   wallet_id: '',
+  goal_id: '',
   termsAccepted: false,
   GrowrTermsAccepted: false,
   loan: {
@@ -48,7 +52,12 @@ const userReducer = (state = initialState, { type, query }) => {
       return {
         ...state,
         user_id: query
-      }  
+      }
+    case SET_GOAL_ID:
+      return {
+        ...state,
+        goal_id: query
+      }
     case ACCEPT_TERMS:
       return {
         ...state,

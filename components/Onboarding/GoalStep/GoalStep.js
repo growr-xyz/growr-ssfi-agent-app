@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { useTranslations } from "next-intl"
 import { useMutation, gql } from "@apollo/client"
+import { setGoalId } from '../../../redux/user'
 import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout'
 import Input from '../../Input/Input'
 import styles from './GoalStep.module.css'
 
-function GoalStep ({ user_id, onNext }) {
+function GoalStep ({ user_id, setGoalId, onNext }) {
   const t = useTranslations("onboarding")
 
   const [goals, setGoals] = useState({
@@ -39,6 +40,7 @@ function GoalStep ({ user_id, onNext }) {
         availableAmount:"${goals.amount_saved}",
         amountToBorrow:"${goals.amount_needed}"
       }, userId:"${user_id}"){
+        _id,
         name,
         duration,
         availableAmount,
@@ -58,7 +60,10 @@ function GoalStep ({ user_id, onNext }) {
 
   const onFormSubmit = () => {
     updateUserGoal()
-      .then(() => onNext())
+      .then(res => {
+        res.data.updateGoal._id && setGoalId(res.data.updateGoal._id)
+        onNext()
+      })
       .catch(err => err)
   }
 
@@ -97,4 +102,8 @@ const mapStateToProps = function(state) {
   }
 }
 
-export default connect(mapStateToProps)(GoalStep)
+const mapDispatchToProps = {
+  setGoalId
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoalStep)
