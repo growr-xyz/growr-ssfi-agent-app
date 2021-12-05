@@ -1,13 +1,15 @@
 import Image from 'next/image'
+import { useRouter } from "next/router"
 import { useTranslations } from "next-intl"
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
 import styles from "./LastStep.module.css"
 
 const LastStep = () => {
   const t = useTranslations("onboarding")
+  const router = useRouter()
 
   const onSubmit = () => {
-    console.log('Go to my dashboard')
+    router.replace("/dashboard")
   }
 
   return (

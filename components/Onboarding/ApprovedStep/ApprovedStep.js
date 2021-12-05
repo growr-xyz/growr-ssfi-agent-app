@@ -1,26 +1,50 @@
-import { useTranslations } from "next-intl"
 import { connect } from 'react-redux';
+import { useTranslations } from "next-intl"
+import { useMutation,  gql } from "@apollo/client"
 import { acceptGrowrTerms, rejectGrowrTerms } from '../../../redux/user'
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
 import styles from "./ApprovedStep.module.css"
 
 function ApprovedStep (props) {
-  const { termsAccepted, loan, acceptGrowrTerms, rejectGrowrTerms, onNext } = props
+  const { termsAccepted, goal_id, loan, acceptGrowrTerms, rejectGrowrTerms, onNext } = props
   
   const t = useTranslations("onboarding")
 
   const onChangeCheckbox = ({ target }) => target.checked ? acceptGrowrTerms() : rejectGrowrTerms()
 
   const onSubmit = () => {
-    console.log('onSubmit')
+    updateLoan()
+      .then(() => {
+        onNext()
+      })
+      .catch(err => err)
   }
+
+  const UPDATE_LOAN = gql`
+    mutation updateLoan{
+      updateLoan(loanData:{
+        duration:"9",
+        amount:"1100.00",
+        apr:"12.34%",
+        nextInstalmentDue:"12.12.2021",
+        lastInstalmentDue:"12.10.2022",
+        totalToRepay:"1234.22",
+        totalInterest:"134.22",
+        instalment:"12.22%"
+      }, goalId:"${goal_id}" ){
+        _id
+      }
+    }
+  `
+
+  const [updateLoan, { data, loading, error }] = useMutation(UPDATE_LOAN)
 
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
         label: t('page5.button_label'),
         onClick: onSubmit,
-        disabled: !termsAccepted
+        disabled: !termsAccepted || !goal_id
       }
     }} >
       <div className={styles.wrapper}>
@@ -64,6 +88,7 @@ function ApprovedStep (props) {
 const mapStateToProps = function(state) {
   return {
     termsAccepted: state.user.GrowrTermsAccepted,
+    goal_id: state.user.goal_id,
     loan: state.user.loan
   }
 }
