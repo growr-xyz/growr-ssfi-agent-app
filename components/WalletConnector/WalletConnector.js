@@ -33,12 +33,16 @@ function WalletConnector(props) {
 
   const onSubmit = () => {
     if (active && account) {
+      setWalletId(account)
       createWallet()
         .then(() =>
-          createUser())
+          createUser()
+            .then(() =>
+              onNext()
+            .catch(err => err)              
+            )
         .catch(err => err)
-      setWalletId(account)
-      onNext()
+      )
     }
   }
 
