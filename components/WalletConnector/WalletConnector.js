@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { connect } from 'react-redux';
 import { useTranslations } from "next-intl"
 import { useWeb3React } from "@web3-react/core"
+import { useMutation,  gql } from "@apollo/client"
 import { injected } from "../wallet/connectors"
 import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
@@ -32,6 +33,7 @@ function WalletConnector(props) {
 
   const onSubmit = () => {
     if (active && account) {
+      createWallet()
       setWalletId(account)
       onNext()
     }
@@ -45,6 +47,17 @@ function WalletConnector(props) {
     const lastPart = accountString.filter((letter, index) => index > accountString.length - 3)
     return [...firstPart, '...', ...lastPart].join('')
   }
+
+  const CREATE_WALLET = gql`
+    mutation createWallet {
+      createWallet(newWallet:{address:"${account}", vendor:"RSK", network:"testnet"}){
+        address,
+        network
+      }
+    }
+  `
+
+  const [createWallet] = useMutation(CREATE_WALLET)
 
   return (
     <BaseContentLayout  {...{
