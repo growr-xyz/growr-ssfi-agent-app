@@ -17,7 +17,7 @@ function FinancialStep (props) {
       other: 0,
       unofficial: 0,
       expenses: 0,
-      dependants: 0,
+      dependants: 0
   })
 
   const updateInput = e => {
@@ -52,7 +52,7 @@ function FinancialStep (props) {
           officialHouseholdIncome:"${finances.other}",
           unofficialHouseholdIncome:"${finances.unofficial}",
           householdExpenses:"${finances.expenses}",
-          dependants:${finances.dependants}
+          dependants:"${finances.dependants}"
         }, address:"${wallet}"){
         _id,
         officialPersonalIncome,
@@ -82,7 +82,7 @@ function FinancialStep (props) {
         || finances.other < 1
         || finances.unofficial < 1
         || finances.expenses < 1
-        || finances.dependants <1
+        || finances.dependants < 1
       }
     }}>
       <div className={styles.wrapper}>
@@ -96,8 +96,8 @@ function FinancialStep (props) {
               type = 'number'
               placeholder = {t(f.placeholder)}
               onChange={updateInput}
-              />
-            )}
+            />
+          )}
         </div>
       </div> 
     </BaseContentLayout>
