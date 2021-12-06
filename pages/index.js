@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <Page >
       <ProgressHeader {...{ progress, hidden }}/>
-        {step === 0 && <WalletConnector {...{label: t("page1.title"), onNext: nextStep}} />}
+        {step === 0 && <WalletConnector {...{onNext: nextStep}} />}
         {step === 1 && <BankAccountConnector {...{onNext: nextStep}} />}
         {step === 2 && <FinancialStep {...{onNext: nextStep}} />}
         {step === 3 && <GoalStep {...{onNext: nextStep}} />}

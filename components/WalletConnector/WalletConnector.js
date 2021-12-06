@@ -83,8 +83,8 @@ function WalletConnector(props) {
       }
     }}>
 
-    <div className={styles.container}>
-      <h1>{ label }</h1>
+    <div className={styles.wrapper}>
+      <h1>{t('page1.title')}</h1>
 
       { active ?
         <div

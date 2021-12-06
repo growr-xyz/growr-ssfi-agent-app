@@ -6,13 +6,17 @@ import { Web3ReactProvider } from '@web3-react/core'
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
 import CustomHead from '../components/CustomHead/CustomHead'
 import '../styles/globals.css'
+import getConfig from 'next/config'
 
 function getLibrary(provider) {
   return new Web3(provider)
 }
 
+const { publicRuntimeConfig } = getConfig()
+
 const client = new ApolloClient({
-  uri: 'http://localhost:4000',
+  //uri: 'http://localhost:4000', 
+  uri: publicRuntimeConfig.backendUrl,
   cache: new InMemoryCache()
 });
 

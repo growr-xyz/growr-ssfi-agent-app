@@ -6,6 +6,11 @@
     text-align: left;
 }
 
+.wrapper {
+    max-width: 420px;
+    text-align: left;
+}
+
 .connected {
     display: flex;
     align-items: center;

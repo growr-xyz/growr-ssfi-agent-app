@@ -5,14 +5,14 @@
          "confirmCheck": "Acepto que mis datos se procesarán de acuerdo con los Términos de uso y la Política de privacidad de Growr"
     },
     "page2": {
-        "title":"Please connect your bank account.",
-        "access_note": "Please enter your access credentials for the Banco Hipotecario e-Banking, in order to connect your bank account to Peseta.",
-        "data_note": "We use your transactional data to perform risk scoring on the fly and we do not store any of this data. So your data remains yours.",
-        "username": "User name",
-        "password": "Password",
-        "skip": "Skip for now",
-        "try_again": "Try again",
-        "connection_error": "Error connecting account"
+        "title": "Por favor, conecte su cuenta bancaria.",
+        "access_note": "Por favor ingrese sus credenciales de acceso al e-Banking del Banco Hipotecario, para conectar su cuenta bancaria a Peseta.",
+        "data_note": "Usamos sus datos transaccionales para realizar una puntuación de riesgo sobre la marcha y no almacenamos ninguno de estos datos. Por lo tanto, sus datos siguen siendo suyos",
+        "username": "Nombre de usuario",
+        "password": "Contraseña",
+        "skip": "Omitir por ahora",
+        "try_again": "Inténtalo de nuevo",
+        "connection_error": "Error al conectar la cuenta"
     },
     "page3": {
          "title": "Luego, algunos detalles financieros.",
@@ -23,33 +23,33 @@
          "dependants": "Dependientes"
     },
     "page4": {
-        "title":"What goal would you like to achieve?",
-        "goal_type": "Select a goal type",
-        "amount_saved": "Amount saved (USD)",
-        "amount_needed": "Amount needed to borrow (USD)",
-        "loan_duration": "Loan durartion (months)"
+        "title": "¿Qué objetivo le gustaría alcanzar?",
+        "goal_type": "Seleccione un tipo de objetivo",
+        "amount_saved": "Importe ahorrado (USD)",
+        "amount_needed": "Cantidad necesaria para pedir prestado (USD)",
+        "loan_duration": "Duración del préstamo (meses)"
     },
     "page5": {
-        "title": "Hurray! You have been approved for ",
-        "congratulations": "Congratulations you have been approved for a loan with the following conditions:",
-        "amount": "Amount:",
+        "title": "¡Viva! Has sido aprobado para",
+        "congratulations": "Felicidades ha sido aprobado para un préstamo con las siguientes condiciones:",
+        "amount": "Monto:",
         "apr": "APR:",
-        "duration": "Duration:",
-        "instalment": "Instalment:",
-        "next_instalment": "Next instalment due:",
-        "last_instalment": "Last instalment due:",
-        "total_to_repay": "Total to repay:",
-        "total_interest": "Total interest:",
-        "loan_details": "This loan will disbursed from the Growr protocol Lending Pool after your signature of the transaction. The disbursement and repayment transactions leave a permanent on-chain track record of your credit history that can be publicly verified.",
-        "agreement_check": "I agree with the Growr Lending Pool terms and conditions.",
-        "skip": "Skip for now",
-        "button_label": "Apply"
+        "duration": "Duración:",
+        "instalment": "Cuota:",
+        "next_instalment": "Próxima entrega vence:",
+        "last_instalment": "Última cuota vencida:",
+        "total_to_repay": "Total a pagar:",
+        "total_interest": "Interés total:",
+        "loan_details": "Este préstamo se desembolsará del Fondo de préstamos del protocolo Growr después de la firma de la transacción. Las transacciones de desembolso y reembolso dejan un registro permanente en cadena de su historial crediticio que se puede verificar públicamente.",
+        "agreement_check": "Acepto los términos y condiciones del Growr Lending Pool.",
+        "skip": "Omitir por ahora",
+        "button_label": "Aplicar"
     },
     "page6": {
-        "title": "You can receive up to $101.73 back on your loan! 🤑",
-        "subtitle": "Get on just 1 learning quest per week throughout the duration of the loan, and you can earn up 50% of the total interest paid.",
-        "start_learning": "Start learning today and earn!",
-        "button_label": "Go to my dashboard"
+        "title": "¡Puede recibir hasta $ 101.73 de su préstamo! 🤑",
+        "subtitle": "Realice solo 1 misión de aprendizaje por semana durante la duración del préstamo y podrá ganar hasta el 50% del interés total pagado",
+        "start_learning": "¡Empiece a aprender hoy y gane!",
+        "button_label": "Ir a mi panel de control"
     },
     "page7": {
         "title": "Ahora, algunos detalles personales.",
