@@ -62,7 +62,7 @@ function WalletConnector(props) {
 
   const CREATE_USER = gql`
     mutation createUser{
-      updateUser(userData:{fullName:"IvanAsen", dateOfBirth:"2121123"}, address:"0xD4A420FD1b2a33514BFBaEBab738999E708D1FC6"){
+      updateUser(userData:{fullName:"IvanAsen"}, address:"${account}"){
         _id
       }
     }
