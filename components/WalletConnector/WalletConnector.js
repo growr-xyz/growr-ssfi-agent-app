@@ -34,6 +34,9 @@ function WalletConnector(props) {
   const onSubmit = () => {
     if (active && account) {
       createWallet()
+        .then(() =>
+          createUser())
+        .catch(err => err)
       setWalletId(account)
       onNext()
     }
@@ -57,7 +60,16 @@ function WalletConnector(props) {
     }
   `
 
+  const CREATE_USER = gql`
+    mutation createUser{
+      updateUser(userData:{fullName:"IvanAsen", dateOfBirth:"2121123"}, address:"0xD4A420FD1b2a33514BFBaEBab738999E708D1FC6"){
+        _id
+      }
+    }
+  `
+
   const [createWallet] = useMutation(CREATE_WALLET)
+  const [createUser] = useMutation(CREATE_USER)
 
   return (
     <BaseContentLayout  {...{
