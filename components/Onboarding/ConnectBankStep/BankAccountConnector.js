@@ -2,18 +2,18 @@ import Image from 'next/image'
 import { connect } from 'react-redux';
 import React, { useState } from 'react';
 import { useTranslations } from "next-intl"
-import { useQuery, useMutation, useSubscription,  gql } from "@apollo/client"
-import { decrementStep } from '../../../redux/steps'
+import { useMutation, gql } from "@apollo/client"
 import Input from '../../Input/Input'
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
 import styles from "./BankAccountConnector.module.css"
 
-const BankAccountConnector = ({ wallet, decrementStep, onNext }) => {
+const BankAccountConnector = ({ wallet, onNext }) => {
   const t = useTranslations("onboarding")
 
   const [user, setUser] = useState({
     username: '',
-    password: ''
+    password: '',
+    connectionError: false
   });
 
   const updateInput = e => {
@@ -30,23 +30,32 @@ const BankAccountConnector = ({ wallet, decrementStep, onNext }) => {
   `
   const [connectBankMutation, { data, loading, error }] = useMutation(CONNECT_BANK) //, {errorPolicy: 'all'})
 
-  const onLoginClick = () => {
-    if (error) {
-      return decrementStep()
-    }
-
+  const onContinue = () => {
     connectBankMutation()
       .then(() => onNext())
-      .catch(err => err)
+      .catch(err => {
+        setUser({
+          ...user,
+          connectionError: true
+        })
+        return err
+      })
+  }
+
+  const onRetry = () => {
+    setUser({
+      ...user,
+      connectionError: false
+    })
   }
 
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
-        label: error ? t('page2.try_again') : t('submitBtn'),
-        onClick: onLoginClick,
+        label: user.connectionError ? t('page2.try_again') : t('submitBtn'),
+        onClick: user.connectionError ? onRetry : onContinue,
         disabled: !user.username || !user.password || !wallet,
-        style: error ? styles.customButton : null
+        style: user.connectionError ? styles.customButton : null
       }
     }} >
       <div className={styles.wrapper}>
@@ -72,7 +81,7 @@ const BankAccountConnector = ({ wallet, decrementStep, onNext }) => {
           />
         </div>
 
-        { error ? 
+        { user.connectionError ? 
           <div className={styles.errorconnecting}>
             <div className={styles.errorcircle} />
             {t('page2.connection_error')}
@@ -94,12 +103,14 @@ const BankAccountConnector = ({ wallet, decrementStep, onNext }) => {
           </div>
         }
 
-        <div
-          className={styles.skip}
-          onClick={() => onNext()}
-        >
-          {t('page2.skip')}
-        </div>
+        { !user.connectionError  &&
+          <div
+            className={styles.skip}
+            onClick={() => onNext()}
+          >
+            {t('page2.skip')}
+          </div>
+        }
     </div> 
   </BaseContentLayout>
   )
@@ -111,8 +122,4 @@ const mapStateToProps = function(state) {
   }
 }
 
-const mapDispatchToProps = {
-  decrementStep
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BankAccountConnector)
+export default connect(mapStateToProps)(BankAccountConnector)
