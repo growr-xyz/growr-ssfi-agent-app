@@ -1,3 +1,7 @@
 {
-    
+  "submitBtn": "Continue",
+  "initiatePayment": {
+      "amount": "Amount in RBTC",
+      "invoice": "Paste the Lightning invoice"
+  }
 }
