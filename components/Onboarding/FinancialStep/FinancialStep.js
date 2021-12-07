@@ -77,6 +77,7 @@ function FinancialStep (props) {
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
+        label: t('submitBtn'),
         onClick: onFormSubmit,
         disabled: finances.income < 1 
         || finances.other < 1

@@ -88,6 +88,7 @@ function WalletConnector(props) {
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
+        label: t('submitBtn'),
         onClick: onSubmit,
         disabled: !active || !account || !termsAccepted
       }

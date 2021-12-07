@@ -1,10 +1,10 @@
 import styles from "./Button.module.css";
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
 
 const Button = ({ label, onClick, disabled = false, loading, style }) => {
-  const t = useTranslations("onboarding");
+  // const t = useTranslations("onboarding");
 
-  let activeLabel = !label ? t("submitBtn") : label;
+  // let activeLabel = !label ? t("submitBtn") : label;
 
   if (loading) {
     return (
@@ -20,7 +20,7 @@ const Button = ({ label, onClick, disabled = false, loading, style }) => {
       disabled={disabled}
       className={`${style ?? style} ${styles.button}`}
     >
-      {activeLabel}
+      {label}
     </button>
   );
 };
