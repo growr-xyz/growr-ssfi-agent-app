@@ -84,7 +84,16 @@ function WalletConnector(props) {
     }}>
 
     <div className={styles.wrapper}>
-      <h1>{t('page1.title')}</h1>
+      <div className={styles.logo}>
+        <Image
+          src="/logo.svg"
+          height={56}
+          width={195}
+          alt="Logo"
+        />
+      </div>
+      
+      <h1 className={styles.title}>{t('page1.title')}</h1>
 
       { active ?
         <div

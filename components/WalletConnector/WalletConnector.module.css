@@ -1,14 +1,13 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-}
-
 .wrapper {
     max-width: 420px;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.title {
+    max-width: 315px;
 }
 
 .connected {
