@@ -7,7 +7,7 @@ import { injected } from "../wallet/connectors"
 import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 function WalletConnector(props) {
   const {
