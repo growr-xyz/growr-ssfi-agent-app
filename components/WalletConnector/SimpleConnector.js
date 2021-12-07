@@ -25,7 +25,14 @@ function SimpleConnector({ setWalletId }) {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.wrapper}>
+      <Image
+        src="/logo.svg"
+        height={56}
+        width={195}
+        alt="Logo"
+      />
+
       { active ?
         <div
           className={styles.connected}

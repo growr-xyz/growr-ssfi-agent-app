@@ -7,12 +7,12 @@ import {
 
 const determineColor = (index) => {
   if (0.4 >= index) {
-    return "#E28EA8";
+    return "#b9dfbb";
   }
   if (index > 0.4 && 0.8 >= index) {
-    return "#E6E386";
+    return "#85c788";
   }
-  return "#18D0BA";
+  return "#53AF57";
 };
 
 const useScoreBar = ({
@@ -38,7 +38,7 @@ const useScoreBar = ({
           alignToBottom: false,
           className: "score-bar-text",
         },
-        from: { color: "#ED6A5A" },
+        from: { color: "#53AF57" },
         to: { color: toColor },
         step: (state, bar) => {
           bar.path.setAttribute("stroke", state.color);
