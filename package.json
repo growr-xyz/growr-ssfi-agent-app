@@ -19,6 +19,7 @@
     "ethers": "^5.5.2",
     "eventsource": "^1.1.0",
     "graphql": "^16.0.1",
+    "moment": "^2.29.1",
     "next": "12.0.4",
     "next-intl": "^2.3.0",
     "progressbar.js": "^1.1.0",

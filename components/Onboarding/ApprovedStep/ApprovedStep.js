@@ -48,7 +48,7 @@ function ApprovedStep (props) {
       }
     }} >
       <div className={styles.wrapper}>
-        <h1>{`${t('page5.title')}${loan.amount}.🎉`}</h1>
+        <h1>{`${t('page5.title')}${loan.amount_title}.🎉`}</h1>
 
         <h4>{t('page5.congratulations')}</h4>
 

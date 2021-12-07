@@ -105,7 +105,7 @@ const Goal = ({ balance }) => {
       </div>
       <div className={styles.more}>
         {loan ? <Loan {...loan} /> : null}
-        <Transactions />
+        {/* <Transactions /> */}
       </div>
     </div>
   );
