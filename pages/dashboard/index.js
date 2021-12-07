@@ -15,11 +15,11 @@ import styles from "./Dashbaord.module.css"
 
 function Dashboard ({wallet}) {
 
-  if (!wallet) return <SimpleConnector />;
-
   const t = useTranslations("dashboard");
 
   const router = useRouter();
+
+  if (!wallet) return <SimpleConnector />;
 
   const GET_WALLET = gql`
     query wallet {
