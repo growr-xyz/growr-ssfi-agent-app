@@ -5,7 +5,8 @@ import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLay
 import { startSwap, connectWallet, lockFunds } from '../../utils/swap';
 import Input from '../../components/Input/Input';
 import { useTranslations } from "next-intl";
-import BigNumber from "bignumber.js";
+import BigNumber from 'bignumber.js';
+import styles from "./Payment.module.css";
 
 function Payment() {
   const t = useTranslations("invoice");
@@ -127,38 +128,37 @@ function Payment() {
   console.log(swapState);
 
   return (
-    <BaseContentLayout
-      {...{
+    <div className={styles.container}>
+      <BaseContentLayout {... {
         submitButtonProps: {
           onClick: onSubmit,
-          label: swapState.step === 0 ? t("submitBtn") : t("signBtn"),
-          disabled: working,
-        },
-      }}
-    >
-      {/* <div className={styles.container}> */}
-      <div>
-        <h1>{t("title")}</h1>
+          label: (swapState.step === 0 ? 'Continue' : 'Sign'),
+          disabled: working
+        }
+      }}>
+        {/* <div className={styles.container}> */}
+        <div>
+          <h1>{t("title")}</h1>
 
-        <h4>{t("input_invoice")}</h4>
+          <h4>{t("input_invoice")}</h4>
 
-        {/* Amount in RBTC - TODO: we could extract from the invoice */}
-        <Input
-          type="text"
-          name="quoteAmount"
-          placeholder={t("initiate.amount")}
-          onChange={updateQuoteAmountInput}
-        />
+          {/* Amount in RBTC - TODO: we could extract from the invoice */}
+          <Input
+            type="text"
+            name="quoteAmount"
+            placeholder={t("initiate.amount")}
+            onChange={updateQuoteAmountInput} />
 
-        {/* Lightning invoice */}
-        <Input
-          type="text"
-          name="invoice"
-          placeholder={t("initiate.invoice")}
-          onChange={updateInvoiceInput}
-        />
-      </div>
-    </BaseContentLayout>
+          {/* Lightning invoice */}
+          <Input
+            type="text"
+            name="invoice"
+            placeholder={t("initiate.invoice")}
+            onChange={updateInvoiceInput} />
+
+        </div>
+      </BaseContentLayout>
+    </div>
   );
 }
 

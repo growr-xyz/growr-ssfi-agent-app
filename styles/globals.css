@@ -119,26 +119,26 @@ div#__next > div {
   overflow: auto;
 }
 
-@media (prefers-color-scheme: light) {
-  body {
-    --accent-color: #18d0ba;
-    --background-color: #ffffff;
-    --font-color: #000000;
-    --button-color: #646464;
-    --button-border-color: #ebebeb;
-    --button-background: #f5f5f5;
-    --lock-icon-base: #18d0ba;
-    --lock-icon-lock: #455a64;
-    --submit-button-color: #ebebeb;
-    --submit-button-background: #d5d5d5;
-    --input-border-color: #b2b2b2;
-    --input-placeholder-color: #b2b2b2;
-    --score-background: #f9f9f9;
-    --score-border: #ebebeb;
-    --score-trail-color: #f5f5f5;
-  }
+/* @media (prefers-color-scheme: light) { */
+body {
+  --accent-color: #18d0ba;
+  --background-color: #ffffff;
+  --font-color: #000000;
+  --button-color: #646464;
+  --button-border-color: #ebebeb;
+  --button-background: #f5f5f5;
+  --lock-icon-base: #18d0ba;
+  --lock-icon-lock: #455a64;
+  --submit-button-color: #ebebeb;
+  --submit-button-background: #d5d5d5;
+  --input-border-color: #b2b2b2;
+  --input-placeholder-color: #b2b2b2;
+  --score-background: #f9f9f9;
+  --score-border: #ebebeb;
+  --score-trail-color: #f5f5f5;
 }
-@media (prefers-color-scheme: dark) {
+/* } */
+/* @media (prefers-color-scheme: dark) {
   body {
     --accent-color: #0ca896;
     --background-color: #222222;
@@ -157,7 +157,7 @@ div#__next > div {
     --score-border: #646464;
     --score-trail-color: #484848;
   }
-}
+} */
 
 input {
   width: 100%;
