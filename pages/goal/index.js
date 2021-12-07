@@ -1,4 +1,5 @@
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
+import { connect } from 'react-redux';
 import { useQuery, gql } from "@apollo/client";
 import Header from "./components/Header/Header";
 import Loan from "./components/Loan/Loan";
@@ -28,9 +29,8 @@ import styles from "./Goal.module.css";
 //   },
 // };
 
-const Goal = () => {
+const Goal = ({ balance }) => {
   const router = useRouter();
-  console.log("router:", router);
   const t = useTranslations("dashboard");
   const { goalId } = router.query;
 
@@ -65,7 +65,7 @@ const Goal = () => {
   const { loan } = goal;
 
   // TBD - get wallet balance
-  const balance = 1200.0;
+  // const balance = 1200.0;
 
   const onBackPress = () => {
     router.push("/dashboard");
@@ -78,17 +78,17 @@ const Goal = () => {
         <div className={styles.scoreBar}>
           <ScoreBar
             progressIndex={
-              balance /
+              (balance * 50000) /
               (parseFloat(goal.amountToBorrow) +
                 parseFloat(goal.availableAmount))
             }
-            value={balance}
+            value={balance * 50000}
             size="big"
           />
         </div>
         <h1>{goal.name}</h1>
         <h4>
-          {t("goals.amount.progress")} {balance} {t("goals.amount.of")}
+          {t("goals.amount.progress")} {balance * 50000} {t("goals.amount.of")}
           {parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)}
         </h4>
         <div className={styles.buttonGroup}>
@@ -111,7 +111,13 @@ const Goal = () => {
   );
 };
 
-export default Goal;
+const mapStateToProps = function(state) {
+  return {
+    balance: state.user.balance
+  }
+}
+
+export default connect(mapStateToProps)(Goal)
 
 export function getStaticProps({ locale }) {
   return {

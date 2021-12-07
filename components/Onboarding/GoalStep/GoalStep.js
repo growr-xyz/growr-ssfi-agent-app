@@ -70,6 +70,7 @@ function GoalStep ({ user_id, setGoalId, onNext }) {
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
+        label: t('submitBtn'),
         onClick: onFormSubmit,
         disabled: goals.goal_type === '' 
         || goals.amount_saved < 1
