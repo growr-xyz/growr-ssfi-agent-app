@@ -40,9 +40,7 @@ export function getStaticProps({ locale }) {
   return {
     props: {
       messages: {
-        onboarding: require(`../locales/${locale}/onboarding.json`),
-        dashboard: require(`../locales/${locale}/dashboard.json`),
-        invoice: require(`../locales/${locale}/invoice.json`),
+        onboarding: require(`../locales/${locale}/onboarding.json`)
       }
     },
   };

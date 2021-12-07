@@ -1,3 +1,24 @@
 {
-    
+    "go_to":"Go to my dashboard",
+    "goals":{
+        "title":"Goals",
+        "status":{
+            "funded":"Funded",
+            "progress":"In progress",
+            "due":"due"
+        },
+        "amount":{
+            "add":"Add"
+        }
+    },
+    "quests":{
+        "title":"Quests",
+        "start":"Click to begin quest",
+        "budget":{
+            "title":"How to make and follow a budget"
+        },
+        "bitcoin":{
+            "title":"What is Bitcoin, really?"
+        }
+    }
 }

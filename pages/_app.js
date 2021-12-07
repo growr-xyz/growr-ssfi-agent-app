@@ -24,16 +24,16 @@ function MyApp({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState)
 
   return (
-    <Provider store={store}>
-      <ApolloProvider client={client}>
-        <Web3ReactProvider getLibrary={getLibrary}>
-          <NextIntlProvider messages={pageProps.messages}>
+    <NextIntlProvider messages={pageProps.messages}>
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <Web3ReactProvider getLibrary={getLibrary}>
             <CustomHead />
             <Component {...pageProps} />
-          </NextIntlProvider>
-        </Web3ReactProvider>
-      </ApolloProvider>
-    </Provider>
+          </Web3ReactProvider>
+        </ApolloProvider>
+      </Provider>
+    </NextIntlProvider>
   )
 }
 

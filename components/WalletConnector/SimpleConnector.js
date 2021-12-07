@@ -4,8 +4,10 @@ import { useWeb3React } from "@web3-react/core"
 import { injected } from "../wallet/connectors"
 import { setWalletId } from '../../redux/user'
 import styles from "./SimpleConnector.module.css";
+import { useTranslations } from 'use-intl';
 
 function SimpleConnector({ setWalletId }) {
+  const t = useTranslations("dashboard")
   const { active, account, activate } = useWeb3React()
 
   async function connect() {
@@ -29,7 +31,7 @@ function SimpleConnector({ setWalletId }) {
           className={styles.connected}
           onClick={onProceed}
         >
-          Go to my dashboard
+          {t("go_to")}
         </div>
         :
         <div className={styles.disconnected}>

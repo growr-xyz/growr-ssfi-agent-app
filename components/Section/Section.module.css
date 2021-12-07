@@ -1,0 +1,15 @@
+.container {
+  margin-top: 25px;
+}
+
+.label {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.widgetContainer {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding-bottom: 10px;
+}

@@ -1,0 +1,15 @@
+.pageWrap {
+  background: #f5f5f5;
+}
+
+.navigation {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+}
+
+.link {
+  margin-bottom: 0px;
+  text-decoration: none;
+}

@@ -18,13 +18,16 @@ const determineColor = (index) => {
 const useScoreBar = ({
   duration,
   progressIndex,
+  value,
+  size
 }) => {
   const scoreBarContainerRef = useRef(null);
-
+  
   useEffect(() => {
     let toColor = determineColor(progressIndex);
 
     if (progressIndex) {
+      if (progressIndex > 1) {progressIndex=1}
       let bar = new progressBar.SemiCircle(scoreBarContainerRef.current, {
         strokeWidth: 7,
         trailColor: "#eee",
@@ -39,15 +42,20 @@ const useScoreBar = ({
         to: { color: toColor },
         step: (state, bar) => {
           bar.path.setAttribute("stroke", state.color);
-          var value = Math.round(bar.value() * 100);
           if (value === 0) {
             bar.setText("");
           } else {
-            bar.setText(value);
+            bar.setText("$"+value);
           }
 
-          bar.text.style.fontSize = "6rem";
-          bar.text.style.bottom = "30px";
+          if (size=="big") {
+            bar.text.style.fontSize = "5rem";
+            bar.text.style.bottom = "25px";
+          } else {
+            bar.text.style.fontSize = "2rem";
+            bar.text.style.bottom = "5px";
+          }
+          
         },
       });
       bar.animate(progressIndex);

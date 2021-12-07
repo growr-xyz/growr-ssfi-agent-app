@@ -6,7 +6,7 @@ const Button = ({ label, onClick, disabled = false, loading, style }) => {
 
   let activeLabel = !label ? t("submitBtn") : label;
 
-  if (loading) {npm 
+  if (loading) {
     return (
       <button className={`${styles.button} ${styles.loading}`}>
         <div className={styles.loader}></div>
@@ -15,7 +15,11 @@ const Button = ({ label, onClick, disabled = false, loading, style }) => {
   }
 
   return (
-    <button onClick={onClick} disabled={disabled} className={style ? style : styles.button}>
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${style ?? style} ${styles.button}`}
+    >
       {activeLabel}
     </button>
   );
