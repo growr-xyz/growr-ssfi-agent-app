@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { useQuery, gql } from "@apollo/client"
@@ -7,14 +8,13 @@ import { useTranslations } from "next-intl"
 import SimpleConnector from "../../components/WalletConnector/SimpleConnector"
 import { Header, Page, Widget, Section, Goal } from '../../components'
 import HelmetIcon from "../../components/Icons/Helmet"
-import Link from "next/link"
 import { Bitcoin, Budget } from "../../components/Quests"
-import { getWalletBalance } from '../../utils/swap';
+import { getWalletBalance } from '../../utils/swap'
+import { setWalletBalance } from '../../redux/user'
 import styles from "./Dashbaord.module.css"
 
 
-function Dashboard ({wallet}) {
-
+function Dashboard ({ wallet, balance, setBalance }) {
   if (!wallet) return <SimpleConnector />;
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -50,7 +50,7 @@ function Dashboard ({wallet}) {
             amountToBorrow,
             availableAmount
             loan{
-                _id,
+              _id,
               amount,
               apr,
               duration,
@@ -59,56 +59,25 @@ function Dashboard ({wallet}) {
               lastInstalmentDue,
               totalToRepay,
               totalInterest
-              }
+            }
           }
-        }}
+        }
       }
-    `
-
-// const data = {
-//   "wallet": {
-//     "address": "0xD4A420FD1b2a33514BFBaEBab738999E708D1FC6",
-//     "balance": "1200.00",
-//     "user": {
-//       "fullName": "Camila Busd.01",
-//       "dateOfBirth": "2021-11-17",
-//       "_id": "61ab9dbbd52730d9c0c77f63",
-//       "goals": [
-//         {
-//           "name": "Car Purchase",
-//           "duration": "12M",
-//           "availableAmount": "0.00",
-//           "amountToBorrow": "1500.00",
-//           "isAchieved": false,
-//           "loan": {
-//             "amount": "1200.00",
-//             "apr": "12.34%",
-//             "duration": "9",
-//             "instalment": "12.22%",
-//             "nextInstalmentDue": "116.96",
-//             "lastInstalmentDue": "1670630400000",
-//             "totalToRepay": "1200.00", //"1334.22"
-//             "totalInterest": "134.22"
-//           }
-//         }
-//       ]
-//     }
-//   }
-// }
-
-  const goToDashboard = () => {
-    router.push('/dashboard');
-  }
-
-  const printBalance = value => console.log('Wallet balance:', value);
+    }
+  `
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     getWalletBalance(wallet, printBalance)
-  }, [wallet])
+  })
 
-  // TBD - get wallet balance
-  const balance = 1200.0;
+  const printBalance = value => {
+    setBalance(value)
+  }
+
+  const goToDashboard = () => {
+    router.push('/dashboard');
+  }
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, loading, error } = useQuery(GET_WALLET);
@@ -150,8 +119,8 @@ function Dashboard ({wallet}) {
     >
       <Widget
         {...{
-          balance: "$"+balance, // TBD - wallet balance here
-          currency: "US Dollar (xUSD)",
+          balance: `$ ${balance * 50000}`,
+          currency: `${balance} RBTC`,
         }}
       />
       <Section label={t('goals.title')}>
@@ -163,7 +132,11 @@ function Dashboard ({wallet}) {
             }}
             style={{ display: "inline-block" }}
           >
-            <Goal {...{ ...goal, details: `${goal.isAchieved?t("goals.status.funded"):t("goals.status.progress")}, $${Math.round(goal.loan.totalToRepay)} ${t("goals.status.due")}`, progress: balance/(parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)), value:balance }} />
+            <Goal {...{ 
+              ...goal, 
+              details: `${goal.isAchieved?t("goals.status.funded"):t("goals.status.progress")}, $${Math.round(goal.loan.totalToRepay)} ${t("goals.status.due")}`, 
+              progress: (balance * 50000) / (parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)), 
+              value: (balance * 50000) }} />
           </div>
         ))}
       </Section>
@@ -177,11 +150,16 @@ function Dashboard ({wallet}) {
 
 const mapStateToProps = function(state) {
   return {
-    wallet: state.user.wallet_id
+    wallet: state.user.wallet_id,
+    balance: state.user.balance
   }
 }
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = {
+  setBalance: setWalletBalance
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
 
 export function getStaticProps({ locale }) {
   return {
