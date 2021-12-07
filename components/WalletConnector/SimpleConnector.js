@@ -1,10 +1,11 @@
 import Image from 'next/image'
 import { connect } from 'react-redux';
+import router from "next/router";
+import { useTranslations } from 'use-intl';
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../wallet/connectors"
 import { setWalletId } from '../../redux/user'
 import styles from "./SimpleConnector.module.css";
-import { useTranslations } from 'use-intl';
 
 function SimpleConnector({ setWalletId }) {
   const t = useTranslations("dashboard")
@@ -51,7 +52,19 @@ function SimpleConnector({ setWalletId }) {
           />
         </div>
       }
-      <div />
+
+      <div
+        className={styles.switch}
+        onClick={() => {
+          if (router.locale == "es") {
+            router.push(`/dashboard`, `/dashboard`, { locale: "en" });
+          } else {
+            router.push(`/dashboard`, `/dashboard`, { locale: "es" });
+          }
+        }}
+      >
+        {t("switchLang")}
+      </div>
     </div>
   )
 }
