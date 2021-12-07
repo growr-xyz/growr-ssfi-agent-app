@@ -63,9 +63,7 @@ const Goal = ({ balance }) => {
 
   const { goal } = data;
   const { loan } = goal;
-
-  // TBD - get wallet balance
-  // const balance = 1200.0;
+  const ballanceUsd = Math.trunc(balance * 50000)
 
   const onBackPress = () => {
     router.push("/dashboard");
@@ -78,17 +76,17 @@ const Goal = ({ balance }) => {
         <div className={styles.scoreBar}>
           <ScoreBar
             progressIndex={
-              (balance * 50000) /
+              ballanceUsd /
               (parseFloat(goal.amountToBorrow) +
                 parseFloat(goal.availableAmount))
             }
-            value={balance * 50000}
+            value={ballanceUsd}
             size="big"
           />
         </div>
         <h1>{goal.name}</h1>
         <h4>
-          {t("goals.amount.progress")} {balance * 50000} {t("goals.amount.of")}
+          {t("goals.amount.progress")} {ballanceUsd} {t("goals.amount.of")}
           {parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)}
         </h4>
         <div className={styles.buttonGroup}>

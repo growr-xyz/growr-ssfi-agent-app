@@ -86,6 +86,8 @@ function Dashboard ({ wallet, balance, setBalance }) {
 
   const { goals } = data.wallet.user;
 
+  const ballanceUsd = Math.trunc(balance * 50000)
+
   // TODO: add proper links
   const renderHeader = () => {
     return (
@@ -119,7 +121,7 @@ function Dashboard ({ wallet, balance, setBalance }) {
     >
       <Widget
         {...{
-          balance: `$ ${balance * 50000}`,
+          balance: `$ ${ballanceUsd}`,
           currency: `${balance} RBTC`,
         }}
       />
@@ -135,8 +137,8 @@ function Dashboard ({ wallet, balance, setBalance }) {
             <Goal {...{ 
               ...goal, 
               details: `${goal.isAchieved?t("goals.status.funded"):t("goals.status.progress")}, $${Math.round(goal.loan.totalToRepay)} ${t("goals.status.due")}`, 
-              progress: (balance * 50000) / (parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)), 
-              value: (balance * 50000) }} />
+              progress: (ballanceUsd) / (parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)), 
+              value: ballanceUsd }} />
           </div>
         ))}
       </Section>
