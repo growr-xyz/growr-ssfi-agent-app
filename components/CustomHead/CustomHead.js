@@ -3,7 +3,7 @@ import Head from "next/head";
 const CustomHead = () => {
   return (
     <Head>
-      <title>Growr Onchain App</title>
+      <title>Peseta</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       {/* <link
         rel="preload"
