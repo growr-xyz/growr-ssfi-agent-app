@@ -35,14 +35,14 @@ export const initialState = {
   GrowrTermsAccepted: false,
   loan: {
     amount_title: '$1200',
-    amount: '$1200.00 (0.024 RBTC)',
+    amount: '$1200 (0.024 RBTC)',
     apr: '29.95%',
     duration: '12 months',
-    instalment: '$100.00 (0.002 RBTC)',
+    instalment: '$116.96',
     next_instalment: '30/12/2021',
     last_instalment: '30/11/2022',
-    total_to_repay: '$1500.00 (0.03 RBTC)',
-    total_interest: '$200.00 (0.004 RBTC)'
+    total_to_repay: '$1403.46',
+    total_interest: '$203.45'
   }
 }
 
