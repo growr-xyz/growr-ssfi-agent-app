@@ -1,60 +1,59 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
+.wrapper {
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
-.wrapper {
-    max-width: 420px;
-    text-align: left;
+.title {
+  max-width: 315px;
 }
 
 .connected {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 315px;
-    height: 143px;
-    background-color: #F5F5F5;
-    border-radius: 4px;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 315px;
+  height: 143px;
+  background-color: #F5F5F5;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .usernumber {
-    margin-right: 10px;
-    font-size: 24px;
-    color: '#000000';
+  margin-right: 10px;
+  font-size: 24px;
+  color: '#000000';
 }
 
 .disconnected {
-    display: flex;
-    height: 143px;
-    width: 315px;
-    background-color: #F5F5F5;
-    border-radius: 4px;
-    cursor: pointer;
+  display: flex;
+  height: 143px;
+  width: 315px;
+  background-color: #F5F5F5;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .terms {
-    width: 315px;
-    display: flex;
-    font-size: 16px;
-    text-align: left;
-    padding-top: 15px;
+  width: 315px;
+  display: flex;
+  font-size: 16px;
+  text-align: left;
+  padding-top: 15px;
 }
   
 .checkbox {
-    width: auto;
-    margin-right: 9px;
+  width: auto;
+  margin-right: 9px;
 }
 
 .switch {
-    text-align: center;
-    color: #18D0BA;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 400;
-    padding-top: 15px;
-  }
+  text-align: center;
+  color: #53AF57;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  padding-top: 15px;
+}

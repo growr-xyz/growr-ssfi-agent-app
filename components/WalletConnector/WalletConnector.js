@@ -7,7 +7,7 @@ import { injected } from "../wallet/connectors"
 import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 function WalletConnector(props) {
   const {
@@ -86,37 +86,53 @@ function WalletConnector(props) {
   const [createUser] = useMutation(CREATE_USER);
 
   return (
-    <BaseContentLayout
-      {...{
-        submitButtonProps: {
-          onClick: onSubmit,
-          disabled: !active || !account || !termsAccepted,
-        },
-      }}
-    >
-      <div className={styles.wrapper}>
-        <h1>{t("page1.title")}</h1>
+    <BaseContentLayout  {...{
+      submitButtonProps: {
+        onClick: onSubmit,
+        disabled: !active || !account || !termsAccepted
+      }
+    }}>
 
-        {active ? (
-          <div className={styles.connected} onClick={disconnect}>
-            <span className={styles.usernumber}>{truncateAccount()}</span>
-            <Image src="/logout.svg" height={32} width={32} alt="Logout" />
-          </div>
-        ) : (
-          <div className={styles.disconnected}>
-            <Image
-              src="/metamask.svg"
-              height={95}
-              width={304}
-              alt="MetaMask"
-              onClick={connect}
-            />
-          </div>
-        )}
+    <div className={styles.wrapper}>
+      <div className={styles.logo}>
+        <Image
+          src="/logo.svg"
+          height={56}
+          width={195}
+          alt="Logo"
+        />
+      </div>
+      
+      <h1 className={styles.title}>{t('page1.title')}</h1>
 
-        <div className={styles.terms}>
-          <input
-            className={styles.checkbox}
+      { active ?
+        <div
+          className={styles.connected}
+          onClick={disconnect}
+        >
+          <span className={styles.usernumber}>{truncateAccount()}</span>
+          <Image
+            src="/logout.svg"
+            height={32}
+            width={32}
+            alt="Logout"
+          />
+        </div>
+        :
+        <div className={styles.disconnected}>
+          <Image
+            src="/metamask.svg"
+            height={95}
+            width={304}
+            alt="MetaMask"
+            onClick={connect}
+          />
+        </div>
+      }
+
+      <div className={styles.terms}>
+        <input
+          className={styles.checkbox}
             id="terms"
             name="terms"
             type="checkbox"

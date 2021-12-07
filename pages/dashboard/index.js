@@ -1,95 +1,111 @@
+import Image from 'next/image'
+import { useEffect } from 'react'
 import { useQuery, gql } from "@apollo/client"
 import { connect } from 'react-redux'
 import { useRouter } from "next/router"
 import { useTranslations } from "next-intl"
 import SimpleConnector from "../../components/WalletConnector/SimpleConnector"
-import Scrollbar from '../../components/ScoreBar'
-import { Header, Page, Widget, Section, Goal, ScoreBar } from '../../components'
+import { Header, Page, Widget, Section, Goal } from '../../components'
 import HelmetIcon from "../../components/Icons/Helmet"
-import Trophy from "../../components/Icons/Trophy"
-import PlusCircle from "../../components/Icons/PlusCircle";
-import Link from "next/link";
-import { Bitcoin, Budget } from "../../components/Quests";
-import styles from "./Dashbaord.module.css";
+import Link from "next/link"
+import { Bitcoin, Budget } from "../../components/Quests"
+import { getWalletBalance } from '../../utils/swap';
+import styles from "./Dashbaord.module.css"
 
-function Dashboard({ wallet }) {
+
+function Dashboard ({wallet}) {
+
   if (!wallet) return <SimpleConnector />;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const t = useTranslations("dashboard");
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter();
 
-  const GET_WALLET = gql`
-query wallet {
-  wallet(address:"${wallet}"){
-    address, 
-    vendor, 
-    network
-    user{
-      _id,
-      fullName,
-      education, 
-        dependants, 
-      dateOfBirth, 
-      householdExpenses,
-      officialHouseholdIncome,
-      unofficialHouseholdIncome,
-      location,
-      maritalStatus,
-      score,
-      goals{
-        _id,
-        name,
-        duration,
-        isAchieved,
-        amountToBorrow,
-        availableAmount
-        loan{
-            _id,
-          amount,
-          apr,
-          duration,
-          instalment,
-          nextInstalmentDue,
-          lastInstalmentDue,
-          totalToRepay,
-          totalInterest
-          }
-      }
-    }}
-}
-`;
+  if (!wallet) return <SimpleConnector />;
 
-  // const data = {
-  //   "wallet": {
-  //     "address": "0xD4A420FD1b2a33514BFBaEBab738999E708D1FC6",
-  //     "balance": "1200.00",
-  //     "user": {
-  //       "fullName": "Camila Busd.01",
-  //       "dateOfBirth": "2021-11-17",
-  //       "_id": "61ab9dbbd52730d9c0c77f63",
-  //       "goals": [
-  //         {
-  //           "name": "Car Purchase",
-  //           "duration": "12M",
-  //           "availableAmount": "0.00",
-  //           "amountToBorrow": "1500.00",
-  //           "isAchieved": false,
-  //           "loan": {
-  //             "amount": "1200.00",
-  //             "apr": "12.34%",
-  //             "duration": "9",
-  //             "instalment": "12.22%",
-  //             "nextInstalmentDue": "116.96",
-  //             "lastInstalmentDue": "1670630400000",
-  //             "totalToRepay": "1200.00", //"1334.22"
-  //             "totalInterest": "134.22"
-  //           }
-  //         }
-  //       ]
-  //     }
-  //   }
-  // }
+  const GET_WALLET = gql`
+    query wallet {
+      wallet(address:"${wallet}"){
+        address, 
+        vendor, 
+        network
+        user{
+          _id,
+          fullName,
+          education, 
+            dependants, 
+          dateOfBirth, 
+          householdExpenses,
+          officialHouseholdIncome,
+          unofficialHouseholdIncome,
+          location,
+          maritalStatus,
+          score,
+          goals{
+            _id,
+            name,
+            duration,
+            isAchieved,
+            amountToBorrow,
+            availableAmount
+            loan{
+                _id,
+              amount,
+              apr,
+              duration,
+              instalment,
+              nextInstalmentDue,
+              lastInstalmentDue,
+              totalToRepay,
+              totalInterest
+              }
+          }
+        }}
+      }
+    `
+
+// const data = {
+//   "wallet": {
+//     "address": "0xD4A420FD1b2a33514BFBaEBab738999E708D1FC6",
+//     "balance": "1200.00",
+//     "user": {
+//       "fullName": "Camila Busd.01",
+//       "dateOfBirth": "2021-11-17",
+//       "_id": "61ab9dbbd52730d9c0c77f63",
+//       "goals": [
+//         {
+//           "name": "Car Purchase",
+//           "duration": "12M",
+//           "availableAmount": "0.00",
+//           "amountToBorrow": "1500.00",
+//           "isAchieved": false,
+//           "loan": {
+//             "amount": "1200.00",
+//             "apr": "12.34%",
+//             "duration": "9",
+//             "instalment": "12.22%",
+//             "nextInstalmentDue": "116.96",
+//             "lastInstalmentDue": "1670630400000",
+//             "totalToRepay": "1200.00", //"1334.22"
+//             "totalInterest": "134.22"
+//           }
+//         }
+//       ]
+//     }
+//   }
+// }
+
+  const goToDashboard = () => {
+    router.push('/dashboard');
+  }
+
+  const printBalance = value => console.log('Wallet balance:', value);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    getWalletBalance(wallet, printBalance)
+  }, [wallet])
 
   // TBD - get wallet balance
   const balance = 1200.0;
@@ -101,29 +117,18 @@ query wallet {
 
   const { goals } = data.wallet.user;
 
-  const renderNewGoal = () => {
-    return (
-      <Link href="/dashboard">
-        <a>
-          <div className={styles.newGoal}>
-            <PlusCircle />
-            {t("goals.add")}
-          </div>
-        </a>
-      </Link>
-    );
-  };
-
   // TODO: add proper links
   const renderHeader = () => {
     return (
       <Header>
         <div className={styles.navigation}>
-          <Link href="/dashboard">
-            <a className={styles.link}>
-              <Trophy />
-            </a>
-          </Link>
+          <Image
+            src="/congrats.svg"
+            height={28}
+            width={28}
+            alt="Helmet"
+            onClick={goToDashboard}
+          />
           <Link href="/dashboard">
             <a className={styles.link}>
               <HelmetIcon />
@@ -145,11 +150,11 @@ query wallet {
     >
       <Widget
         {...{
-          balance: "$" + balance, // TBD - wallet balance here
+          balance: "$"+balance, // TBD - wallet balance here
           currency: "US Dollar (xUSD)",
         }}
       />
-      <Section label={t("goals.title")} render={renderNewGoal}>
+      <Section label={t('goals.title')}>
         {goals?.map((goal) => (
           <div
             key={goal.name}
@@ -158,29 +163,11 @@ query wallet {
             }}
             style={{ display: "inline-block" }}
           >
-            <Goal
-              {...{
-                ...goal,
-                details: `${
-                  goal.isAchieved
-                    ? t("goals.status.funded")
-                    : t("goals.status.progress")
-                }, $${
-                  goal?.loan?.totalToRepay
-                    ? Math.round(goal.loan.totalToRepay)
-                    : 0
-                } ${t("goals.status.due")}`,
-                progress:
-                  balance /
-                  (parseFloat(goal.amountToBorrow) +
-                    parseFloat(goal.availableAmount)),
-                value: balance,
-              }}
-            />
+            <Goal {...{ ...goal, details: `${goal.isAchieved?t("goals.status.funded"):t("goals.status.progress")}, $${Math.round(goal.loan.totalToRepay)} ${t("goals.status.due")}`, progress: balance/(parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)), value:balance }} />
           </div>
         ))}
       </Section>
-      <Section label={t("quests.title")}>
+      <Section label={t('quests.title')}>
         <Budget />
         <Bitcoin />
       </Section>
