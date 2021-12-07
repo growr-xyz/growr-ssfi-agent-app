@@ -159,7 +159,6 @@ function Dashboard ({wallet}) {
           <div
             key={goal.name}
             onClick={() => {
-              console.log('WEIRD');
               router.push(`/goal?goalId=${goal._id}`);
             }}
             style={{ display: "inline-block" }}
