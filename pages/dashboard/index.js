@@ -22,6 +22,8 @@ function Dashboard ({wallet}) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter();
 
+  if (!wallet) return <SimpleConnector />;
+
   const GET_WALLET = gql`
     query wallet {
       wallet(address:"${wallet}"){
