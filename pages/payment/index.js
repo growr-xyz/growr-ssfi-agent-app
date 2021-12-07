@@ -6,6 +6,7 @@ import { startSwap, connectWallet, lockFunds } from '../../utils/swap';
 import Input from '../../components/Input/Input';
 // import { useTranslations } from "next-intl";
 import BigNumber from 'bignumber.js';
+import styles from "./Payment.module.css";
 
 function Payment() {
   // const t = useTranslations("onboarding");
@@ -124,35 +125,37 @@ function Payment() {
   console.log(swapState);
 
   return (
-    <BaseContentLayout {... {
-      submitButtonProps: {
-        onClick: onSubmit,
-        label: (swapState.step === 0 ? 'Continue' : 'Sign'),
-        disabled: working
-      }
-    }}>
-      {/* <div className={styles.container}> */}
-      <div>
-        <h1>Payment</h1>
+    <div className={styles.container}>
+      <BaseContentLayout {... {
+        submitButtonProps: {
+          onClick: onSubmit,
+          label: (swapState.step === 0 ? 'Continue' : 'Sign'),
+          disabled: working
+        }
+      }}>
+        {/* <div className={styles.container}> */}
+        <div>
+          <h1>Payment</h1>
 
-        <h4>Input invoice, then press the button to lock funds.</h4>
+          <h4>Input invoice, then press the button to lock funds.</h4>
 
-        {/* Amount in RBTC - TODO: we could extract from the invoice */}
-        <Input
-          type="text"
-          name="quoteAmount"
-          placeholder="Amount in RBTC"
-          onChange={updateQuoteAmountInput} />
+          {/* Amount in RBTC - TODO: we could extract from the invoice */}
+          <Input
+            type="text"
+            name="quoteAmount"
+            placeholder="Amount in RBTC"
+            onChange={updateQuoteAmountInput} />
 
-        {/* Lightning invoice */}
-        <Input
-          type="text"
-          name="invoice"
-          placeholder="Lightning invoice"
-          onChange={updateInvoiceInput} />
+          {/* Lightning invoice */}
+          <Input
+            type="text"
+            name="invoice"
+            placeholder="Lightning invoice"
+            onChange={updateInvoiceInput} />
 
-      </div>
-    </BaseContentLayout>
+        </div>
+      </BaseContentLayout>
+    </div>
   );
 }
 

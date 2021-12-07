@@ -1,5 +1,5 @@
 {
-  "name": "hackaton",
+  "name": "peseta",
   "private": true,
   "scripts": {
     "dev": "next dev",
