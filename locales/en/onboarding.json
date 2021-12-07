@@ -1,0 +1,64 @@
+{
+    "submitBtn": "Continue",
+    "page1": {
+        "title": "Hi! 👋 Let’s start by connecting your wallet.",
+        "confirmCheck": "I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy"
+    },
+    "page2": {
+        "title": "Please connect your bank account.",
+        "access_note": "Please enter your access credentials for the Banco Hipotecario e-Banking, in order to connect your bank account to Peseta.",
+        "data_note": "We use your transactional data to perform risk scoring on the fly and we do not store any of this data. So your data remains yours.",
+        "username": "User name",
+        "password": "Password",
+        "skip": "Skip for now",
+        "try_again": "Try again",
+        "connection_error": "Error connecting account"
+    },
+    "page3": {
+        "title": "Then, some financial details.",
+        "official_income": "Your official income (USD)",
+        "other_income": "Other official household income (USD)",
+        "unofficial_income": "Household unofficial income (USD)",
+        "expenses": "Household expenses (USD)",
+        "dependants": "Dependants"
+    },
+    "page4": {
+        "title": "What goal would you like to achieve?",
+        "goal_type": "Select a goal type",
+        "amount_saved": "Amount saved (USD)",
+        "amount_needed": "Amount needed to borrow (USD)",
+        "loan_duration": "Loan durartion (months)"
+    },
+    "page5": {
+        "title": "Hurray! You have been approved for ",
+        "congratulations": "Congratulations you have been approved for a loan with the following conditions:",
+        "amount": "Amount:",
+        "apr": "APR:",
+        "duration": "Duration:",
+        "instalment": "Instalment:",
+        "next_instalment": "Next instalment due:",
+        "last_instalment": "Last instalment due:",
+        "total_to_repay": "Total to repay:",
+        "total_interest": "Total interest:",
+        "loan_details": "This loan will disbursed from the Growr protocol Lending Pool after your signature of the transaction. The disbursement and repayment transactions leave a permanent on-chain track record of your credit history that can be publicly verified.",
+        "agreement_check": "I agree with the Growr Lending Pool terms and conditions.",
+        "skip": "Skip for now",
+        "button_label": "Apply"
+    },
+    "page6": {
+        "title": "You can receive up to $101.73 back on your loan! 🤑",
+        "subtitle": "Get on just 1 learning quest per week throughout the duration of the loan, and you can earn up 50% of the total interest paid.",
+        "start_learning": "Start learning today and earn!",
+        "button_label": "Go to my dashboard"
+    },
+    "page7": {
+        "title":"Now, some personal details.",
+        "full_name":"Full name",
+        "birth_date":"Date of birth",
+        "education":"Education",
+        "family_status":"Family status",
+        "location":"Location",
+        "confirmCheck":"I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy",
+        "switchLang": "Cambiar a español"
+    }
+}

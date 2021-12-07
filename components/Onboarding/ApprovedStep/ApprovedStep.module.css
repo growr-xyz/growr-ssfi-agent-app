@@ -1,0 +1,22 @@
+.wrapper {
+  max-width: 420px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.terms {
+  margin: 20px 0;
+  width: 315px;
+}
+
+.checkbox {
+  width: auto;
+  margin-right: 9px;
+}
+
+.skip {
+  text-align: center;
+  color: #18D0BA;
+  cursor: pointer;
+}

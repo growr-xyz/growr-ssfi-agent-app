@@ -1,11 +1,10 @@
 import styles from "./Button.module.css";
-// import { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
-const Button = ({ label, onClick, disabled = false, loading }) => {
-  // const commonT = useTranslations("common");
+const Button = ({ label, onClick, disabled = false, loading, style }) => {
+  const t = useTranslations("onboarding");
 
-  // let activeLabel = !label ? commonT("continue") : label;
-  let activeLabel = "Label";
+  let activeLabel = !label ? t("submitBtn") : label;
 
   if (loading) {
     return (
@@ -16,7 +15,11 @@ const Button = ({ label, onClick, disabled = false, loading }) => {
   }
 
   return (
-    <button onClick={onClick} disabled={disabled} className={styles.button}>
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${style ?? style} ${styles.button}`}
+    >
       {activeLabel}
     </button>
   );

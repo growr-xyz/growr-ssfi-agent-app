@@ -1,0 +1,64 @@
+{
+    "submitBtn": "Continuar",
+     "page1": {
+         "title": "¡Hola! 👋 Comencemos conectando tu billetera",
+         "confirmCheck": "Acepto que mis datos se procesarán de acuerdo con los Términos de uso y la Política de privacidad de Growr"
+    },
+    "page2": {
+        "title": "Por favor, conecte su cuenta bancaria.",
+        "access_note": "Por favor ingrese sus credenciales de acceso al e-Banking del Banco Hipotecario, para conectar su cuenta bancaria a Peseta.",
+        "data_note": "Usamos sus datos transaccionales para realizar una puntuación de  riesgo durante el proceso y no almacenamos ninguno de estos datos.",
+        "username": "Nombre de usuario",
+        "password": "Contraseña",
+        "skip": "Omitir por ahora",
+        "try_again": "Inténtalo de nuevo",
+        "connection_error": "Error al conectar la cuenta"
+    },
+    "page3": {
+         "title": "Luego, algunos detalles financieros.",
+         "official_income": "Tus ingresos oficiales (USD)",
+         "other_income": "Otros ingresos familiares oficiales (USD)",
+         "unofficial_income": "Ingresos no oficiales del hogar (USD)",
+         "expenses": "Gastos del hogar (USD)",
+         "dependants": "Dependientes"
+    },
+    "page4": {
+        "title": "¿Qué objetivo le gustaría alcanzar?",
+        "goal_type": "Seleccione un tipo de objetivo",
+        "amount_saved": "Importe ahorrado (USD)",
+        "amount_needed": "Cantidad necesaria para pedir prestado (USD)",
+        "loan_duration": "Duración del préstamo (meses)"
+    },
+    "page5": {
+        "title": "¡Felicidades! Has sido aprobado para",
+        "congratulations": "Usted a sido aprobado para un préstamo con las siguientes condiciones:",
+        "amount": "Monto:",
+        "apr": "APR:",
+        "duration": "Duración:",
+        "instalment": "Cuota:",
+        "next_instalment": "Próxima entrega vence:",
+        "last_instalment": "Última cuota vencida:",
+        "total_to_repay": "Total a pagar:",
+        "total_interest": "Interés total:",
+        "loan_details": "Este préstamo se desembolsará del Fondo de préstamos del protocolo Growr después de la firma de la transacción. Las transacciones de desembolso y reembolso dejan un registro permanente en cadena de su historial crediticio que se puede verificar públicamente.",
+        "agreement_check": "Acepto los términos y condiciones del Growr Lending Pool.",
+        "skip": "Omitir por ahora",
+        "button_label": "Aplicar"
+    },
+    "page6": {
+        "title": "¡Puede recibir hasta $ 101.73 de su préstamo! 🤑",
+        "subtitle": "Realice solo 1 misión de aprendizaje por semana durante la duración del préstamo y podrá ganar hasta el 50% del interés total pagado",
+        "start_learning": "¡Empiece a aprender hoy y gane!",
+        "button_label": "Ir a mi panel de control"
+    },
+    "page7": {
+        "title": "Ahora, algunos detalles personales.",
+        "full_name": "Nombre completo",
+        "birth_date": "Fecha de nacimiento",
+        "education":"Educación",
+        "family_status": "Estado familiar",
+        "location": "Ubicación",
+        "confirmCheck": "Acepto que mis datos se procesarán de acuerdo con los Términos de uso y la Política de privacidad de Growr",
+        "switchLang": "Switch to English"
+    }
+}

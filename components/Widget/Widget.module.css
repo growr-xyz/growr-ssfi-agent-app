@@ -1,0 +1,15 @@
+.container {
+  background: var(--background-color);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.container > h1 {
+  margin: 0;
+}
+.container > h4 {
+  margin: 0;
+}

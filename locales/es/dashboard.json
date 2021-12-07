@@ -1,0 +1,39 @@
+{
+    "go_to":"Ir a mi tablero",
+    "goals":{
+        "title":"Objectivos",
+        "status":{
+            "funded":"Financiado",
+            "progress":"En progreso",
+            "due":"debido"
+        },
+        "amount":{
+            "add":"Añadir",
+            "pay":"Pagar",
+            "progress":"Progreso:",
+            "of":"de "
+        },
+        "add":"Nuevo objectivo",
+        "settings":"Ajustes"
+    },
+    "loan":{
+        "title":"Préstamo",
+        "amount":"monto pendiente del préstamo",
+        "next_inst":"Próxima cuota ",
+        "due":"Vence ",
+        "repay":"Reembolsar"
+    },
+    "trx":{
+        "title":"Actas"
+    },
+    "quests":{
+        "title":"Misiones",
+        "start":"Haga clic para comenzar misión",
+        "budget":{
+            "title":"Cómo hacer y seguir un presupuesto"
+        },
+        "bitcoin":{
+            "title":"¿Qué es Bitcoin, realmente?"
+        }
+    }
+}

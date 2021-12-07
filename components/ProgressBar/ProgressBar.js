@@ -18,4 +18,4 @@ const ProgressBar = ({ step, total }) => {
   );
 };
 
-export default ProgressBar;
+export default ProgressBar

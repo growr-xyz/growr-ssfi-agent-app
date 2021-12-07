@@ -1,0 +1,39 @@
+.wrapper {
+  background: var(--background-color);
+  width: 165px;
+  height: 165px;
+  border-radius: 10px;
+  margin-right: 15px;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.container {
+  padding: 12px;
+  width: 165px;
+  height: 165px;
+  display: flex;
+  flex-direction: column;
+}
+
+.childrenWrapper {
+  flex: 1;
+}
+
+.info {
+  flex: 1;
+  margin-top: 10px;
+}
+
+.name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+  white-space: break-spaces;
+  margin-bottom: 5px;
+}
+
+.details {
+  font-size: 1.3rem;
+  overflow: hidden;
+}
