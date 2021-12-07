@@ -199,6 +199,22 @@ export const connectWallet = async () => {
   // return account;
 };
 
+export const getWalletBalance = async (wallet, callback) => {
+  if (!w3) {
+    const web3Modal = new Web3Modal({});
+    const provider = await web3Modal.connect();
+    const web3 = new Web3(provider);
+
+    web3.eth.getBalance(wallet, function(err, res) {
+      if (err) {
+        console.log(err)
+      } else {
+        const balance = web3.utils.fromWei(res, "ether")
+        callback(balance)
+      }
+    })
+  }
+};
 
 // Lock submarine swap funds
 export const lockFunds = async (swapInfo, swapResponse) => {

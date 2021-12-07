@@ -1,15 +1,15 @@
 import Image from 'next/image'
+import { useEffect } from 'react'
 import { useQuery, gql } from "@apollo/client"
 import { connect } from 'react-redux'
 import { useRouter } from "next/router"
 import { useTranslations } from "next-intl"
 import SimpleConnector from "../../components/WalletConnector/SimpleConnector"
-import Scrollbar from '../../components/ScoreBar'
-import { Header, Page, Widget, Section, Goal, ScoreBar } from '../../components'
+import { Header, Page, Widget, Section, Goal } from '../../components'
 import HelmetIcon from "../../components/Icons/Helmet"
-import Trophy from "../../components/Icons/Trophy"
 import Link from "next/link"
 import { Bitcoin, Budget } from "../../components/Quests"
+import { getWalletBalance } from '../../utils/swap';
 import styles from "./Dashbaord.module.css"
 
 
@@ -17,8 +17,9 @@ function Dashboard ({wallet}) {
 
   if (!wallet) return <SimpleConnector />;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const t = useTranslations("dashboard");
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter();
 
   const GET_WALLET = gql`
@@ -96,6 +97,13 @@ function Dashboard ({wallet}) {
   const goToDashboard = () => {
     router.push('/dashboard');
   }
+
+  const printBalance = value => console.log('Wallet balance:', value);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    getWalletBalance(wallet, printBalance)
+  }, [wallet])
 
   // TBD - get wallet balance
   const balance = 1200.0;
