@@ -2,6 +2,11 @@
   margin-top: 25px;
 }
 
+.labelContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .label {
   margin-top: 0;
   margin-bottom: 10px;

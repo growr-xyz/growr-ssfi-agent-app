@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
-import { useQuery, gql } from "@apollo/client"
+import router, { useRouter } from "next/router";
+import { useQuery, gql } from "@apollo/client";
 import Header from "./components/Header/Header";
 import Loan from "./components/Loan/Loan";
 import Transactions from "./components/Transactions/Transactions";
 import { ScoreBar, Button } from "../../components";
-import { useTranslations } from "next-intl"
+import { useTranslations } from "next-intl";
 
 import styles from "./Goal.module.css";
 
@@ -29,7 +29,7 @@ import styles from "./Goal.module.css";
 
 const Goal = () => {
   const router = useRouter();
-  const t = useTranslations("dashboard")
+  const t = useTranslations("dashboard");
   const { goalId } = router.query;
 
   const GET_GOAL = gql`
@@ -54,16 +54,16 @@ const Goal = () => {
             }
         }
   }
-  `
-  const { data, loading, error } = useQuery(GET_GOAL)
+  `;
+  const { data, loading, error } = useQuery(GET_GOAL);
 
-  if (loading || error || !data) return null
+  if (loading || error || !data) return null;
 
   const { goal } = data;
   const { loan } = goal;
 
   // TBD - get wallet balance
-  const balance = 1200.00
+  const balance = 1200.0;
 
   const onBackPress = () => {
     router.push("/dashboard");
@@ -74,10 +74,21 @@ const Goal = () => {
       <Header onBackPress={onBackPress} />
       <div className={styles.goal}>
         <div className={styles.scoreBar}>
-          <ScoreBar progressIndex={balance/(parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount))} value={balance} size="big" />
+          <ScoreBar
+            progressIndex={
+              balance /
+              (parseFloat(goal.amountToBorrow) +
+                parseFloat(goal.availableAmount))
+            }
+            value={balance}
+            size="big"
+          />
         </div>
         <h1>{goal.name}</h1>
-        <h4>Progress: {balance} out of {(parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount))}</h4>
+        <h4>
+          Progress: {balance} out of{" "}
+          {parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)}
+        </h4>
         <div className={styles.buttonGroup}>
           <Button label="Add" style={styles.button} />
           <Button label="Pay" style={styles.button} />
@@ -85,7 +96,7 @@ const Goal = () => {
         </div>
       </div>
       <div className={styles.more}>
-        <Loan {...loan} />
+        {loan ? <Loan {...loan} /> : null}
         <Transactions />
       </div>
     </div>
