@@ -1,6 +1,10 @@
 {
   "submitBtn": "Continue",
-  "initiatePayment": {
+  "signBtn": "Sign",
+  "waitingMsg":"Waiting for one confirmation...",
+  "title": "Payment",
+  "input_invoice": "Input invoice, then press the button to lock funds.",
+  "initiate": {
       "amount": "Amount in RBTC",
       "invoice": "Paste the Lightning invoice"
   }
