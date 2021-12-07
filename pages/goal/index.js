@@ -5,6 +5,7 @@ import Loan from "./components/Loan/Loan";
 import Transactions from "./components/Transactions/Transactions";
 import { ScoreBar, Button } from "../../components";
 import { useTranslations } from "next-intl";
+import Gear from "../../components/Icons/Gear";
 
 import styles from "./Goal.module.css";
 
@@ -29,6 +30,7 @@ import styles from "./Goal.module.css";
 
 const Goal = () => {
   const router = useRouter();
+  console.log("router:", router);
   const t = useTranslations("dashboard");
   const { goalId } = router.query;
 
@@ -86,13 +88,19 @@ const Goal = () => {
         </div>
         <h1>{goal.name}</h1>
         <h4>
-          Progress: {balance} out of{" "}
+          {t("goals.amount.progress")} {balance} {t("goals.amount.of")}
           {parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)}
         </h4>
         <div className={styles.buttonGroup}>
-          <Button label="Add" style={styles.button} />
-          <Button label="Pay" style={styles.button} />
-          <Button label="settings" style={styles.button} />
+          <Button label={t("goals.amount.add")} style={styles.button} />
+          <Button
+            label={t("goals.amount.pay")}
+            style={styles.button}
+            onClick={() => {
+              router.push(`/payment?goalId=${goalId}`);
+            }}
+          />
+          <Button label={<Gear />} style={styles.button} />
         </div>
       </div>
       <div className={styles.more}>
@@ -105,12 +113,12 @@ const Goal = () => {
 
 export default Goal;
 
-// export function getStaticProps({ locale }) {
-//   return {
-//     props: {
-//       messages: {
-//         dashboard: require(`../../locales/${locale}/dashboard.json`),
-//       },
-//     },
-//   };
-// } // generates an error: Error: getStaticPaths is required for dynamic SSG pages and is missing for '/goal/[goalId]'.
+export function getStaticProps({ locale }) {
+  return {
+    props: {
+      messages: {
+        dashboard: require(`../../locales/${locale}/dashboard.json`),
+      },
+    },
+  };
+} // generates an error: Error: getStaticPaths is required for dynamic SSG pages and is missing for '/goal/[goalId]'.

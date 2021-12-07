@@ -1,3 +1,11 @@
 {
-    
-}
+    "submitBtn": "Continuar",
+    "signBtn": "Firmar",
+    "waitingMsg":"Esperando una confirmación...",
+    "title": "Pago",
+    "input_invoice": "Ingrese la factura, luego presione el botón para bloquear los fondos.",
+    "initiate": {
+        "amount": "Importe en RBTC",
+        "invoice": "Pega la factura Lightning"
+    }
+  }
