@@ -7,7 +7,7 @@
     "page2": {
         "title": "Por favor, conecte su cuenta bancaria.",
         "access_note": "Por favor ingrese sus credenciales de acceso al e-Banking del Banco Hipotecario, para conectar su cuenta bancaria a Peseta.",
-        "data_note": "Usamos sus datos transaccionales para realizar una puntuación de riesgo sobre la marcha y no almacenamos ninguno de estos datos. Por lo tanto, sus datos siguen siendo suyos",
+        "data_note": "Usamos sus datos transaccionales para realizar una puntuación de  riesgo durante el proceso y no almacenamos ninguno de estos datos.",
         "username": "Nombre de usuario",
         "password": "Contraseña",
         "skip": "Omitir por ahora",
@@ -30,8 +30,8 @@
         "loan_duration": "Duración del préstamo (meses)"
     },
     "page5": {
-        "title": "¡Viva! Has sido aprobado para",
-        "congratulations": "Felicidades ha sido aprobado para un préstamo con las siguientes condiciones:",
+        "title": "¡Felicidades! Has sido aprobado para",
+        "congratulations": "Usted a sido aprobado para un préstamo con las siguientes condiciones:",
         "amount": "Monto:",
         "apr": "APR:",
         "duration": "Duración:",
@@ -58,6 +58,7 @@
         "education":"Educación",
         "family_status": "Estado familiar",
         "location": "Ubicación",
-        "confirmCheck": "Acepto que mis datos se procesarán de acuerdo con los Términos de uso y la Política de privacidad de Growr"
+        "confirmCheck": "Acepto que mis datos se procesarán de acuerdo con los Términos de uso y la Política de privacidad de Growr",
+        "switchLang": "Switch to English"
     }
 }

@@ -7,53 +7,63 @@ import { injected } from "../wallet/connectors"
 import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user'
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
 import styles from "./WalletConnector.module.css";
+import router, { useRouter } from "next/router";
 
 function WalletConnector(props) {
-  const { termsAccepted, label, onNext, setWalletId, acceptTerms, rejectTerms } = props
+  const {
+    termsAccepted,
+    label,
+    onNext,
+    setWalletId,
+    acceptTerms,
+    rejectTerms,
+  } = props;
 
-  const { active, account, library, connector, activate, deactivate } = useWeb3React()
+  const { active, account, library, connector, activate, deactivate } =
+    useWeb3React();
 
-  const t = useTranslations("onboarding")
+  const t = useTranslations("onboarding");
+
+  const router = useRouter();
 
   async function connect() {
     try {
-      await activate(injected)
+      await activate(injected);
     } catch (ex) {
-      console.log(ex)
+      console.log(ex);
     }
   }
 
   async function disconnect() {
     try {
-      deactivate()
+      deactivate();
     } catch (ex) {
-      console.log(ex)
+      console.log(ex);
     }
   }
 
   const onSubmit = () => {
     if (active && account) {
-      setWalletId(account)
-      createWallet()
-        .then(() =>
-          createUser()
-            .then(() =>
-              onNext()
-            .catch(err => err)              
-            )
-        .catch(err => err)
-      )
+      setWalletId(account);
+      createWallet().then(() =>
+        createUser()
+          .then(() => onNext().catch((err) => err))
+          .catch((err) => err)
+      );
     }
-  }
+  };
 
-  const onChangeCheckbox = ({ target }) => target.checked ? acceptTerms() : rejectTerms()
+  const onChangeCheckbox = ({ target }) =>
+    target.checked ? acceptTerms() : rejectTerms();
 
   const truncateAccount = () => {
-    const accountString = account.split('')
-    const firstPart = accountString.filter((letter, index) => index < 5)
-    const lastPart = accountString.filter((letter, index) => index > accountString.length - 3)
-    return [...firstPart, '...', ...lastPart].join('')
-  }
+    const accountString = account.split("");
+    const firstPart = accountString.filter((letter, index) => index < 5);
+    const lastPart = accountString.filter(
+      (letter, index) => index > accountString.length - 3
+    );
+    return [...firstPart, "...", ...lastPart].join("");
+  };
 
   const CREATE_WALLET = gql`
     mutation createWallet {
@@ -62,7 +72,7 @@ function WalletConnector(props) {
         network
       }
     }
-  `
+  `;
 
   const CREATE_USER = gql`
     mutation createUser{
@@ -70,62 +80,67 @@ function WalletConnector(props) {
         _id
       }
     }
-  `
+  `;
 
-  const [createWallet] = useMutation(CREATE_WALLET)
-  const [createUser] = useMutation(CREATE_USER)
+  const [createWallet] = useMutation(CREATE_WALLET);
+  const [createUser] = useMutation(CREATE_USER);
 
   return (
-    <BaseContentLayout  {...{
-      submitButtonProps: {
-        onClick: onSubmit,
-        disabled: !active || !account || !termsAccepted
-      }
-    }}>
+    <BaseContentLayout
+      {...{
+        submitButtonProps: {
+          onClick: onSubmit,
+          disabled: !active || !account || !termsAccepted,
+        },
+      }}
+    >
+      <div className={styles.wrapper}>
+        <h1>{t("page1.title")}</h1>
 
-    <div className={styles.wrapper}>
-      <h1>{t('page1.title')}</h1>
+        {active ? (
+          <div className={styles.connected} onClick={disconnect}>
+            <span className={styles.usernumber}>{truncateAccount()}</span>
+            <Image src="/logout.svg" height={32} width={32} alt="Logout" />
+          </div>
+        ) : (
+          <div className={styles.disconnected}>
+            <Image
+              src="/metamask.svg"
+              height={95}
+              width={304}
+              alt="MetaMask"
+              onClick={connect}
+            />
+          </div>
+        )}
 
-      { active ?
-        <div
-          className={styles.connected}
-          onClick={disconnect}
-        >
-          <span className={styles.usernumber}>{truncateAccount()}</span>
-          <Image
-            src="/logout.svg"
-            height={32}
-            width={32}
-            alt="Logout"
-          />
-        </div>
-        :
-        <div className={styles.disconnected}>
-          <Image
-            src="/metamask.svg"
-            height={95}
-            width={304}
-            alt="MetaMask"
-            onClick={connect}
-          />
-        </div>
-      }
-
-      <div className={styles.terms}>
-        <input
-          className={styles.checkbox}
+        <div className={styles.terms}>
+          <input
+            className={styles.checkbox}
             id="terms"
             name="terms"
             type="checkbox"
             checked={termsAccepted}
             onChange={onChangeCheckbox}
           />
-        <label htmlFor="terms">{t("page7.confirmCheck")}</label>
-      </div>
-    </div>
+          <label htmlFor="terms">{t("page7.confirmCheck")}</label>
+        </div>
 
+        <div
+          className={styles.switch}
+          onClick={() => {
+            if (router.locale == "es") {
+              router.push(`/`, `/`, { locale: "en" });
+            } else {
+              router.push(`/`, `/`, { locale: "es" });
+            }
+          }}
+        >
+          {t("page7.switchLang")}
+        </div>
+      </div>
     </BaseContentLayout>
-  )
+  );
 }
 
 const mapStateToProps = function(state) {

@@ -42,9 +42,19 @@
     display: flex;
     font-size: 16px;
     text-align: left;
+    padding-top: 15px;
 }
   
 .checkbox {
     width: auto;
     margin-right: 9px;
 }
+
+.switch {
+    text-align: center;
+    color: #18D0BA;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    padding-top: 15px;
+  }

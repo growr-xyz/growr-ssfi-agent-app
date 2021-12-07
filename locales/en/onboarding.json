@@ -58,6 +58,7 @@
         "education":"Education",
         "family_status":"Family status",
         "location":"Location",
-        "confirmCheck":"I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy"
+        "confirmCheck":"I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy",
+        "switchLang": "Cambiar a español"
     }
 }
