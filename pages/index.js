@@ -35,7 +35,6 @@ export default function Home() {
   )
 }
 
-
 export function getStaticProps({ locale }) {
   return {
     props: {
@@ -44,4 +43,4 @@ export function getStaticProps({ locale }) {
       }
     },
   };
-}
+} 

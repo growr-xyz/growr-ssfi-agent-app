@@ -1,13 +1,18 @@
 import Image from 'next/image'
-import { connect } from 'react-redux';
-import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { useTranslations } from "next-intl"
 import { useMutation, gql } from "@apollo/client"
+import { setBankUserId } from '../../../redux/user'
 import Input from '../../Input/Input'
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
 import styles from "./BankAccountConnector.module.css"
 
-const BankAccountConnector = ({ wallet, onNext }) => {
+const BankAccountConnector = ({ onNext }) => {
+  const walletId = useSelector((state) => state.user.walletId);
+  // const bankUserId = useSelector((state) => state.user.bankUserId);
+  const dispatch = useDispatch();
+
   const t = useTranslations("onboarding")
 
   const [user, setUser] = useState({
@@ -23,23 +28,25 @@ const BankAccountConnector = ({ wallet, onNext }) => {
     })
   }
 
-  const CONNECT_BANK = gql`
-    mutation connectBank {
-      connectBank(, username:"${user.username}", password:"${user.password}", wallet:"${wallet}"){success}
-    }
-  `
-  const [connectBankMutation, { data, loading, error }] = useMutation(CONNECT_BANK) //, {errorPolicy: 'all'})
+  // const CONNECT_BANK = gql`
+  //   mutation connectBank {
+  //     connectBank(, username:"${user.username}", password:"${user.password}", wallet:"${walletId}"){success}
+  //   }
+  // `
+  // const [connectBankMutation, { data, loading, error }] = useMutation(CONNECT_BANK) //, {errorPolicy: 'all'})
 
   const onContinue = () => {
-    connectBankMutation()
-      .then(() => onNext())
-      .catch(err => {
-        setUser({
-          ...user,
-          connectionError: true
-        })
-        return err
-      })
+    dispatch(setBankUserId(user.username));
+    onNext();
+    // connectBankMutation()
+    //   .then(() => onNext())
+    //   .catch(err => {
+    //     setUser({
+    //       ...user,
+    //       connectionError: true
+    //     })
+    //     return err
+    //   })
   }
 
   const onRetry = () => {
@@ -54,7 +61,7 @@ const BankAccountConnector = ({ wallet, onNext }) => {
       submitButtonProps: {
         label: user.connectionError ? t('page2.try_again') : t('submitBtn'),
         onClick: user.connectionError ? onRetry : onContinue,
-        disabled: !user.username || !user.password || !wallet,
+        disabled: !user.username || !user.password || !walletId,
         style: user.connectionError ? styles.customButton : null
       }
     }} >
@@ -103,7 +110,7 @@ const BankAccountConnector = ({ wallet, onNext }) => {
           </div>
         }
 
-        { !user.connectionError  &&
+        { !user.connectionError &&
           <div
             className={styles.skip}
             onClick={() => onNext()}
@@ -116,10 +123,11 @@ const BankAccountConnector = ({ wallet, onNext }) => {
   )
 }
 
-const mapStateToProps = function(state) {
-  return {
-    wallet: state.user.wallet_id
-  }
-}
+// const mapStateToProps = function(state) {
+//   return {
+//     wallet: state.user.walletId
+//   }
+// }
 
-export default connect(mapStateToProps)(BankAccountConnector)
+// export default connect(mapStateToProps)(BankAccountConnector)
+export default BankAccountConnector;

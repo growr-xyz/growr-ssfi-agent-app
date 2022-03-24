@@ -1,96 +1,118 @@
 // Actions
-export const SET_USER_ID = "SET_USER_ID"
-export const SET_WALLET_ID = 'SET_WALLET_ID'
-export const SET_GOAL_ID = 'SET_GOAL_ID'
-export const SET_WALLET_BALANCE = 'SET_WALLET_BALANCE'
-export const ACCEPT_TERMS = 'ACCEPT_TERMS'
-export const REJECT_TERMS = 'REJECT_TERMS'
-export const ACCEPT_GROWR_TERMS = 'ACCEPT_GROWR_TERMS'
-export const REJECT_GROWR_TERMS = 'REJECT_GROWR_TERMS'
+export const SET_USER_ID = 'SET_USER_ID';
+export const SET_WALLET_ID = 'SET_WALLET_ID';
+export const SET_BANK_USER_ID = 'SET_BANK_USER_ID';
+export const SET_FINANCES = 'SET_FINANCES';
+export const SET_GOAL = 'SET_GOAL';
+export const ACCEPT_TERMS = 'ACCEPT_TERMS';
+export const REJECT_TERMS = 'REJECT_TERMS';
+export const ACCEPT_GROWR_TERMS = 'ACCEPT_GROWR_TERMS';
+export const REJECT_GROWR_TERMS = 'REJECT_GROWR_TERMS';
 
 // Action Creators
-export const setUserId = query => ({ type: SET_USER_ID, query})
+export const setUserId = query => ({ type: SET_USER_ID, query});
 
-export const setWalletId = (query) => ({ type: SET_WALLET_ID, query})
+export const setWalletId = (query) => ({ type: SET_WALLET_ID, query});
 
-export const setGoalId = (query) => ({ type: SET_GOAL_ID, query})
+export const setBankUserId = (query) => ({ type: SET_BANK_USER_ID, query});
 
-export const setWalletBalance = (query) => ({ type: SET_WALLET_BALANCE, query})
+export const setFinances = (query) => ({ type: SET_FINANCES, query});
 
-export const acceptTerms = () => ({ type: ACCEPT_TERMS })
+export const setGoal = (query) => ({ type: SET_GOAL, query});
 
-export const rejectTerms = () => ({ type: REJECT_TERMS })
+export const acceptTerms = () => ({ type: ACCEPT_TERMS });
 
-export const acceptGrowrTerms = () => ({ type: ACCEPT_GROWR_TERMS })
+export const rejectTerms = () => ({ type: REJECT_TERMS });
 
-export const rejectGrowrTerms = () => ({ type: REJECT_GROWR_TERMS })
+export const acceptGrowrTerms = () => ({ type: ACCEPT_GROWR_TERMS });
+
+export const rejectGrowrTerms = () => ({ type: REJECT_GROWR_TERMS });
 
 // Reducer
 export const initialState = {
-  user_id: '',
-  wallet_id: '',
-  goal_id: '',
-  balance: 0,
+  userId: '',
+  walletId: '',
+  bankUserId: '',
   termsAccepted: false,
-  GrowrTermsAccepted: false,
-  loan: {
-    amount_title: '$1200',
-    amount: '$1200 (0.024 RBTC)',
-    apr: '29.95%',
-    duration: '12 months',
-    instalment: '$116.96',
-    next_instalment: '30/12/2021',
-    last_instalment: '30/11/2022',
-    total_to_repay: '$1403.46',
-    total_interest: '$203.45'
-  }
-}
+  growrTermsAccepted: false,
+  finances: {
+    income: 0,
+    other: 0,
+    unofficial: 0,
+    expenses: 0,
+    dependants: 0
+  },
+  goals: [{
+    goalId: '',
+    goalType: '',
+    loanDuration: 0,
+    amountSaved: 0,
+    amountNeeded: 0,
+    isAchieved: false,
+    loan: {
+      amount: 1200,
+      annualPercentageRate: 0.2995,
+      duration: 12,
+      instalment: 116.96,
+      nextInstalment: '2022-03-31',
+      lastInstalment: '2023-02-28',
+      totalToRepay: 1403.46,
+      totalInterest: 203.46,
+      outstanding: 1200
+    }
+  }],
+};
 
 const userReducer = (state = initialState, { type, query }) => {
   switch (type) {
     case SET_WALLET_ID:
       return {
         ...state,
-        wallet_id: query
-      }
+        walletId: query
+      };
     case SET_USER_ID:
       return {
         ...state,
-        user_id: query
-      }
-    case SET_GOAL_ID:
+        userId: query
+      };
+    case SET_BANK_USER_ID:
       return {
         ...state,
-        goal_id: query
-      }
-    case SET_WALLET_BALANCE:
+        bankUserId: query
+      };
+    case SET_FINANCES:
       return {
         ...state,
-        balance: query
-      }
+        finances: query
+      };
+    case SET_GOAL:
+      return {
+        ...state,
+        goals: [query]
+      };
     case ACCEPT_TERMS:
       return {
         ...state,
         termsAccepted: true
-      }
+      };
     case REJECT_TERMS:
       return {
         ...state,
         termsAccepted: false
-      }
+      };
     case ACCEPT_GROWR_TERMS:
-        return {
-          ...state,
-          GrowrTermsAccepted: true
-        }
+      return {
+        ...state,
+        growrTermsAccepted: true
+      };
     case REJECT_GROWR_TERMS:
-        return {
-          ...state,
-          GrowrTermsAccepted: false
-        }
+      return {
+        ...state,
+        growrTermsAccepted: false
+      };
     default:
-      return state
+      return state;
   }
 }
 
-export default userReducer
+export default userReducer;
