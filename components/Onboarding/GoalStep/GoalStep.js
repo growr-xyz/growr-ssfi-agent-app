@@ -10,7 +10,7 @@ import styles from './GoalStep.module.css';
 
 function GoalStep ({ onNext }) {
   // const userId = useSelector((state) => state.user.userId);
-  const goal = useSelector((state) => state.user.goals[0]);
+  const goal = useSelector((state) => state.user?.goals[0]);
   const dispatch = useDispatch();
 
   if (!goal.goalId) dispatch(setGoal({...goal, goalId: uuidv4()}));

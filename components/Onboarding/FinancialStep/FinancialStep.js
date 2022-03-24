@@ -83,11 +83,11 @@ function FinancialStep({ onNext }) {
       submitButtonProps: {
         label: t('submitBtn'),
         onClick: onFormSubmit,
-        disabled: finances.income < 1 
-        || finances.other < 1
-        || finances.unofficial < 1
-        || finances.expenses < 1
-        || finances.dependants < 1
+        disabled: finances?.income < 1 
+        || finances?.other < 1
+        || finances?.unofficial < 1
+        || finances?.expenses < 1
+        || finances?.dependants < 1
       }
     }}>
       <div className={styles.wrapper}>
