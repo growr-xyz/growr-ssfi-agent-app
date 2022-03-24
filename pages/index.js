@@ -35,7 +35,6 @@ export default function Home() {
   )
 }
 
-
 export function getStaticProps({ locale }) {
   return {
     props: {
@@ -44,20 +43,4 @@ export function getStaticProps({ locale }) {
       }
     },
   };
-}  
-
-{/* <BaseContentLayout  {...{
-  submitButtonProps: {
-    onClick: onNextPress,
-    disabled: !walletConnected // || activeStep === 2
-  },
-  activeStep,
-  totalSteps,
-  onBackPress
-}} >
-  {activeStep === 1 && <WalletConnector {...{label: t("page1.title")}} />}
-  {activeStep === 2 && <OnboardingStepTwo label={t("page2.title")} onSubmit={onSubmit} />}
-  {activeStep === 3 && <OnboardingStepThree {...{label: t("page3.title")}} />}
-  {activeStep === 4 && <OnboardingStep {...{label: t("page4.title")}} />}
-  {activeStep === 5 && <OnboardingStep {...{label: t("page5.title")}} />}
-</BaseContentLayout> */}
+} 

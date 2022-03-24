@@ -1,6 +1,8 @@
+import App from 'next/app'
 import Web3 from 'web3'
-import { Provider } from 'react-redux'
-import { useStore } from '../redux/store'
+import { useStore } from 'react-redux'
+import { wrapper } from '../redux/store'
+import { PersistGate } from 'redux-persist/integration/react'
 import { NextIntlProvider } from "next-intl"
 import { Web3ReactProvider } from '@web3-react/core'
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
@@ -15,26 +17,38 @@ function getLibrary(provider) {
 const { publicRuntimeConfig } = getConfig()
 
 const client = new ApolloClient({
-  //uri: 'http://localhost:4000', 
   uri: publicRuntimeConfig.backendUrl,
   cache: new InMemoryCache()
 });
 
 function MyApp({ Component, pageProps }) {
-  const store = useStore(pageProps.initialReduxState)
+  const store = useStore((state) => state);
+  // const { Component, pageProps, store } = props;
+  // console.log('!!!!!!!! Store:', store.getState());
 
-  return (
+  return process.browser ? (
     <NextIntlProvider messages={pageProps.messages}>
-      <Provider store={store}>
+      <PersistGate loading={<div>Loading...</div>} persistor={store.__PERSISTOR}>
         <ApolloProvider client={client}>
           <Web3ReactProvider getLibrary={getLibrary}>
             <CustomHead />
             <Component {...pageProps} />
           </Web3ReactProvider>
         </ApolloProvider>
-      </Provider>
+      </PersistGate>
+    </NextIntlProvider>) : (
+    <NextIntlProvider messages={pageProps.messages}>
+      <PersistGate persistor={store}>
+        <ApolloProvider client={client}>
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <CustomHead />
+            <Component {...pageProps} />
+          </Web3ReactProvider>
+        </ApolloProvider>
+      </PersistGate>
     </NextIntlProvider>
-  )
+  );
 }
 
-export default MyApp
+export default wrapper.withRedux(MyApp);
+//export default withRedux(reduxStore)(MyApp)

@@ -1,26 +1,19 @@
-import Image from 'next/image'
-import { connect } from 'react-redux';
-import { useTranslations } from "next-intl"
-import { useWeb3React } from "@web3-react/core"
-import { useMutation,  gql } from "@apollo/client"
-import { injected } from "../wallet/connectors"
-import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user'
-import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout'
-import styles from "./WalletConnector.module.css";
-import { useRouter } from "next/router";
+import Image from 'next/image';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslations } from 'next-intl';
+import { useWeb3React } from '@web3-react/core';
+import { useMutation,  gql } from '@apollo/client';
+import { injected } from '../wallet/connectors';
+import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user';
+import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout';
+import styles from './WalletConnector.module.css';
+import { useRouter } from 'next/router';
 
-function WalletConnector(props) {
-  const {
-    termsAccepted,
-    label,
-    onNext,
-    setWalletId,
-    acceptTerms,
-    rejectTerms,
-  } = props;
+function WalletConnector({ onNext }) {
+  const termsAccepted = useSelector((state) => state.user.termsAccepted);
+  const dispatch = useDispatch();
 
-  const { active, account, library, connector, activate, deactivate } =
-    useWeb3React();
+  const { active, account, library, connector, activate, deactivate } = useWeb3React();
 
   const t = useTranslations("onboarding");
 
@@ -44,17 +37,18 @@ function WalletConnector(props) {
 
   const onSubmit = () => {
     if (active && account) {
-      setWalletId(account);
-      createWallet().then(() =>
-        createUser()
-          .then(() => onNext().catch((err) => err))
-          .catch((err) => err)
-      );
+      dispatch(setWalletId(account));
+      onNext(); // .catch((err) => err);
+      // createWallet().then(() =>
+      //   createUser()
+      //     .then(() => onNext().catch((err) => err))
+      //     .catch((err) => err)
+      // );
     }
   };
 
   const onChangeCheckbox = ({ target }) =>
-    target.checked ? acceptTerms() : rejectTerms();
+    target.checked ? dispatch(acceptTerms()) : dispatch(rejectTerms());
 
   const truncateAccount = () => {
     const accountString = account.split("");
@@ -65,28 +59,28 @@ function WalletConnector(props) {
     return [...firstPart, "...", ...lastPart].join("");
   };
 
-  const CREATE_WALLET = gql`
-    mutation createWallet {
-      createWallet(newWallet:{address:"${account}", vendor:"RSK", network:"testnet"}){
-        address,
-        network
-      }
-    }
-  `;
+  // const CREATE_WALLET = gql`
+  //   mutation createWallet {
+  //     createWallet(newWallet:{address:"${account}", vendor:"RSK", network:"testnet"}){
+  //       address,
+  //       network
+  //     }
+  //   }
+  // `;
 
-  const CREATE_USER = gql`
-    mutation createUser{
-      updateUser(userData:{fullName:"IvanAsen"}, address:"${account}"){
-        _id
-      }
-    }
-  `;
+  // const CREATE_USER = gql`
+  //   mutation createUser{
+  //     updateUser(userData:{fullName:"IvanAsen"}, address:"${account}"){
+  //       _id
+  //     }
+  //   }
+  // `;
 
-  const [createWallet] = useMutation(CREATE_WALLET);
-  const [createUser] = useMutation(CREATE_USER);
+  // const [createWallet] = useMutation(CREATE_WALLET);
+  // const [createUser] = useMutation(CREATE_USER);
 
   return (
-    <BaseContentLayout  {...{
+    <BaseContentLayout {...{
       submitButtonProps: {
         onClick: onSubmit,
         disabled: !active || !account || !termsAccepted
@@ -105,7 +99,7 @@ function WalletConnector(props) {
       
       <h1 className={styles.title}>{t('page1.title')}</h1>
 
-      { active ?
+      {active ?
         <div
           className={styles.connected}
           onClick={disconnect}
@@ -159,16 +153,4 @@ function WalletConnector(props) {
   );
 }
 
-const mapStateToProps = function(state) {
-  return {
-    termsAccepted: state.user.termsAccepted
-  }
-}
-
-const mapDispatchToProps = {
-  setWalletId,
-  acceptTerms,
-  rejectTerms
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(WalletConnector)
+export default WalletConnector;

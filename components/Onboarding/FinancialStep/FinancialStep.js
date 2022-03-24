@@ -1,30 +1,33 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslations } from "next-intl"
 import { useMutation,  gql } from "@apollo/client"
-import { setUserId } from '../../../redux/user'
+import { setUserId, setFinances } from '../../../redux/user'
 import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout'
 import Input from '../../Input/Input'
 import styles from './FinancialStep.module.css'
 
-function FinancialStep (props) {
-  const { wallet, setUserId, onNext } = props
+function FinancialStep({ onNext }) {
+  // const walletId = useSelector((state) => state.user.walletId);
+  // const userId = useSelector((state) => state.user.termsAccepted);
+  const finances = useSelector((state) => state.user.finances);
+  const dispatch = useDispatch();
 
   const t = useTranslations("onboarding")
 
-  const [finances, setFinances] = useState({
-      income: 0,
-      other: 0,
-      unofficial: 0,
-      expenses: 0,
-      dependants: 0
-  })
+  // const [finances, setFinances] = useState({
+  //     income: 0,
+  //     other: 0,
+  //     unofficial: 0,
+  //     expenses: 0,
+  //     dependants: 0
+  // })
 
   const updateInput = e => {
-    setFinances({
+    dispatch(setFinances({
       ...finances,
       [e.target.name]: e.target.value
-    })
+    }))
   }
 
   const formInputs = [{
@@ -44,34 +47,35 @@ function FinancialStep (props) {
     placeholder: 'page3.dependants',
   }]
 
-  const UPDATE_USER_FINANCES = gql`
-    mutation updateUser{
-      updateUser(
-        userData:{
-          officialPersonalIncome:"${finances.income}",
-          officialHouseholdIncome:"${finances.other}",
-          unofficialHouseholdIncome:"${finances.unofficial}",
-          householdExpenses:"${finances.expenses}",
-          dependants:"${finances.dependants}"
-        }, address:"${wallet}"){
-        _id,
-        officialPersonalIncome,
-        officialHouseholdIncome,
-        unofficialHouseholdIncome,
-        householdExpenses,
-        dependants
-      }
-    }
-  `
-  const [updateUserFinances, { data, loading, error }] = useMutation(UPDATE_USER_FINANCES)
+  // const UPDATE_USER_FINANCES = gql`
+  //   mutation updateUser{
+  //     updateUser(
+  //       userData:{
+  //         officialPersonalIncome:"${finances.income}",
+  //         officialHouseholdIncome:"${finances.other}",
+  //         unofficialHouseholdIncome:"${finances.unofficial}",
+  //         householdExpenses:"${finances.expenses}",
+  //         dependants:"${finances.dependants}"
+  //       }, address:"${walletId}"){
+  //       _id,
+  //       officialPersonalIncome,
+  //       officialHouseholdIncome,
+  //       unofficialHouseholdIncome,
+  //       householdExpenses,
+  //       dependants
+  //     }
+  //   }
+  // `
+  // const [updateUserFinances, { data, loading, error }] = useMutation(UPDATE_USER_FINANCES)
 
   const onFormSubmit = () => {
-    updateUserFinances()
-      .then(res => {
-        res.data.updateUser._id && setUserId(res.data.updateUser._id)
-        onNext()
-      })
-      .catch(err => err)
+    onNext();
+    // updateUserFinances()
+    //   .then(res => {
+    //     res.data.updateUser._id && setUserId(res.data.updateUser._id)
+    //     onNext()
+    //   })
+    //   .catch(err => err)
   }
 
   return (
@@ -104,14 +108,4 @@ function FinancialStep (props) {
   )
 }
 
-const mapStateToProps = function(state) {
-  return {
-    wallet: state.user.wallet_id
-  }
-}
-
-const mapDispatchToProps = {
-  setUserId
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FinancialStep)
+export default FinancialStep;

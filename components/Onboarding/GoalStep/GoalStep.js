@@ -1,80 +1,81 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
-import { useTranslations } from "next-intl"
-import { useMutation, gql } from "@apollo/client"
-import { setGoalId } from '../../../redux/user'
-import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout'
-import Input from '../../Input/Input'
-import styles from './GoalStep.module.css'
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslations } from 'next-intl';
+import { useMutation, gql } from '@apollo/client';
+import { v4 as uuidv4 } from 'uuid';
+import { setGoal } from '../../../redux/user';
+import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout';
+import Input from '../../Input/Input';
+import styles from './GoalStep.module.css';
 
-function GoalStep ({ user_id, setGoalId, onNext }) {
-  const t = useTranslations("onboarding")
+function GoalStep ({ onNext }) {
+  // const userId = useSelector((state) => state.user.userId);
+  const goal = useSelector((state) => state.user.goals[0]);
+  const dispatch = useDispatch();
 
-  const [goals, setGoals] = useState({
-    goal_type: '',
-    amount_saved: 0,
-    amount_needed: 0,
-    loan_duration: 0
-  })
+  if (!goal.goalId) dispatch(setGoal({...goal, goalId: uuidv4()}));
+
+  const t = useTranslations("onboarding");
 
   const inputFields = [{
     type: 'text',
-    name: 'goal_type',
+    name: 'goalType',
     placeholder: 'page4.goal_type'
   }, {
-    name: 'amount_saved',
+    name: 'amountSaved',
     placeholder: 'page4.amount_saved',
   }, {
-    name: 'amount_needed',
+    name: 'amountNeeded',
     placeholder: 'page4.amount_needed',
   }, {
-    name: 'loan_duration',
+    name: 'loanDuration',
     placeholder: 'page4.loan_duration',
   }]
 
-  const UPDATE_USER_GOAL = gql`
-    mutation updateGoal{
-      updateGoal(goalData:{
-        name:"${goals.goal_type}",
-        duration:"${goals.loan_duration}",
-        availableAmount:"${goals.amount_saved}",
-        amountToBorrow:"${goals.amount_needed}"
-      }, userId:"${user_id}"){
-        _id,
-        name,
-        duration,
-        availableAmount,
-        amountToBorrow
-      }
-    }
-  `
+  // const UPDATE_USER_GOAL = gql`
+  //   mutation updateGoal{
+  //     updateGoal(goalData:{
+  //       name:"${goal.goalType}",
+  //       duration:"${goal.loanDuration}",
+  //       availableAmount:"${goal.amountSaved}",
+  //       amountToBorrow:"${goal.amountNeeded}"
+  //     }, userId:"${userId}"){
+  //       _id,
+  //       name,
+  //       duration,
+  //       availableAmount,
+  //       amountToBorrow
+  //     }
+  //   }
+  // `
 
-  const [updateUserGoal] = useMutation(UPDATE_USER_GOAL)
+  // const [updateUserGoal] = useMutation(UPDATE_USER_GOAL)
 
   const updateInput = e => {
-    setGoals({
-      ...goals,
+    dispatch(setGoal({
+      ...goal,
       [e.target.name]: e.target.value
-    })
+    }))
   }
 
   const onFormSubmit = () => {
-    updateUserGoal()
-      .then(res => {
-        res.data.updateGoal._id && setGoalId(res.data.updateGoal._id)
-        onNext()
-      })
-      .catch(err => err)
+    // dispatch(setGoal(goals));
+    // updateUserGoal()
+    //   .then(res => {
+    //     res.data.updateGoal._id && setGoalId(res.data.updateGoal._id)
+    onNext()
+    // })
+    // .catch(err => err)
   }
 
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
         onClick: onFormSubmit,
-        disabled: goals.goal_type === '' 
-        || goals.amount_saved < 1
-        || goals.amount_needed < 1
-        || goals.loan_duration < 1
+        disabled: goal.goalType === '' 
+        || goal.amountSaved < 1
+        || goal.amountNeeded < 1
+        || goal.loanDuration < 1
       }
     }}>
       <div className={styles.wrapper}>
@@ -96,14 +97,15 @@ function GoalStep ({ user_id, setGoalId, onNext }) {
   )
 }
 
-const mapStateToProps = function(state) {
-  return {
-    user_id: state.user.user_id
-  }
-}
+// const mapStateToProps = function(state) {
+//   return {
+//     userId: state.user.userId
+//   }
+// }
 
-const mapDispatchToProps = {
-  setGoalId
-}
+// const mapDispatchToProps = {
+//   setGoalId
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GoalStep)
+// export default connect(mapStateToProps, mapDispatchToProps)(GoalStep)
+export default GoalStep;

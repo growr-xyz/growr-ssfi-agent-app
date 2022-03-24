@@ -2,11 +2,11 @@ import styles from "./Goal.module.css";
 import ScoreBar from "../ScoreBar/index";
 import Box from "../Box/Box";
 
-const Goal = ({ name, details, progress, value }) => {
+const Goal = ({ goalType, details, progress, value }) => {
   return (
     <Box
       {...{
-        name,
+        name: goalType,
         details,
         progress,
         value

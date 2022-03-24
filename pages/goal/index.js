@@ -1,5 +1,6 @@
 import router, { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
+import { useSelector, useDispatch } from 'react-redux'
 import Header from "./components/Header/Header";
 import Loan from "./components/Loan/Loan";
 import Transactions from "./components/Transactions/Transactions";
@@ -34,35 +35,43 @@ const Goal = () => {
   const t = useTranslations("dashboard");
   const { goalId } = router.query;
 
-  const GET_GOAL = gql`
-  query goal {
-    goal(id:"${goalId}"){
-          _id,
-          name,
-          duration,
-          isAchieved,
-          amountToBorrow,
-          availableAmount
-          loan{
-              _id,
-            amount,
-            apr,
-            duration,
-            instalment,
-            nextInstalmentDue,
-            lastInstalmentDue,
-            totalToRepay,
-            totalInterest
-            }
-        }
-  }
-  `;
-  const { data, loading, error } = useQuery(GET_GOAL);
+  // const walletId = useSelector((state) => state.user.walletId);
+  const goals = useSelector((state) => state.user.goals);
+  const goal = goals?.filter(goal => goal.goalId === goalId)[0];
+  console.log('Goal:', goal);
+  const loan = goal?.loan;
+  const dispatch = useDispatch();
+  
+  // const GET_GOAL = gql`
+  // query goal {
+  //   goal(id:"${goalId}"){
+  //         _id,
+  //         name,
+  //         duration,
+  //         isAchieved,
+  //         amountToBorrow,
+  //         availableAmount
+  //         loan{
+  //             _id,
+  //           amount,
+  //           apr,
+  //           duration,
+  //           instalment,
+  //           nextInstalmentDue,
+  //           lastInstalmentDue,
+  //           totalToRepay,
+  //           totalInterest
+  //           }
+  //       }
+  // }
+  // `;
 
-  if (loading || error || !data) return null;
+  // const { data, loading, error } = useQuery(GET_GOAL);
 
-  const { goal } = data;
-  const { loan } = goal;
+  // if (loading || error || !data) return null;
+
+  // const { goal } = data;
+  // const { loan } = goal;
 
   // TBD - get wallet balance
   const balance = 1200.0;
@@ -79,17 +88,17 @@ const Goal = () => {
           <ScoreBar
             progressIndex={
               balance /
-              (parseFloat(goal.amountToBorrow) +
-                parseFloat(goal.availableAmount))
+              (parseFloat(goal?.amountNeeded) +
+                parseFloat(goal?.amountSaved))
             }
             value={balance}
             size="big"
           />
         </div>
-        <h1>{goal.name}</h1>
+        <h1>{goal?.goalType}</h1>
         <h4>
           {t("goals.amount.progress")} {balance} {t("goals.amount.of")}
-          {parseFloat(goal.amountToBorrow) + parseFloat(goal.availableAmount)}
+          {parseFloat(goal?.amountNeeded) + parseFloat(goal?.amountSaved)}
         </h4>
         <div className={styles.buttonGroup}>
           <Button label={t("goals.amount.add")} style={styles.button} />

@@ -1,6 +1,6 @@
 ## Peseta Web Application
 
-(c) 2021. Originally developed by the Growr On-chain team for the Bitcoin Bankathon and further developed by Growr dev team.
+(c) 2021-2022. Originally developed by the Growr On-chain team during the Bitcoin Bankathon in 2021 and further developed by Growr dev team.
 
 ## Getting Started
 
