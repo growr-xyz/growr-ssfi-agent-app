@@ -102,7 +102,7 @@ function Dashboard() {
     router.push('/dashboard');
   }
 
-  const printBalance = value => console.log('Wallet balance:', value);
+  // const printBalance = value => console.log('Wallet balance:', value);
 
   // // eslint-disable-next-line react-hooks/rules-of-hooks
   // useEffect(() => {
