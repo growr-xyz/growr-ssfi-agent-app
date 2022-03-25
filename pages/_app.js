@@ -1,20 +1,20 @@
-import App from 'next/app'
-import Web3 from 'web3'
-import { useStore } from 'react-redux'
-import { wrapper } from '../redux/store'
-import { PersistGate } from 'redux-persist/integration/react'
-import { NextIntlProvider } from "next-intl"
-import { Web3ReactProvider } from '@web3-react/core'
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
-import CustomHead from '../components/CustomHead/CustomHead'
-import '../styles/globals.css'
-import getConfig from 'next/config'
+// import App from 'next/app';
+import Web3 from 'web3';
+import { useStore } from 'react-redux';
+import { wrapper } from '../redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { NextIntlProvider } from 'next-intl';
+import { Web3ReactProvider } from '@web3-react/core';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import CustomHead from '../components/CustomHead/CustomHead';
+import '../styles/globals.css';
+import getConfig from 'next/config';
 
 function getLibrary(provider) {
   return new Web3(provider)
-}
+};
 
-const { publicRuntimeConfig } = getConfig()
+const { publicRuntimeConfig } = getConfig();
 
 const client = new ApolloClient({
   uri: publicRuntimeConfig.backendUrl,
@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }) {
       </PersistGate>
     </NextIntlProvider>
   );
-}
+};
 
 export default wrapper.withRedux(MyApp);
 //export default withRedux(reduxStore)(MyApp)
