@@ -1,3 +1,4 @@
+import moment from "moment";
 import styles from "./Loan.module.css";
 import { Button } from "../../../../components";
 import { useTranslations } from "next-intl";
@@ -5,17 +6,19 @@ import { useTranslations } from "next-intl";
 const Loan = ({
   amount,
   nextInstalmentDue,
-  due = new Date().toDateString(),
+  due = moment().format('DD/MM/YYYY'),
 }) => {
   const t = useTranslations("dashboard");
+  const nextDue = nextInstalmentDue?.split('"')[1]
+
   return (
     <div className={styles.container}>
       <h3>{t("loan.title")}</h3>
       <div className={styles.loanCard}>
-        <h1>{amount}</h1>
+        <h1>${amount}</h1>
         <h4>{t("loan.amount")}</h4>
         <h4>
-          {t("loan.next_inst")} {nextInstalmentDue}
+          {t("loan.next_inst")} {moment(nextDue).format('DD/MM/YYYY')}
         </h4>
         <h4>
           {t("loan.due")} {due}
