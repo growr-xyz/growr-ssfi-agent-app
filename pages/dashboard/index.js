@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { useQuery, gql } from "@apollo/client"
@@ -8,9 +7,9 @@ import { useTranslations } from "next-intl"
 import SimpleConnector from "../../components/WalletConnector/SimpleConnector"
 import { Header, Page, Widget, Section, Goal } from '../../components'
 import HelmetIcon from "../../components/Icons/Helmet"
+import Link from "next/link"
 import { Bitcoin, Budget } from "../../components/Quests"
-import { getWalletBalance } from '../../utils/swap'
-import { setWalletBalance } from '../../redux/user'
+import { getWalletBalance } from '../../utils/swap';
 import styles from "./Dashbaord.module.css"
 
 function Dashboard() {
@@ -109,13 +108,8 @@ function Dashboard() {
   //   getWalletBalance(walletId, printBalance)
   // }, [walletId])
 
-  const printBalance = value => {
-    setBalance(value)
-  }
-
-  const goToDashboard = () => {
-    router.push('/dashboard');
-  }
+  // TBD - get wallet balance
+  const balance = 1200.0;
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   // const { data, loading, error } = useQuery(GET_WALLET);
@@ -123,8 +117,6 @@ function Dashboard() {
   // if (loading || error || !data) return null;
 
   // const { goals } = data.wallet.user;
-
-  const ballanceUsd = Math.trunc(balance * 50000)
 
   // TODO: add proper links
   const renderHeader = () => {
@@ -159,8 +151,8 @@ function Dashboard() {
     >
       <Widget
         {...{
-          balance: `$ ${ballanceUsd}`,
-          currency: `${balance} RBTC`,
+          balance: "$"+balance, // TBD - wallet balance here
+          currency: "US Dollar (xUSD)",
         }}
       />
       <Section label={t('goals.title')}>
@@ -172,10 +164,7 @@ function Dashboard() {
             }}
             style={{ display: "inline-block" }}
           >
-            <Goal {...{...goal, 
-              details: `${goal.isAchieved ? t("goals.status.funded") : t("goals.status.progress")}, $${Math.round(goal.loan.totalToRepay)} ${t("goals.status.due")}`, 
-              progress: balance/(parseFloat(goal.amountNeeded) + parseFloat(goal.amountSaved)), 
-              value: balance }} />
+            <Goal {...{...goal, details: `${goal.isAchieved ? t("goals.status.funded") : t("goals.status.progress")}, $${Math.round(goal.loan.totalToRepay)} ${t("goals.status.due")}`, progress: balance/(parseFloat(goal.amountNeeded) + parseFloat(goal.amountSaved)), value: balance }} />
           </div>
         ))}
       </Section>
