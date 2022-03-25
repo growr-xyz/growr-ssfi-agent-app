@@ -59,6 +59,7 @@ function GoalStep ({ onNext }) {
   }
 
   const onFormSubmit = () => {
+    // TODO: Get offers from pond factory: list of VCs => provide details => OK/NOK
     // dispatch(setGoal(goals));
     // updateUserGoal()
     //   .then(res => {
