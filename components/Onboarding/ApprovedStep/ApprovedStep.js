@@ -16,6 +16,7 @@ function ApprovedStep({ onNext }) {
   const onChangeCheckbox = ({ target }) => target.checked ? dispatch(acceptGrowrTerms()) : dispatch(rejectGrowrTerms());
 
   const onSubmit = () => {
+    // TODO: Apply to the verifier & get disbursement from the pond
     onNext();
     // updateLoan()
     //   .then(() => {
