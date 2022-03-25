@@ -6,10 +6,10 @@ import { useTranslations } from "next-intl";
 const Loan = ({
   amount,
   nextInstalmentDue,
-  due = moment().format('MM/DD/YYYY'),
+  due = moment().format('DD/MM/YYYY'),
 }) => {
   const t = useTranslations("dashboard");
-  const nextDue = nextInstalmentDue.split('"')[1]
+  const nextDue = nextInstalmentDue?.split('"')[1]
 
   return (
     <div className={styles.container}>
@@ -18,7 +18,7 @@ const Loan = ({
         <h1>${amount}</h1>
         <h4>{t("loan.amount")}</h4>
         <h4>
-          {t("loan.next_inst")} {moment(nextDue).format('MM/DD/YYYY')}
+          {t("loan.next_inst")} {moment(nextDue).format('DD/MM/YYYY')}
         </h4>
         <h4>
           {t("loan.due")} {due}
