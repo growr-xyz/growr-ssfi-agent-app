@@ -8,13 +8,13 @@ import Input from "../../Input/Input";
 import styles from "./FinancialStep.module.css";
 import { useWeb3React } from "@web3-react/core";
 import {
-	checkBalanceXUSD,
-	createPond,
 	findBestOffer,
 	verifyCredentials,
 	registerVerification,
 	borrow,
-	fetchEvents,
+	repay,
+	fetchRepaymentHistory,
+	getLoanDetails,
 } from "../../../utils/contractHelper.js";
 
 function FinancialStep({ onNext }) {
@@ -23,33 +23,38 @@ function FinancialStep({ onNext }) {
 	useEffect(() => {
 		const init = async () => {
 			try {
-				// await createPond(library, account);
-				await fetchEvents(library, account);
-				return;
-				const offer = await findBestOffer(library, account, {
-					amount: "10",
-					duration: 5,
-					credentials: { names: ["citizenship"], contents: ["SV"] },
-				});
-
-				// ponds ['0x6882914bB5904De6b50ba897F4B3a7A4F627435d', '0xab853DA027775dF11c30cb5b7757B8B703E75c65']
-				const verifiedCredentialNames = await verifyCredentials(library, account, {
-					pondAddress: offer.pondAddress,
-					credentials: { citizenship: "SV" },
-				});
-
-				if (!verifiedCredentialNames) throw new Error("Not eligible");
-
-				await registerVerification(library, account, {
-					borrower: account,
-					pondAddress: offer.pondAddress,
-				});
-
-				await borrow(library, account, {
-					amount: offer.details.amount,
-					duration: offer.details.duration,
-					pondAddress: offer.pondAddress,
-				});
+				// const offer = await findBestOffer(library, account, {
+				// 	amount: "10",
+				// 	duration: 5,
+				// 	credentials: { names: ["citizenship"], contents: ["SV"] },
+				// });
+				// console.log(`Offer found `, offer);
+				// const verifiedCredentialNames = await verifyCredentials(library, account, {
+				// 	pondAddress: offer.pondAddress,
+				// 	credentials: { citizenship: "SV" },
+				// });
+				// if (!verifiedCredentialNames) throw new Error("Not eligible");
+				// await registerVerification(library, account, {
+				// 	borrower: account,
+				// 	pondAddress: offer.pondAddress,
+				// });
+				// console.log(`Borrower is verified`);
+				// await borrow(library, account, {
+				// 	amount: offer.details.amount,
+				// 	duration: offer.details.duration,
+				// 	pondAddress: offer.pondAddress,
+				// });
+				// console.log(`Borrower got the money`);
+				// const loanDetailsBefore = await getLoanDetails(library, account, { pondAddress: offer.pondAddress });
+				// console.log("Next installment", loanDetailsBefore._receipt.nextInstallment.total.toString());
+				// await repay(library, account, { pondAddress: offer.pondAddress, amount: "50" });
+				// console.log(`Repaid ${50}`);
+				// const loanDetailsAfter = await getLoanDetails(library, account, { pondAddress: offer.pondAddress });
+				// console.log("Next installment", loanDetailsAfter._receipt.nextInstallment.total.toString());
+				// const history = await fetchRepaymentHistory(library, account, {
+				// 	pondAddress: offer.pondAddress,
+				// });
+				// console.log(`Repayment history`, history);
 			} catch (error) {
 				console.log(error.message);
 			}
