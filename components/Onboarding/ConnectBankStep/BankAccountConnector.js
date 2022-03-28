@@ -35,9 +35,27 @@ const BankAccountConnector = ({ onNext }) => {
   // `
   // const [connectBankMutation, { data, loading, error }] = useMutation(CONNECT_BANK) //, {errorPolicy: 'all'})
 
+  const REQUEST_VERIFICATION = gql`
+    mutation requestVC {
+      requestVerification(did:"did:ethr:rsk:${walletId}", type:employmentStatus, username:"${user.username}")
+    }  
+  `
+  
+  const [requestVerificationMutation, { data, loading, error }] = useMutation(REQUEST_VERIFICATION); //, {errorPolicy: 'all'})
+
   const onContinue = () => {
-    dispatch(setBankUserId(user.username));
-    onNext();
+    // dispatch(setBankUserId(user.username));
+    // onNext();
+    requestVerificationMutation()
+      .then(res => {
+        console.log(res.data)
+        dispatch(setBankUserId(user.username));
+        onNext();
+      })
+      .catch(err => {
+        dispatch(setBankUserId('ERROR'));
+        return err
+      })
     // connectBankMutation()
     //   .then(() => onNext())
     //   .catch(err => {
