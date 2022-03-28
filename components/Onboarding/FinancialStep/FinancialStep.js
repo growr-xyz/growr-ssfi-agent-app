@@ -8,6 +8,7 @@ import Input from "../../Input/Input";
 import styles from "./FinancialStep.module.css";
 import { useWeb3React } from "@web3-react/core";
 import {
+	getAllPondsCriteriaNames,
 	findBestOffer,
 	verifyCredentials,
 	registerVerification,
@@ -23,12 +24,16 @@ function FinancialStep({ onNext }) {
 	useEffect(() => {
 		const init = async () => {
 			try {
-				// const offer = await findBestOffer(library, account, {
-				// 	amount: "10",
-				// 	duration: 5,
-				// 	credentials: { names: ["citizenship"], contents: ["SV"] },
-				// });
-				// console.log(`Offer found `, offer);
+				const allPondsCriteriaNames = await getAllPondsCriteriaNames(library, account);
+				console.log(allPondsCriteriaNames);
+
+				const offer = await findBestOffer(library, account, {
+					amount: "10",
+					duration: 5,
+					credentials: { citizenship: "SV" },
+				});
+				console.log(`Offer found `, offer);
+				// // -- VERIFIER
 				// const verifiedCredentialNames = await verifyCredentials(library, account, {
 				// 	pondAddress: offer.pondAddress,
 				// 	credentials: { citizenship: "SV" },
@@ -39,18 +44,21 @@ function FinancialStep({ onNext }) {
 				// 	pondAddress: offer.pondAddress,
 				// });
 				// console.log(`Borrower is verified`);
+				// // Peseta - GO btn
 				// await borrow(library, account, {
 				// 	amount: offer.details.amount,
 				// 	duration: offer.details.duration,
 				// 	pondAddress: offer.pondAddress,
 				// });
 				// console.log(`Borrower got the money`);
+				// // -- Peseta Repay
 				// const loanDetailsBefore = await getLoanDetails(library, account, { pondAddress: offer.pondAddress });
 				// console.log("Next installment", loanDetailsBefore._receipt.nextInstallment.total.toString());
 				// await repay(library, account, { pondAddress: offer.pondAddress, amount: "50" });
 				// console.log(`Repaid ${50}`);
 				// const loanDetailsAfter = await getLoanDetails(library, account, { pondAddress: offer.pondAddress });
 				// console.log("Next installment", loanDetailsAfter._receipt.nextInstallment.total.toString());
+				// // -- History
 				// const history = await fetchRepaymentHistory(library, account, {
 				// 	pondAddress: offer.pondAddress,
 				// });

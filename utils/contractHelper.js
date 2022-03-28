@@ -15,7 +15,29 @@ const VerificationRegistryAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
 const PondFactoryAddress = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
 // const WRBTCAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
-export const findBestOffer = async (provider, account, userInputParams) => {
+function onlyUnique(value, index, self) {
+	return self.indexOf(value) === index;
+  }
+
+  // TODO: cache pond criterias
+export const getAllPondsCriteriaNames = async (provider, account) => {
+	const signer = provider.getSigner(account);
+
+	const PondFactory = new ethers.Contract(PondFactoryAddress, PondFactoryABI, provider);
+	const allPondAddresses = await PondFactory.connect(signer).getAllPonds();
+
+	const res = await Promise.all(
+		allPondAddresses.flatMap(async (pondAddress) => {
+			const pondCredentilNames = await getPondCriteriaNames(provider, account, { pondAddress });
+			return pondCredentilNames;
+		})
+	);
+
+	const uniqueNames = res.flat().filter(onlyUnique);
+	return uniqueNames;
+};
+
+export const findBestOffer = async (provider, account, { amount, duration, credentials}) => {
 	const signer = provider.getSigner(account);
 
 	const PondFactory = new ethers.Contract(PondFactoryAddress, PondFactoryABI, provider);
@@ -24,11 +46,13 @@ export const findBestOffer = async (provider, account, userInputParams) => {
 	const res = await Promise.allSettled(
 		allPondAddresses.map(async (pondAddress) => {
 			const Pond = new ethers.Contract(pondAddress, PondABI, provider);
-			const amount = ethers.utils.parseEther(userInputParams.amount);
-			const duration = userInputParams.duration;
+			const { match, containsAll } = await filterOnlyPondCredentials(provider, account, { pondAddress, credentials })
+			if (!containsAll) {
+				throw Error(`Not all credentials are passed to this pond ${pondAddress}`);
+			}
 			return {
 				pondAddress,
-				details: await Pond.getLoanOffer(amount, duration, userInputParams.credentials),
+				details: await Pond.getLoanOffer(ethers.utils.parseEther(amount), duration, match.arrays),
 			};
 		})
 	);
@@ -95,10 +119,16 @@ export const findBestOffer = async (provider, account, userInputParams) => {
 	return bestOffersDuration.length > 0 ? bestOffersDuration[0] : null;
 };
 
-export const verifyCredentials = async (provider, account, { pondAddress, credentials }) => {
+export const getPondCriteriaNames = async (provider, account, { pondAddress }) => {
 	const Pond = new ethers.Contract(pondAddress, PondABI, provider);
 
 	const criteriaNames = await Pond.getCriteriaNames();
+
+	return criteriaNames;
+}
+
+export const filterOnlyPondCredentials = async (provider, account, { pondAddress, credentials }) => {
+	const criteriaNames = await getPondCriteriaNames(provider, account, { pondAddress });
 
 	const userValidCredentials = Object.fromEntries(
 		Object.entries(credentials).filter(([name, value]) => criteriaNames.includes(name))
@@ -107,11 +137,28 @@ export const verifyCredentials = async (provider, account, { pondAddress, creden
 	const names = Object.keys(userValidCredentials);
 	const contents = Object.values(userValidCredentials);
 
-	if (names.length != criteriaNames.length) {
+	const containsAll = names.length === criteriaNames.length;
+
+	return {
+		neededNames: criteriaNames,
+		match: {
+			json: userValidCredentials,
+			arrays: { names, contents }
+		},
+		containsAll,
+	}
+};
+
+export const verifyCredentials = async (provider, account, { pondAddress, credentials }) => {
+	const { match, containsAll } = await filterOnlyPondCredentials(provider, account, { pondAddress, credentials });
+
+	if (!containsAll) {
 		return false;
 	}
 
-	const valid = await Pond.verifyCredentials({ names, contents });
+	const Pond = new ethers.Contract(pondAddress, PondABI, provider);
+
+	const valid = await Pond.verifyCredentials(match.arrays);
 
 	return valid && criteriaNames;
 };
