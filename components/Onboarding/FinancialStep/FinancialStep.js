@@ -21,14 +21,14 @@ function FinancialStep({ onNext }) {
   //     unofficial: 0,
   //     expenses: 0,
   //     dependants: 0
-  // })
+  // });
 
   const updateInput = e => {
     dispatch(setFinances({
       ...finances,
       [e.target.name]: e.target.value
     }))
-  }
+  };
 
   const formInputs = [{
     name: 'income',
@@ -45,7 +45,7 @@ function FinancialStep({ onNext }) {
   }, {
     name: 'dependants',
     placeholder: 'page3.dependants',
-  }]
+  }];
 
   // const UPDATE_USER_FINANCES = gql`
   //   mutation updateUser{

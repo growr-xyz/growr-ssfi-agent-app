@@ -1,19 +1,20 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { useTranslations } from "next-intl"
-import { useMutation, gql } from "@apollo/client"
-import { setBankUserId } from '../../../redux/user'
-import Input from '../../Input/Input'
-import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
-import styles from "./BankAccountConnector.module.css"
+import { useTranslations } from 'next-intl';
+import { useMutation, useLazyQuery, gql } from '@apollo/client';
+import { setBankUserId, setBankCredential } from '../../../redux/user';
+import Input from '../../Input/Input';
+import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout';
+import styles from "./BankAccountConnector.module.css";
+import { parse } from '@ethersproject/transactions';
 
 const BankAccountConnector = ({ onNext }) => {
   const walletId = useSelector((state) => state.user.walletId);
   // const bankUserId = useSelector((state) => state.user.bankUserId);
   const dispatch = useDispatch();
 
-  const t = useTranslations("onboarding")
+  const t = useTranslations("onboarding");
 
   const [user, setUser] = useState({
     username: '',
@@ -26,7 +27,7 @@ const BankAccountConnector = ({ onNext }) => {
       ...user,
       [e.target.name]: e.target.value
     })
-  }
+  };
 
   // const CONNECT_BANK = gql`
   //   mutation connectBank {
@@ -39,21 +40,68 @@ const BankAccountConnector = ({ onNext }) => {
     mutation requestVC {
       requestVerification(did:"did:ethr:rsk:${walletId}", type:employmentStatus, username:"${user.username}")
     }  
-  `
-  
-  const [requestVerificationMutation, { data, loading, error }] = useMutation(REQUEST_VERIFICATION); //, {errorPolicy: 'all'})
+  `;
+
+  const REQUEST_BANK_VC = gql`
+    query bankVC($did: String, $message: String, $type: VCTypeEnum, $parameters: String) {
+      bankVC(did:$did, message:$message, parameters: $parameters, type: $type)
+    }
+  `;
+
+  const [requestVerificationMutation, { verificationData, loading, error }] = useMutation(REQUEST_VERIFICATION); //, {errorPolicy: 'all'})
+  const [requestBankVC, { bankVCData, bankVCLoading, bankVCError }] = useLazyQuery(REQUEST_BANK_VC, {
+    onCompleted: (data) => {
+      console.log('onCompleted data', data);
+    }    
+  });
+
+  function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  };
 
   const onContinue = () => {
     // dispatch(setBankUserId(user.username));
     // onNext();
     requestVerificationMutation()
       .then(res => {
-        console.log(res.data)
-        dispatch(setBankUserId(user.username));
-        onNext();
-      })
+        let salt = res.data.requestVerification;
+        console.log('Returned salt', salt);
+
+        var CryptoJS = require('crypto-js');
+        const salted = CryptoJS.AES.encrypt(user.password, salt).toString();
+        console.log('Encrypted salt', salted);
+
+        // var jsonData = pm.response.json();
+        // pm.environment.set('salt', jsonData.data.requestVerification)
+        requestBankVC({ variables: {
+          "parameters": salted,
+          "did": `did:ethr:rsk:${walletId}`,
+          "message": "dafdas",
+          "type": "employmentStatus"
+        }})
+          .then(resVC =>
+            {
+              console.log('resVC', resVC);
+              let vc = parseJwt(resVC.data.bankVC);
+              console.log('vc', vc);
+              
+              dispatch(setBankUserId(user.username));
+              dispatch(setBankCredential(vc));
+              onNext();      
+            })
+          .catch(err => {
+            dispatch(setBankUserId('ERROR2'));
+            return err
+          })
+        })
       .catch(err => {
-        dispatch(setBankUserId('ERROR'));
+        dispatch(setBankUserId('ERROR1'));
         return err
       })
     // connectBankMutation()

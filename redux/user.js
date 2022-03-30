@@ -2,6 +2,7 @@
 export const SET_USER_ID = 'SET_USER_ID';
 export const SET_WALLET_ID = 'SET_WALLET_ID';
 export const SET_BANK_USER_ID = 'SET_BANK_USER_ID';
+export const SET_BANK_CREDENTIAL = 'SET_BANK_CREDENTIAL';
 export const SET_FINANCES = 'SET_FINANCES';
 export const SET_GOAL = 'SET_GOAL';
 export const ACCEPT_TERMS = 'ACCEPT_TERMS';
@@ -15,6 +16,8 @@ export const setUserId = query => ({ type: SET_USER_ID, query});
 export const setWalletId = (query) => ({ type: SET_WALLET_ID, query});
 
 export const setBankUserId = (query) => ({ type: SET_BANK_USER_ID, query});
+
+export const setBankCredential = (query) => ({ type: SET_BANK_CREDENTIAL, query});
 
 export const setFinances = (query) => ({ type: SET_FINANCES, query});
 
@@ -35,6 +38,9 @@ export const initialState = {
   bankUserId: '',
   termsAccepted: false,
   growrTermsAccepted: false,
+  bankCredentials: [{
+
+  }],
   finances: {
     income: 0,
     other: 0,
@@ -79,6 +85,12 @@ const userReducer = (state = initialState, { type, query }) => {
       return {
         ...state,
         bankUserId: query
+      };
+    case SET_BANK_CREDENTIAL:
+      return {
+        ...state,
+        // TODO: Handle add/replace
+        bankCredentials: [query]
       };
     case SET_FINANCES:
       return {
