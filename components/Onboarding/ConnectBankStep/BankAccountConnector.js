@@ -38,7 +38,7 @@ const BankAccountConnector = ({ onNext }) => {
 
   const REQUEST_VERIFICATION = gql`
     mutation requestVC {
-      requestVerification(did:"did:ethr:rsk:${walletId}", type:employmentStatus, username:"${user.username}")
+      requestVerification(did:"did:ethr:rsk:${walletId}", type:citizenship, username:"${user.username}")
     }  
   `;
 
@@ -82,8 +82,8 @@ const BankAccountConnector = ({ onNext }) => {
         requestBankVC({ variables: {
           "parameters": salted,
           "did": `did:ethr:rsk:${walletId}`,
-          "message": "dafdas",
-          "type": "employmentStatus"
+          "message": "test", // To be signed with DID (wallet)
+          "type": "citizenship"
         }})
           .then(resVC =>
             {
