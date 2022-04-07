@@ -6,6 +6,6 @@ module.exports = {
     defaultLocale: 'en'
   },
   publicRuntimeConfig: {
-    backendUrl: process.env.BACKEND_URL,
+    backendUrl: process.env.BACKEND_URL
   }
 }

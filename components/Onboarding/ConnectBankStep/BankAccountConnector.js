@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useMutation, useLazyQuery, gql } from '@apollo/client';
-import { setBankUserId, setBankCredential } from '../../../redux/user';
+import { setBankUserId, setVerifiableCredential, setBankCredential } from '../../../redux/user';
 import Input from '../../Input/Input';
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout';
 import styles from "./BankAccountConnector.module.css";
 import { parse } from '@ethersproject/transactions';
+import { createDidFormat, parseJwt } from '../../../utils/vcUtils';
 
 const BankAccountConnector = ({ onNext }) => {
   const walletId = useSelector((state) => state.user.walletId);
@@ -38,7 +39,7 @@ const BankAccountConnector = ({ onNext }) => {
 
   const REQUEST_VERIFICATION = gql`
     mutation requestVC {
-      requestVerification(did:"did:ethr:rsk:${walletId}", type:citizenship, username:"${user.username}")
+      requestVerification(did:"${createDidFormat(walletId)}", type:citizenship, username:"${user.username}")
     }  
   `;
 
@@ -54,16 +55,6 @@ const BankAccountConnector = ({ onNext }) => {
       console.log('onCompleted data', data);
     }    
   });
-
-  function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-  };
 
   const onContinue = () => {
     // dispatch(setBankUserId(user.username));
@@ -81,29 +72,34 @@ const BankAccountConnector = ({ onNext }) => {
         // pm.environment.set('salt', jsonData.data.requestVerification)
         requestBankVC({ variables: {
           "parameters": salted,
-          "did": `did:ethr:rsk:${walletId}`,
+          "did": createDidFormat(walletId), 
           "message": "test", // To be signed with DID (wallet)
           "type": "citizenship"
         }})
           .then(resVC =>
             {
-              console.log('resVC', resVC);
-              let vc = parseJwt(resVC.data.bankVC);
+              let vcJwt = resVC.data.bankVC;
+              console.log('vcJwt', vcJwt);
+              let vc = parseJwt(vcJwt);
               console.log('vc', vc);
               
               dispatch(setBankUserId(user.username));
+              dispatch(setVerifiableCredential(vcJwt));
               dispatch(setBankCredential(vc));
-              onNext();      
+              onNext();
             })
-          .catch(err => {
-            dispatch(setBankUserId('ERROR2'));
-            return err
-          })
+          // .catch(err => {
+          //   console.log('ERROR2', err);
+          //   dispatch(setBankUserId('ERROR2'));
+          //   return err
+          // })
         })
-      .catch(err => {
-        dispatch(setBankUserId('ERROR1'));
-        return err
-      })
+      // .catch(err => {
+      //   console.log('ERROR1', err);
+
+      //   dispatch(setBankUserId('ERROR1'));
+      //   return err
+      // })
     // connectBankMutation()
     //   .then(() => onNext())
     //   .catch(err => {
