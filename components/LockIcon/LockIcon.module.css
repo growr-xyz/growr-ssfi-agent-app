@@ -1,0 +1,6 @@
+.base {
+  fill: var(--lock-icon-base);
+}
+.lock {
+  fill: var(--lock-icon-lock);
+}
