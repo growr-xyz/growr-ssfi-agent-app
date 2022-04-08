@@ -8,7 +8,7 @@ export const SET_VERIFIABLE_CREDENTIAL = 'SET_VERIFIABLE_CREDENTIAL';
 export const SET_BANK_CREDENTIAL = 'SET_BANK_CREDENTIAL';
 export const SET_FINANCES = 'SET_FINANCES';
 export const SET_GOAL = 'SET_GOAL';
-export const SET_POND_ADDRESS = 'SET_POND_ADDRESS';
+export const SET_OFFER = 'SET_OFFER';
 export const ACCEPT_TERMS = 'ACCEPT_TERMS';
 export const REJECT_TERMS = 'REJECT_TERMS';
 export const ACCEPT_GROWR_TERMS = 'ACCEPT_GROWR_TERMS';
@@ -29,7 +29,7 @@ export const setFinances = (query) => ({ type: SET_FINANCES, query});
 
 export const setGoal = (query) => ({ type: SET_GOAL, query});
 
-export const setPondAddress = (goalId, pondAddress) => ({ type: SET_POND_ADDRESS, query: {goalId, pondAddress}});
+export const setOffer = (goalId, offer) => ({ type: SET_OFFER, query: {goalId, offer}});
 
 export const acceptTerms = () => ({ type: ACCEPT_TERMS });
 
@@ -63,17 +63,28 @@ export const initialState = {
     amountSaved: 0,
     amountNeeded: 0,
     isAchieved: false,
-    loan: {
+    offer: {
       pondAddress: '',
-      amount: 1200,
-      annualPercentageRate: 0.2995,
-      duration: 12,
-      instalment: 116.96,
-      nextInstalment: '2022-03-31',
-      lastInstalment: '2023-02-28',
-      totalToRepay: 1403.46,
-      totalInterest: 203.46,
-      outstanding: 1200
+      amount: 0,
+      annualInterestRate: 0,
+      approved: false,
+      cashBackRate: 0,
+      disbursmentFee: 0,
+      duration: 0,
+      installmentAmount: 0,
+      totalAmount: 0,
+      totalInterest: 0
+    },
+    loan: {
+      amount: 0,
+      annualPercentageRate: 0,
+      duration: 0,
+      instalment: 0,
+      nextInstalment: '2022-01-01',
+      lastInstalment: '2022-01-01',
+      totalToRepay: 0,
+      totalInterest: 0,
+      outstanding: 0
     }
   }],
 };
@@ -119,8 +130,8 @@ const userReducer = (state = initialState, { type, query }) => {
         ...state,
         goals: [query]
       };
-    case SET_POND_ADDRESS:
-      console.log('SET_POND_ADDRESS', query);
+    case SET_OFFER:
+      console.log('SET_OFFER', query.goalId, query.offer);
       return {
         ...state,
         goals: state.goals.map(goal => {
@@ -128,13 +139,12 @@ const userReducer = (state = initialState, { type, query }) => {
           
           // We found the goal => update the pondAddress
           console.log('update goal', goal.goalId);
-          return {
+          const newGoal = {
             ...goal,
-            loan: {
-              ...goal.loan,
-              pondAddress: query.pondAddress
-            }
+            offer: query.offer
           }
+          console.log('newGoal', newGoal);
+          return newGoal;
         })
       };
     case ACCEPT_TERMS:

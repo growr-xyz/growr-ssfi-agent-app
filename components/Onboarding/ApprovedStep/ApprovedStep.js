@@ -18,6 +18,8 @@ import {
 	// getLoanDetails,
 } from "../../../utils/contractHelper.js";
 
+const { ethers } = require('ethers');
+
 function ApprovedStep({ onNext }) {
   const { activate, library } = useWeb3React();
 
@@ -31,7 +33,8 @@ function ApprovedStep({ onNext }) {
 
   const walletId = useSelector((state) => state.user.walletId);
   const chainId = useSelector((state) => state.user.chainId);
-  const loan = useSelector((state) => state.user.goals[0].loan);
+  const offer = useSelector((state) => state.user.goals[0].offer);
+  // const loan = useSelector((state) => state.user.goals[0].loan);
   const jwt = useSelector((state) => state.user.verifiableCredentials[0]);
   const growrTermsAccepted = useSelector((state) => state.user.growrTermsAccepted);
   const dispatch = useDispatch();
@@ -64,17 +67,17 @@ function ApprovedStep({ onNext }) {
       if (vpJwt) {
         verifyVCs({ variables: {
           vps: [vpJwt],
-          pondAddress: loan.pondAddress
+          pondAddress: offer.pondAddress
         }}).then(async() => {
-          console.log('Presentation verified, now borrow');
-          await borrow(library, account, {
-  					amount: offer.details.amount,
-	  				duration: offer.details.duration,
+          console.log('Presentation verified, now borrow', offer.amount);
+          await borrow(library, walletId, {
+  					amount: ethers.utils.parseUnits(offer.amount),
+	  				duration: Number(offer.duration),
 		  			pondAddress: offer.pondAddress,
 			  	});
 				  console.log(`Borrower got the money`);
 
-          // onNext();
+          onNext();
         }).catch(err => {
           console.error(err);
         })
@@ -99,18 +102,18 @@ function ApprovedStep({ onNext }) {
       }
     }} >
       <div className={styles.wrapper}>
-        <h1>{`${t('page5.title')}${loan.amount}.🎉`}</h1>
+        <h1>{`${t('page5.title')}$${parseFloat(offer.amount).toFixed(2)}.🎉`}</h1>
 
         <h4>{t('page5.congratulations')}</h4>
 
-        <div>- {t('page5.amount')} {loan.amount}</div>
-        <div>- {t('page5.apr')} {loan.annualPercentageRate}</div>
-        <div>- {t('page5.duration')} {loan.duration}</div>
-        <div>- {t('page5.instalment')} {loan.instalment}</div>
-        <div>- {t('page5.next_instalment')} {loan.nextInstalment}</div>
-        <div>- {t('page5.last_instalment')} {loan.lastInstalment}</div>
-        <div>- {t('page5.total_to_repay')} {loan.totalToRepay}</div>
-        <div>- {t('page5.total_interest')} {loan.totalInterest}</div>
+        <div>- {t('page5.amount')} ${parseFloat(offer.amount).toFixed(2)}</div>
+        <div>- {t('page5.apr')} {(offer.annualInterestRate * 100).toFixed(2)}%</div>
+        <div>- {t('page5.duration')} {offer.duration} months</div>
+        <div>- {t('page5.instalment')} ${parseFloat(offer.installmentAmount).toFixed(2)}</div>
+        {/* <div>- {t('page5.next_instalment')} {loan.nextInstalment}</div>
+        <div>- {t('page5.last_instalment')} {loan.lastInstalment}</div> */}
+        <div>- {t('page5.total_to_repay')} ${parseFloat(offer.totalAmount).toFixed(2)}</div>
+        <div>- {t('page5.total_interest')} ${parseFloat(offer.totalInterest).toFixed(2)}</div>
 
         <h4>{t('page5.loan_details')}</h4>
 
