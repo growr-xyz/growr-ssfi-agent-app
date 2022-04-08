@@ -95,7 +95,7 @@ function WalletConnector({ onNext }) {
     return (
       <Button
         disabled={buttonIsActive}
-        label="Reset Account"
+        label="Restore Account"
         onClick={onCustonButtonClick}
       />
     );
