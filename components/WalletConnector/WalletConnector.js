@@ -5,26 +5,26 @@ import { useTranslations } from "next-intl";
 import { useWeb3React } from "@web3-react/core";
 import { useMutation, gql } from "@apollo/client";
 import { injected } from "../../utils/connectors";
-import { setWalletId, acceptTerms, rejectTerms } from "../../redux/user";
+import {
+  setWalletId,
+  acceptTerms,
+  rejectTerms,
+  updateUserState,
+} from "../../redux/user";
+import { goToStep } from "../../redux/steps";
 import BaseContentLayout from "../../components/BaseContentLayout/BaseContentLayout";
 import styles from "./WalletConnector.module.css";
 import { useRouter } from "next/router";
 
-import DataVaultWebClient, {
-  // AuthManager,
-  AsymmetricEncryptionManager,
-} from "@rsksmart/ipfs-cpinner-client";
-import AuthManager from "../../AuthManager";
-import truncateAccount from "@/utils/truncateAccount";
 import { Button } from "components";
-import { createDidFormat } from "@/utils/vcUtils";
-
-const serviceUrl = "https://data-vault.identity.rifos.org";
+import truncateAccount from "@/utils/truncateAccount";
+import useDataVault from "hooks/useDataVault";
+import { dataVaultKeys } from "../../config/getConfig";
 
 function WalletConnector({ onNext }) {
   const termsAccepted = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  let dataVault = useDataVault();
   const { active, account, chainId, activate, deactivate } = useWeb3React();
 
   const t = useTranslations("onboarding");
@@ -74,42 +74,21 @@ function WalletConnector({ onNext }) {
   const buttonIsActive = !active || !account || !termsAccepted;
 
   const onCustonButtonClick = async () => {
-    let did = createDidFormat(account, chainId);
-
-    const encryptionManager =
-      await AsymmetricEncryptionManager.fromWeb3Provider(window.ethereum);
-
-    const dataVault = new DataVaultWebClient({
-      serviceUrl,
-      authManager: new AuthManager({
-        did,
-        serviceUrl,
-        personalSign: (data) =>
-          window.ethereum.request({
-            method: "personal_sign",
-            params: [data, account],
-          }),
-      }),
-      encryptionManager,
-    });
-
-    const key = "Store";
-
-    let result = await dataVault.get({ did, key });
-
-    console.log("result", result);
-    // const content = "this is my content 3";
-
-    // // let info = await dataVault.getStorageInformation();
-
-    // // console.log("info", info);
-    // // const id = await dataVault.create({ key, content });
-    // // console.log("id", id);
-
-    // await dataVault.delete({
-    //   key,
-    //   id: "QmTwV6MzK3rnLgRL3XXbX4Uu4Xe6xf4ssb2mGu8i7AvSri",
-    // });
+    let result = await dataVault.get({ key: dataVaultKeys.onboarding });
+    console.log(result);
+    try {
+      if (result.length) {
+        const latestState = result.pop();
+        // something metamask don't ask the user to decrypt and davaVault returns encrypted
+        // when we try to JSON.parse the data it throws an error, so we try-catch it to move to the next step
+        dispatch(updateUserState(JSON.parse(latestState.content)));
+        dispatch(goToStep(4));
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      onSubmit();
+    }
   };
 
   const renderCustomButton = () => {
