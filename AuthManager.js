@@ -1,10 +1,4 @@
-import axios, { AxiosError } from "axios";
-import {
-  IAuthManager,
-  DIDAuthConfig,
-  KeyValueStore,
-  PersonalSign,
-} from "@rsksmart/ipfs-cpinner-client-types/lib/auth-manager/types";
+import axios from "axios";
 
 export class LocalStorage {
   get = (key) => Promise.resolve(localStorage.getItem(key));
