@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslations } from "next-intl";
-import { useMutation, gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
-import { setGoal, setPondAddress } from "../../../redux/user";
+import { setGoal, setOffer } from "../../../redux/user";
 import BaseContentLayout from "../../../components/BaseContentLayout/BaseContentLayout";
 import Input from "../../Input/Input";
 import { useWeb3React } from "@web3-react/core";
@@ -19,16 +18,12 @@ import {
 } from "../../../utils/contractHelper.js";
 import styles from "./GoalStep.module.css";
 import useDataVault from "hooks/useDataVault";
-
 import { dataVaultKeys } from "../../../config/getConfig";
-
-const { ethers, BigNumber } = require("ethers");
-
-// Decimals from WEI to 10 ** -8
-export const etherDecimals = BigNumber.from(10).pow(BigNumber.from(10));
+const { ethers } = require("ethers");
 
 function GoalStep({ onNext }) {
-  const userState = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
+  const offer = useSelector((state) => state.user.goals[0].offer);
   const dataVault = useDataVault();
 
   const { activate, library } = useWeb3React();
@@ -41,6 +36,22 @@ function GoalStep({ onNext }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (offer.pondAddress) {
+      (async () => {
+        try {
+          await dataVault.create({
+            key: dataVaultKeys.onboarding,
+            content: JSON.stringify(user),
+          });
+          onNext();
+        } catch (err) {
+          onNext();
+        }
+      })();
+    }
+  }, [offer]);
+
   // useEffect(() => {
   // 	const init = async () => {
   // 		try {
@@ -52,39 +63,39 @@ function GoalStep({ onNext }) {
   // 			console.log('Offer found ', offer);
   //       if (offer) {
   //         // const BigNumber = require('bignumber.js');
-  //         // let num=BigNumber.from(offer.details.amount); //.mul(etherDecimals);;
+  //         // let num=BigNumber.from(pondOffer.details.amount); //.mul(etherDecimals);;
   //         // let denom = BigNumber.from(10).pow(16);
   //         // let ans = num.div(denom).toNumber();
-  //         let num = ethers.utils.formatEther(offer.details.amount);
+  //         let num = ethers.utils.formatEther(pondOffer.details.amount);
   //         // console.log(ans.toString());
 
-  //         // console.log(ethers.utils.formatUnits(offer.details.amount, 2));
-  //         // console.log(ethers.utils.formatUnits(offer.details.installmentAmount, 2));
+  //         // console.log(ethers.utils.formatUnits(pondOffer.details.amount, 2));
+  //         // console.log(ethers.utils.formatUnits(pondOffer.details.installmentAmount, 2));
   //       }
   // 			// const verifiedCredentialNames = await verifyCredentials(library, account, {
-  // 			// 	pondAddress: offer.pondAddress,
+  // 			// 	pondAddress: pondOffer.pondAddress,
   // 			// 	credentials: { citizenship: "SV" },
   // 			// });
   // 			// if (!verifiedCredentialNames) throw new Error("Not eligible");
   // 			// await registerVerification(library, account, {
   // 			// 	borrower: account,
-  // 			// 	pondAddress: offer.pondAddress,
+  // 			// 	pondAddress: pondOffer.pondAddress,
   // 			// });
   // 			// console.log(`Borrower is verified`);
   // 			// await borrow(library, account, {
-  // 			// 	amount: offer.details.amount,
-  // 			// 	duration: offer.details.duration,
-  // 			// 	pondAddress: offer.pondAddress,
+  // 			// 	amount: pondOffer.details.amount,
+  // 			// 	duration: pondOffer.details.duration,
+  // 			// 	pondAddress: pondOffer.pondAddress,
   // 			// });
   // 			// console.log(`Borrower got the money`);
-  // 			// const loanDetailsBefore = await getLoanDetails(library, account, { pondAddress: offer.pondAddress });
+  // 			// const loanDetailsBefore = await getLoanDetails(library, account, { pondAddress: pondOffer.pondAddress });
   // 			// console.log("Next installment", loanDetailsBefore._receipt.nextInstallment.total.toString());
-  // 			// await repay(library, account, { pondAddress: offer.pondAddress, amount: "50" });
+  // 			// await repay(library, account, { pondAddress: pondOffer.pondAddress, amount: "50" });
   // 			// console.log(`Repaid ${50}`);
-  // 			// const loanDetailsAfter = await getLoanDetails(library, account, { pondAddress: offer.pondAddress });
+  // 			// const loanDetailsAfter = await getLoanDetails(library, account, { pondAddress: pondOffer.pondAddress });
   // 			// console.log("Next installment", loanDetailsAfter._receipt.nextInstallment.total.toString());
   // 			// const history = await fetchRepaymentHistory(library, account, {
-  // 			// 	pondAddress: offer.pondAddress,
+  // 			// 	pondAddress: pondOffer.pondAddress,
   // 			// });
   // 			// console.log(`Repayment history`, history);
   // 		} catch (error) {
@@ -151,33 +162,36 @@ function GoalStep({ onNext }) {
   };
 
   const onFormSubmit = async () => {
-    await dataVault.create({
-      key: dataVaultKeys.onboarding,
-      content: JSON.stringify(userState),
-    });
-
-    onNext();
-    // try {
-    //   const offer = await findBestOffer(library, walletId, {
-    //     amount: "10", // TODO: From input
-    //     duration: 5, // TODO: From input
-    //     credentials: { names: ["citizenship"], contents: ["SV"] },
-    //   });
-    //   console.log('Offer found', offer);
-    //   if (offer) {
-    //     // const BigNumber = require('bignumber.js');
-    //     dispatch(setPondAddress(goal.goalId, offer.pondAddress));
-    //     // TODO: Set loan details
-    //     let num=BigNumber.from(offer.details.amount).mul(etherDecimals);
-    //     // let ans = num.dividedBy(denom).toNumber();
-    //     console.log(num.toString());
-    //     onNext();
-    //     // console.log(ethers.utils.formatUnits(offer.details.amount, 2));
-    //     // console.log(ethers.utils.formatUnits(offer.details.installmentAmount, 2));
-    //   }
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
+    try {
+      const pondOffer = await findBestOffer(library, user.walletId, {
+        amount: goal.amountNeeded,
+        duration: goal.loanDuration,
+        credentials: { names: ["citizenship"], contents: ["SV"] }, // TODO: Map credentials from store (bankCredentials)
+      });
+      console.log("Offer found", pondOffer);
+      if (pondOffer) {
+        const formattedOffer = {
+          pondAddress: pondOffer.pondAddress,
+          amount: ethers.utils.formatUnits(pondOffer.details.amount),
+          annualInterestRate:
+            Number(pondOffer.details.annualInterestRate) / 100,
+          approved: pondOffer.details.approved,
+          cashBackRate: Number(pondOffer.details.cashBackRate) / 100,
+          disbursmentFee: Number(pondOffer.details.disbursmentFee),
+          duration: Number(pondOffer.details.duration),
+          installmentAmount: ethers.utils.formatUnits(
+            pondOffer.details.installmentAmount
+          ),
+          totalAmount: ethers.utils.formatUnits(pondOffer.details.totalAmount),
+          totalInterest: ethers.utils.formatUnits(
+            pondOffer.details.totalInterest
+          ),
+        };
+        dispatch(setOffer(goal.goalId, formattedOffer));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
     // TODO: Get offers from pond factory: list of VCs => provide details => OK/NOK
     // dispatch(setGoal(goals));
     // updateUserGoal()

@@ -72,6 +72,7 @@ const BankAccountConnector = ({ onNext }) => {
 
         // var jsonData = pm.response.json();
         // pm.environment.set('salt', jsonData.data.requestVerification)
+        // TODO: Array of VCs
         requestBankVC({ variables: {
           "parameters": salted,
           "did": createDidFormat(walletId, chainId),

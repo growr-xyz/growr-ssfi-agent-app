@@ -5,16 +5,16 @@ import { createJWT } from 'jesse-did-jwt';
 // import { fromRpcSig } from 'ethereumjs-util';
 const { ethers } = require('ethers');
 
-const { createVerifiablePresentationJwt } = require('did-jwt-vc');
+// const { createVerifiablePresentationJwt } = require('did-jwt-vc');
 
-export const getNetwork = (provider) => new Eth(provider).net_version();
-export const getAccounts = (provider) => new Eth(provider).accounts();
+// export const getNetwork = (provider) => new Eth(provider).net_version();
+// export const getAccounts = (provider) => new Eth(provider).accounts();
 
-export const getAccountAndNetwork = (provider) =>
-  Promise.all([
-    getAccounts(provider).then((accounts) => accounts[0]),
-    getNetwork(provider).then((chainId) => parseInt(chainId))
-  ]);
+// export const getAccountAndNetwork = (provider) =>
+//   Promise.all([
+//     getAccounts(provider).then((accounts) => accounts[0]),
+//     getNetwork(provider).then((chainId) => parseInt(chainId))
+//   ]);
 
 
 export const createDidMethod = (chainId) => {
