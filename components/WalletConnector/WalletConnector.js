@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { useWeb3React } from '@web3-react/core';
 import { useMutation,  gql } from '@apollo/client';
-import { injected } from '../wallet/connectors';
+import { injected } from '../../utils/connectors';
 import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user';
 import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout';
 import styles from './WalletConnector.module.css';
@@ -19,6 +20,14 @@ function WalletConnector({ onNext }) {
 
   const router = useRouter();
 
+  useEffect(() => {
+    try {
+      activate(injected, undefined, true);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  
   async function connect() {
     try {
       await activate(injected);
@@ -35,9 +44,10 @@ function WalletConnector({ onNext }) {
     }
   }
 
-  const onSubmit = () => {
+  const onSubmit = async() => {
     if (active && account) {
-      dispatch(setWalletId(account));
+      const { chainId } = await library.getNetwork();
+      dispatch(setWalletId(account, chainId));
       onNext(); // .catch((err) => err);
       // createWallet().then(() =>
       //   createUser()

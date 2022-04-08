@@ -6,15 +6,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { setGoal, setPondAddress } from '../../../redux/user';
 import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout';
 import Input from '../../Input/Input';
-import { useWeb3React } from "@web3-react/core";
+import { useWeb3React } from '@web3-react/core';
+import { injected } from '../../../utils/connectors';
 import {
 	findBestOffer,
-	verifyCredentials,
-	registerVerification,
-	borrow,
-	repay,
-	fetchRepaymentHistory,
-	getLoanDetails,
+	// verifyCredentials,
+	// registerVerification,
+	// borrow,
+	// repay,
+	// fetchRepaymentHistory,
+	// getLoanDetails,
 } from "../../../utils/contractHelper.js";
 import styles from './GoalStep.module.css';
 
@@ -24,7 +25,17 @@ const { ethers, BigNumber } = require('ethers');
 export const etherDecimals = BigNumber.from(10).pow(BigNumber.from(10));
 
 function GoalStep ({ onNext }) {
-  const { library, account } = useWeb3React();
+  const walletId = useSelector((state) => state.user.walletId);
+
+  const { activate, library } = useWeb3React();
+
+  useEffect(() => {
+    try {
+      activate(injected, undefined, true);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
 	// useEffect(() => {
 	// 	const init = async () => {
@@ -130,12 +141,12 @@ function GoalStep ({ onNext }) {
 
   const onFormSubmit = async() => {
     try {
-      const offer = await findBestOffer(library, account, {
+      const offer = await findBestOffer(library, walletId, {
         amount: "10", // TODO: From input
         duration: 5, // TODO: From input
         credentials: { names: ["citizenship"], contents: ["SV"] },
       });
-      console.log('Offer found ', offer);
+      console.log('Offer found', offer);
       if (offer) {
         // const BigNumber = require('bignumber.js');
         dispatch(setPondAddress(goal.goalId, offer.pondAddress));

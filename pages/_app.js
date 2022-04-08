@@ -1,15 +1,17 @@
-import App from "next/app";
-import Web3 from "web3";
-import { ethers } from "ethers";
-import { useStore } from "react-redux";
-import { wrapper } from "../redux/store";
+import App from 'next/app';
+import Web3 from 'web3';
+import { useEffect } from 'react';
+import { ethers } from 'ethers';
+import { useStore } from 'react-redux';
+import { wrapper } from '../redux/store';
 import { PersistGate } from "redux-persist/integration/react";
 import { NextIntlProvider } from "next-intl";
-import { Web3ReactProvider } from "@web3-react/core";
+import { Web3ReactProvider, useWeb3React } from "@web3-react/core";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import CustomHead from "../components/CustomHead/CustomHead";
 import "../styles/globals.css";
 import getConfig from "next/config";
+import { injected } from '../utils/connectors';
 
 function getLibrary(provider) {
 	return new ethers.providers.Web3Provider(provider, "any"); //new Web3(provider)
@@ -24,6 +26,17 @@ const client = new ApolloClient({
 
 function MyApp({ Component, pageProps }) {
 	const store = useStore((state) => state);
+
+	// const web3 = useWeb3React();
+
+	// useEffect(() => {
+	// 	try {
+	// 		web3.activate(injected, undefined, true);
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 	}
+  // }, [web3]);
+
 	// const { Component, pageProps, store } = props;
 	// console.log('!!!!!!!! Store:', store.getState());
 

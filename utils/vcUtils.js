@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 // import Eth from 'ethjs-query';
 import EthrDID from '@rsksmart/ethr-did';
-// import { createJWT } from 'jesse-did-jwt';
+import { createJWT } from 'jesse-did-jwt';
 // import { fromRpcSig } from 'ethereumjs-util';
-const { ethers, Signature } = require('ethers');
+const { ethers } = require('ethers');
 
 const { createVerifiablePresentationJwt } = require('did-jwt-vc');
 
@@ -16,25 +16,31 @@ export const getAccountAndNetwork = (provider) =>
     getNetwork(provider).then((chainId) => parseInt(chainId))
   ]);
 
+
+export const createDidMethod = (chainId) => {
+  switch (chainId) {
+    case 1: return 'ethr'
+    case 3: return 'ethr:ropsten'
+    case 4: return 'ethr:rinkeby'
+    case 5: return 'ethr:goerli'
+    case 30: return 'ethr:rsk'
+    case 31: return 'ethr:rsk:testnet'
+    case 42: return 'ethr:kovan'
+    case 5777: return 'ethr:development'
+    case 31337: return 'ethr:rsk:testnet'
+    default: return 'ethr:rsk'
+  }
+};
+
 /**
  * Create Identity
  * @param address address for the did
  * @param chainId chainId
 
  */
- export const createDidFormat = (address, chainId) => {
-  switch (chainId) {
-    case 1: return `did:ethr:${address}`
-    case 3: return `did:ethr:ropsten:${address}`
-    case 4: return `did:ethr:rinkeby:${address}`
-    case 5: return `did:ethr:goerli:${address}`
-    case 30: return `did:ethr:rsk:${address}`
-    case 31: return `did:ethr:rsk:testnet:${address}`
-    case 42: return `did:ethr:kovan:${address}`
-    case 5777: return `did:ethr:development:${address}`
-    case 31337: return `did:ethr:rsk:testnet:${address}`
-    default: return address
-  }
+export const createDidFormat = (address, chainId) => {
+  const method = createDidMethod(chainId);
+  return `did:${method}:${address}`;
 };
 
 export const parseJwt = (token) => {
@@ -93,10 +99,11 @@ export const createPresentation = async(provider, account, jwt) => {
   console.log('did', did);
 
   // const signedPresentation = await signer.signMessage(JSON.stringify(vpPayload));
-  const ethrDid = new EthrDID({address: account, provider, signer: signerFunction});
+  const ethrDid = new EthrDID({address: account, method: 'ethr:rsk:testnet', provider, signer: signerFunction});
   console.log('ethrDid', ethrDid);
-  return createVerifiablePresentationJwt(vpPayload, ethrDid);
+  // return createVerifiablePresentationJwt(vpPayload, ethrDid);
   // return vpVwt;
   // return signedPresentation;
-  // return createJWT(vpPayload, { alg: 'ES256K', issuer: did, signer })
+  console.log('createJWT');
+  return createJWT(vpPayload, { alg: 'ES256K', issuer: did, signer: signerFunction })
 };

@@ -12,6 +12,7 @@ import { createDidFormat, parseJwt } from '../../../utils/vcUtils';
 
 const BankAccountConnector = ({ onNext }) => {
   const walletId = useSelector((state) => state.user.walletId);
+  const chainId = useSelector((state) => state.user.chainId);
   // const bankUserId = useSelector((state) => state.user.bankUserId);
   const dispatch = useDispatch();
 
@@ -67,12 +68,13 @@ const BankAccountConnector = ({ onNext }) => {
         var CryptoJS = require('crypto-js');
         const salted = CryptoJS.AES.encrypt(user.password, salt).toString();
         console.log('Encrypted salt', salted);
+        console.log('DID', createDidFormat(walletId, chainId));
 
         // var jsonData = pm.response.json();
         // pm.environment.set('salt', jsonData.data.requestVerification)
         requestBankVC({ variables: {
           "parameters": salted,
-          "did": createDidFormat(walletId), 
+          "did": createDidFormat(walletId, chainId),
           "message": "test", // To be signed with DID (wallet)
           "type": "citizenship"
         }})

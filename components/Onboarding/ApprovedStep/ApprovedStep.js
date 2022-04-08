@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { useMutation,  gql } from '@apollo/client';
@@ -6,11 +7,30 @@ import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout';
 import { createDidFormat, createPresentation } from "../../../utils/vcUtils";
 import styles from './ApprovedStep.module.css';
 import { useWeb3React } from "@web3-react/core";
+import { injected } from '../../../utils/connectors';
+import {
+	// findBestOffer,
+	// verifyCredentials,
+	// registerVerification,
+	borrow,
+	// repay,
+	// fetchRepaymentHistory,
+	// getLoanDetails,
+} from "../../../utils/contractHelper.js";
 
 function ApprovedStep({ onNext }) {
-  const { library, account } = useWeb3React();
+  const { activate, library } = useWeb3React();
 
-  // const termsAccepted = useSelector((state) => state.user.termsAccepted);
+  useEffect(() => {
+    try {
+      activate(injected, undefined, true);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  const walletId = useSelector((state) => state.user.walletId);
+  const chainId = useSelector((state) => state.user.chainId);
   const loan = useSelector((state) => state.user.goals[0].loan);
   const jwt = useSelector((state) => state.user.verifiableCredentials[0]);
   const growrTermsAccepted = useSelector((state) => state.user.growrTermsAccepted);
@@ -28,22 +48,36 @@ function ApprovedStep({ onNext }) {
 
   const [verifyVCs, { data, loading, error }] = useMutation(VERIFY_VCS, {
     variables: {
-      did: createDidFormat(account),
-      vps: '',
-      pondAddress: ''
+      did: createDidFormat(walletId, chainId),
+      // vps: '',
+      // pondAddress: ''
     }
   });
 
   const onSubmit = async() => {
     // TODO: Apply to the verifier & get disbursement from the pond
     // try {
-      console.log('creating presentation...', account, jwt);
-      let vpJwt = await createPresentation(library, account, jwt);
+      console.log('creating presentation...', walletId, jwt);
+      let vpJwt = await createPresentation(library, walletId, jwt);
       console.log('vpJwt', vpJwt);
 
       if (vpJwt) {
-        // console.log(vp);
-        // onNext();
+        verifyVCs({ variables: {
+          vps: [vpJwt],
+          pondAddress: loan.pondAddress
+        }}).then(async() => {
+          console.log('Presentation verified, now borrow');
+          await borrow(library, account, {
+  					amount: offer.details.amount,
+	  				duration: offer.details.duration,
+		  			pondAddress: offer.pondAddress,
+			  	});
+				  console.log(`Borrower got the money`);
+
+          // onNext();
+        }).catch(err => {
+          console.error(err);
+        })
       }
     // } catch (error) {
     //   console.log(error.message);

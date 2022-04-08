@@ -17,7 +17,7 @@ export const REJECT_GROWR_TERMS = 'REJECT_GROWR_TERMS';
 // Action Creators
 export const setUserId = query => ({ type: SET_USER_ID, query});
 
-export const setWalletId = (query) => ({ type: SET_WALLET_ID, query});
+export const setWalletId = (walletId, chainId) => ({ type: SET_WALLET_ID, query: {walletId, chainId}});
 
 export const setBankUserId = (query) => ({ type: SET_BANK_USER_ID, query});
 
@@ -43,6 +43,7 @@ export const rejectGrowrTerms = () => ({ type: REJECT_GROWR_TERMS });
 export const initialState = {
   userId: '',
   walletId: '',
+  chainId: 0,
   bankUserId: '',
   termsAccepted: false,
   growrTermsAccepted: false,
@@ -80,9 +81,11 @@ export const initialState = {
 const userReducer = (state = initialState, { type, query }) => {
   switch (type) {
     case SET_WALLET_ID:
+      console.log('SET_WALLET_ID', query);
       return {
         ...state,
-        walletId: query
+        walletId: query.walletId,
+        chainId: query.chainId
       };
     case SET_USER_ID:
       return {
@@ -121,14 +124,15 @@ const userReducer = (state = initialState, { type, query }) => {
       return {
         ...state,
         goals: state.goals.map(goal => {
-          if (goal.goalId === query.goalId) return goal;
+          if (goal.goalId !== query.goalId) return goal;
           
           // We found the goal => update the pondAddress
+          console.log('update goal', goal.goalId);
           return {
             ...goal,
             loan: {
-              pondAddress: query.pondAddress,
-              ...goal.loan
+              ...goal.loan,
+              pondAddress: query.pondAddress
             }
           }
         })
