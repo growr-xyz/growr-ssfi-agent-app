@@ -6,72 +6,9 @@ import { setUserId, setFinances } from "../../../redux/user";
 import BaseContentLayout from "../../../components/BaseContentLayout/BaseContentLayout";
 import Input from "../../Input/Input";
 import styles from "./FinancialStep.module.css";
-import { useWeb3React } from "@web3-react/core";
-import {
-	getAllPondsCriteriaNames,
-	findBestOffer,
-	verifyCredentials,
-	registerVerification,
-	borrow,
-	repay,
-	fetchRepaymentHistory,
-	getLoanDetails,
-} from "../../../utils/contractHelper.js";
 
 function FinancialStep({ onNext }) {
-	const { library, account } = useWeb3React();
 
-	useEffect(() => {
-		const init = async () => {
-			try {
-				const allPondsCriteriaNames = await getAllPondsCriteriaNames(library, account);
-				console.log(allPondsCriteriaNames);
-
-				const offer = await findBestOffer(library, account, {
-					amount: "10",
-					duration: 5,
-					credentials: { citizenship: "SV" },
-				});
-				console.log(`Offer found `, offer);
-				// // -- VERIFIER
-				// const verifiedCredentialNames = await verifyCredentials(library, account, {
-				// 	pondAddress: offer.pondAddress,
-				// 	credentials: { citizenship: "SV" },
-				// });
-				// if (!verifiedCredentialNames) throw new Error("Not eligible");
-				// await registerVerification(library, account, {
-				// 	borrower: account,
-				// 	pondAddress: offer.pondAddress,
-				// });
-				// console.log(`Borrower is verified`);
-				// // Peseta - GO btn
-				// await borrow(library, account, {
-				// 	amount: offer.details.amount,
-				// 	duration: offer.details.duration,
-				// 	pondAddress: offer.pondAddress,
-				// });
-				// console.log(`Borrower got the money`);
-				// // -- Peseta Repay
-				// const loanDetailsBefore = await getLoanDetails(library, account, { pondAddress: offer.pondAddress });
-				// console.log("Next installment", loanDetailsBefore._receipt.nextInstallment.total.toString());
-				// await repay(library, account, { pondAddress: offer.pondAddress, amount: "50" });
-				// console.log(`Repaid ${50}`);
-				// const loanDetailsAfter = await getLoanDetails(library, account, { pondAddress: offer.pondAddress });
-				// console.log("Next installment", loanDetailsAfter._receipt.nextInstallment.total.toString());
-				// // -- History
-				// const history = await fetchRepaymentHistory(library, account, {
-				// 	pondAddress: offer.pondAddress,
-				// });
-				// console.log(`Repayment history`, history);
-			} catch (error) {
-				console.log(error.message);
-			}
-		};
-
-		init();
-	}, [library, account]);
-	// const walletId = useSelector((state) => state.user.walletId);
-	// const userId = useSelector((state) => state.user.termsAccepted);
 	const finances = useSelector((state) => state.user.finances);
 	const dispatch = useDispatch();
 

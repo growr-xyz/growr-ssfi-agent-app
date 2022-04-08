@@ -1,3 +1,5 @@
+// import getConfig from "next/config";
+
 const { ethers } = require("ethers");
 
 const LoanABI = require("../abi/Loan.json");
@@ -6,38 +8,22 @@ const PondABI = require("../abi/Pond.json");
 const PondFactoryABI = require("../abi/PondFactory.json");
 const VerificationRegistryABI = require("../abi/VerificationRegistry.json");
 
-const rpcURL = "http://localhost:8545";
+// const { publicRuntimeConfig } = getConfig();
+// console.log('config', publicRuntimeConfig);
 
+// const rpcURL = process.env.NEXT_PUBLIC_RPC_URL;
 // const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-const xUSDAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+
+const xUSDAddress = process.env.NEXT_PUBLIC_XUSD_CONTRACT;
 // const DOCAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-const VerificationRegistryAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
-const PondFactoryAddress = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
+const VerificationRegistryAddress = process.env.NEXT_PUBLIC_VERIFICATION_REGISTRY_CONTRACT;
+const PondFactoryAddress = process.env.NEXT_PUBLIC_POND_FACTORY_CONTRACT;
 // const WRBTCAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
-function onlyUnique(value, index, self) {
-	return self.indexOf(value) === index;
-  }
+// console.log(process.env);
+console.log('Addresses', xUSDAddress, VerificationRegistryAddress, PondFactoryAddress)
 
-  // TODO: cache pond criterias
-export const getAllPondsCriteriaNames = async (provider, account) => {
-	const signer = provider.getSigner(account);
-
-	const PondFactory = new ethers.Contract(PondFactoryAddress, PondFactoryABI, provider);
-	const allPondAddresses = await PondFactory.connect(signer).getAllPonds();
-
-	const res = await Promise.all(
-		allPondAddresses.flatMap(async (pondAddress) => {
-			const pondCredentilNames = await getPondCriteriaNames(provider, account, { pondAddress });
-			return pondCredentilNames;
-		})
-	);
-
-	const uniqueNames = res.flat().filter(onlyUnique);
-	return uniqueNames;
-};
-
-export const findBestOffer = async (provider, account, { amount, duration, credentials}) => {
+export const findBestOffer = async (provider, account, userInputParams) => {
 	const signer = provider.getSigner(account);
 
 	const PondFactory = new ethers.Contract(PondFactoryAddress, PondFactoryABI, provider);

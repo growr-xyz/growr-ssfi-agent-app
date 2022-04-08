@@ -1,5 +1,4 @@
-import { useRouter } from "next/router";
-import { connect } from 'react-redux';
+import router, { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
 import { useSelector, useDispatch } from 'react-redux'
 import Header from "./components/Header/Header";
@@ -30,8 +29,9 @@ import styles from "./Goal.module.css";
 //   },
 // };
 
-const Goal = ({ balance }) => {
+const Goal = () => {
   const router = useRouter();
+  console.log("router:", router);
   const t = useTranslations("dashboard");
   const { goalId } = router.query;
 
@@ -91,7 +91,7 @@ const Goal = ({ balance }) => {
               (parseFloat(goal?.amountNeeded) +
                 parseFloat(goal?.amountSaved))
             }
-            value={ballanceUsd}
+            value={balance}
             size="big"
           />
         </div>
@@ -114,19 +114,13 @@ const Goal = ({ balance }) => {
       </div>
       <div className={styles.more}>
         {loan ? <Loan {...loan} /> : null}
-        {/* <Transactions /> */}
+        <Transactions />
       </div>
     </div>
   );
 };
 
-const mapStateToProps = function(state) {
-  return {
-    balance: state.user.balance
-  }
-}
-
-export default connect(mapStateToProps)(Goal)
+export default Goal;
 
 export function getStaticProps({ locale }) {
   return {

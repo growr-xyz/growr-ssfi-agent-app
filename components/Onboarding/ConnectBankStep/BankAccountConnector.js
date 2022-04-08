@@ -1,19 +1,22 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { useTranslations } from "next-intl"
-import { useMutation, gql } from "@apollo/client"
-import { setBankUserId } from '../../../redux/user'
-import Input from '../../Input/Input'
-import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout'
-import styles from "./BankAccountConnector.module.css"
+import { useTranslations } from 'next-intl';
+import { useMutation, useLazyQuery, gql } from '@apollo/client';
+import { setBankUserId, setVerifiableCredential, setBankCredential } from '../../../redux/user';
+import Input from '../../Input/Input';
+import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout';
+import styles from "./BankAccountConnector.module.css";
+import { parse } from '@ethersproject/transactions';
+import { createDidFormat, parseJwt } from '../../../utils/vcUtils';
 
 const BankAccountConnector = ({ onNext }) => {
   const walletId = useSelector((state) => state.user.walletId);
+  const chainId = useSelector((state) => state.user.chainId);
   // const bankUserId = useSelector((state) => state.user.bankUserId);
   const dispatch = useDispatch();
 
-  const t = useTranslations("onboarding")
+  const t = useTranslations("onboarding");
 
   const [user, setUser] = useState({
     username: '',
@@ -26,7 +29,7 @@ const BankAccountConnector = ({ onNext }) => {
       ...user,
       [e.target.name]: e.target.value
     })
-  }
+  };
 
   // const CONNECT_BANK = gql`
   //   mutation connectBank {
@@ -35,9 +38,70 @@ const BankAccountConnector = ({ onNext }) => {
   // `
   // const [connectBankMutation, { data, loading, error }] = useMutation(CONNECT_BANK) //, {errorPolicy: 'all'})
 
+  const REQUEST_VERIFICATION = gql`
+    mutation requestVC {
+      requestVerification(did:"${createDidFormat(walletId)}", type:citizenship, username:"${user.username}")
+    }  
+  `;
+
+  const REQUEST_BANK_VC = gql`
+    query bankVC($did: String, $message: String, $type: VCTypeEnum, $parameters: String) {
+      bankVC(did:$did, message:$message, parameters: $parameters, type: $type)
+    }
+  `;
+
+  const [requestVerificationMutation, { verificationData, loading, error }] = useMutation(REQUEST_VERIFICATION); //, {errorPolicy: 'all'})
+  const [requestBankVC, { bankVCData, bankVCLoading, bankVCError }] = useLazyQuery(REQUEST_BANK_VC, {
+    onCompleted: (data) => {
+      console.log('onCompleted data', data);
+    }    
+  });
+
   const onContinue = () => {
-    dispatch(setBankUserId(user.username));
-    onNext();
+    // dispatch(setBankUserId(user.username));
+    // onNext();
+    requestVerificationMutation()
+      .then(res => {
+        let salt = res.data.requestVerification;
+        console.log('Returned salt', salt);
+
+        var CryptoJS = require('crypto-js');
+        const salted = CryptoJS.AES.encrypt(user.password, salt).toString();
+        console.log('Encrypted salt', salted);
+        console.log('DID', createDidFormat(walletId, chainId));
+
+        // var jsonData = pm.response.json();
+        // pm.environment.set('salt', jsonData.data.requestVerification)
+        requestBankVC({ variables: {
+          "parameters": salted,
+          "did": createDidFormat(walletId, chainId),
+          "message": "test", // To be signed with DID (wallet)
+          "type": "citizenship"
+        }})
+          .then(resVC =>
+            {
+              let vcJwt = resVC.data.bankVC;
+              console.log('vcJwt', vcJwt);
+              let vc = parseJwt(vcJwt);
+              console.log('vc', vc);
+              
+              dispatch(setBankUserId(user.username));
+              dispatch(setVerifiableCredential(vcJwt));
+              dispatch(setBankCredential(vc));
+              onNext();
+            })
+          // .catch(err => {
+          //   console.log('ERROR2', err);
+          //   dispatch(setBankUserId('ERROR2'));
+          //   return err
+          // })
+        })
+      // .catch(err => {
+      //   console.log('ERROR1', err);
+
+      //   dispatch(setBankUserId('ERROR1'));
+      //   return err
+      // })
     // connectBankMutation()
     //   .then(() => onNext())
     //   .catch(err => {

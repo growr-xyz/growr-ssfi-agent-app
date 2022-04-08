@@ -1,13 +1,14 @@
-import Image from "next/image";
-import { useSelector, useDispatch } from "react-redux";
-import { useTranslations } from "next-intl";
-import { useWeb3React } from "@web3-react/core";
-import { useMutation, gql } from "@apollo/client";
-import { injected } from "../wallet/connectors";
-import { setWalletId, acceptTerms, rejectTerms } from "../../redux/user";
-import BaseContentLayout from "../../components/BaseContentLayout/BaseContentLayout";
-import styles from "./WalletConnector.module.css";
-import { useRouter } from "next/router";
+import Image from 'next/image';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslations } from 'next-intl';
+import { useWeb3React } from '@web3-react/core';
+import { useMutation,  gql } from '@apollo/client';
+import { injected } from '../../utils/connectors';
+import { setWalletId, acceptTerms, rejectTerms } from '../../redux/user';
+import BaseContentLayout from '../../components/BaseContentLayout/BaseContentLayout';
+import styles from './WalletConnector.module.css';
+import { useRouter } from 'next/router';
 
 import DataVaultWebClient, {
   // AuthManager,
@@ -15,9 +16,6 @@ import DataVaultWebClient, {
 } from "@rsksmart/ipfs-cpinner-client";
 import AuthManager from "../../AuthManager";
 import truncateAccount from "@/utils/truncateAccount";
-import { useEffect } from "react";
-
-const serviceUrl = "https://data-vault.identity.rifos.org";
 
 function WalletConnector({ onNext }) {
   const termsAccepted = useSelector((state) => state.user.termsAccepted);
@@ -31,9 +29,13 @@ function WalletConnector({ onNext }) {
   const router = useRouter();
 
   useEffect(() => {
-    injected.isAuthorized().then(console.log);
+    try {
+      activate(injected, undefined, true);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
-
+  
   async function connect() {
     try {
       await activate(injected);

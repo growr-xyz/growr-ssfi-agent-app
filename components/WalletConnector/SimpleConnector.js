@@ -1,15 +1,15 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import { connect } from 'react-redux';
 import router from "next/router";
 import { useTranslations } from 'use-intl';
-import { useWeb3React } from "@web3-react/core"
-import { injected } from "../wallet/connectors"
-import { setWalletId } from '../../redux/user'
-import styles from "./SimpleConnector.module.css";
+import { useWeb3React } from '@web3-react/core';
+import { injected } from '../../utils/connectors';
+import { setWalletId } from '../../redux/user';
+import styles from './SimpleConnector.module.css';
 
-function SimpleConnector({ setWalletId }) {
+function SimpleConnector() {
   const t = useTranslations("dashboard")
-  const { active, account, activate } = useWeb3React()
+  const { active, account, activate, library } = useWeb3React()
 
   async function connect() {
     try {
@@ -19,9 +19,10 @@ function SimpleConnector({ setWalletId }) {
     }
   }
 
-  const onProceed = () => {
+  const onProceed = async() => {
     if (active && account) {
-      setWalletId(account)
+      const { chainId } = await library.getNetwork();
+      dispatch(setWalletId(account, chainId));
     }
   }
 
@@ -69,8 +70,4 @@ function SimpleConnector({ setWalletId }) {
   )
 }
 
-const mapDispatchToProps = {
-  setWalletId
-}
-
-export default connect(null, mapDispatchToProps)(SimpleConnector)
+export default SimpleConnector;
