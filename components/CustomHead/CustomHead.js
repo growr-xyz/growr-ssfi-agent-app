@@ -3,7 +3,7 @@ import Head from "next/head";
 const CustomHead = () => {
   return (
     <Head>
-      <title>Peseta</title>
+      <title>Growr SSFI Agent App</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       {/* <link
         rel="preload"

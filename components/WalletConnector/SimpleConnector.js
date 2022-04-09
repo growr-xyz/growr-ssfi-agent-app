@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import Image from 'next/image';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import router from "next/router";
 import { useTranslations } from 'use-intl';
 import { useWeb3React } from '@web3-react/core';
@@ -10,6 +11,15 @@ import styles from './SimpleConnector.module.css';
 function SimpleConnector() {
   const t = useTranslations("dashboard")
   const { active, account, activate, library } = useWeb3React()
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    try {
+      activate(injected, undefined, true);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   async function connect() {
     try {

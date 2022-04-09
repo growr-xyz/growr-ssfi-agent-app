@@ -1,4 +1,5 @@
-import { bindActionCreators } from "redux";
+// import { bindActionCreators } from "redux";
+import ERC20 from "../abi/ERC20.json";
 
 // Actions
 export const SET_USER_ID = 'SET_USER_ID';
@@ -13,6 +14,8 @@ export const ACCEPT_TERMS = 'ACCEPT_TERMS';
 export const REJECT_TERMS = 'REJECT_TERMS';
 export const ACCEPT_GROWR_TERMS = 'ACCEPT_GROWR_TERMS';
 export const REJECT_GROWR_TERMS = 'REJECT_GROWR_TERMS';
+
+const xUSDAddress = process.env.NEXT_PUBLIC_XUSD_ADDRESS;
 
 // Action Creators
 export const setUserId = query => ({ type: SET_USER_ID, query});

@@ -1,6 +1,6 @@
-## Peseta Web Application
+## Growr SSFI Agent Web Application
 
-(c) 2021-2022. Originally developed by the Growr On-chain team during the Bitcoin Bankathon in 2021 and further developed by Growr dev team.
+(c) 2021-2022. Originally developed by the Growr On-chain team during the Bitcoin Bankathon in 2021 as Peseta, and further developed by Growr dev team during Hack to the Future 4 in 2022.
 
 ## Getting Started
 

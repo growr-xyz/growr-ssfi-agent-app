@@ -6,7 +6,7 @@
     },
     "page2": {
         "title": "Please connect your bank account.",
-        "access_note": "Please enter your access credentials for the Banco Hipotecario e-Banking, in order to connect your bank account to Peseta.",
+        "access_note": "Please enter your access credentials for the e-banking, in order to connect your bank account to Growr.",
         "data_note": "We use your transactional data to perform risk scoring on the fly and we do not store any of this data. So your data remains yours.",
         "username": "User name",
         "password": "Password",

@@ -182,3 +182,13 @@ export const getLoanDetails = async (provider, borrower, { pondAddress }) => {
 
 	return details;
 };
+
+export const getBalance = async (provider, account) => {
+	const signer = provider.getSigner(account);
+
+	const xUSDContract = new ethers.Contract(xUSDAddress, ERC20ABI, signer);
+	const balance = await xUSDContract.balanceOf(signer.getAddress());
+	console.log('xUSD balance', ethers.utils.formatUnits(balance));
+
+	return ethers.utils.formatUnits(balance);
+};
