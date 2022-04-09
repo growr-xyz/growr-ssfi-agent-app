@@ -1,0 +1,71 @@
+{
+    "initialQuestion": {
+        "label": "Which option best describes your household?",
+        "answers": {
+            "a": "I live alone",
+            "b": "I live with other adults and/or children"
+        },
+        "nextButton": "Continue",
+        "loginLink": "I already have an accout"
+    },
+    "finalQuestions": {
+        "label": "Just one more thing...",
+        "description": "Tell us a little more about you, and we'll reward you with personalized advice. \nYour data remains yours – we will only use it if you explicitly allow us to and for reasons that will be beneficial for you.",
+        "questions": {
+            "location": {
+                "label": "We live in a:",
+                "answers": {
+                    "a": "Large Town",
+                    "b": "Small Town",
+                    "c": "Village"
+                }
+            },
+            "income": {
+                "label": "Our household income is:",
+                "answers": {
+                    "a": "<1000",
+                    "b": "1000-3000",
+                    "c": ">3000"
+                }
+            },
+            "age": {
+                "label": "My age is:",
+                "answers": {
+                    "a": "<18",
+                    "b": "18-30",
+                    "c": "30-45",
+                    "d": "45-65",
+                    "e": "65+"
+                }
+            }
+        },
+        "nextButton": "Get me to my score"
+    },
+    "score": {
+        "label": "Hurray! Here's your financial health score. 🎉",
+        "personalResponse": {
+            "red": "Unfortunately, your situation is not easy. We can definitely help you with our advice!",
+            "yellow": "You are not in such a bad shape with your money, but not in a great shape either. We have some good recommendations for you!",
+            "green": "Good job! You're doing very well. We can help you to maintain your good shape. We think that you're also a great fit for our community of mentors who are helping people in need."
+        },
+        "inviteToAction": "Please signup with an existing social profile or enter your name and email, and we will send you a link to your personalized dashboard with more details, as well as weekly \"wisdom pills\" to improve and maintain your financial health.",
+        "consent": "By signing up, I agree with the :%1: and the :%2: of Growr.",
+        "document%1": {
+            "name": "Terms of Service",
+            "link": "https://growr.xyz/en/terms/"
+        },
+        "document%2": {
+            "name": "Privacy Policy",
+            "link": "https://growr.xyz/en/privacy/"
+        },
+        "firstName": "First name",
+        "email": "Email address",
+        "nextButton": "Sign me up",
+        "serverError": "Something went wrong, please try again."
+    },
+    "continue": "Continue",
+    "somethingWentWrong": "Something went wrong, please try agian layer",
+    "emailSent": "Link to your email has been sent",
+    "connectWith": "Connect with",
+    "or": "or"
+}

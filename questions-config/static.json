@@ -1,0 +1,256 @@
+[
+    {
+        "id": "spend001",
+        "pool": "spend",
+        "label": true,
+        "description": true,
+        "answers": [
+            {
+                "id": "spend001.a",
+                "value": "a",
+                "points": 100
+            },
+            {
+                "id": "spend001.b",
+                "value": "b",
+                "points": 75
+            },
+            {
+                "id": "spend001.c",
+                "value": "c",
+                "points": 50
+            },
+            {
+                "id": "spend001.d",
+                "value": "d",
+                "points": 25
+            },
+            {
+                "id": "spend001.e",
+                "value": "e",
+                "points": 0
+            }
+        ]
+    },
+    {
+        "id": "spend002",
+        "pool": "spend",
+        "label": true,
+        "description": true,
+        "answers": [
+            {
+                "id": "spend002.a",
+                "value": "a",
+                "points": 100
+            },
+            {
+                "id": "spend002.b",
+                "value": "b",
+                "points": 75
+            },
+            {
+                "id": "spend002.c",
+                "value": "c",
+                "points": 50
+            },
+            {
+                "id": "spend002.d",
+                "value": "d",
+                "points": 25
+            },
+            {
+                "id": "spend002.e",
+                "value": "e",
+                "points": 0
+            }
+        ]
+    },
+    {
+        "id": "save001",
+        "pool": "save",
+        "label": true,
+        "description": true,
+        "answers": [
+            {
+                "id": "save001.a",
+                "value": "a",
+                "points": 100
+            },
+            {
+                "id": "save001.b",
+                "value": "b",
+                "points": 75
+            },
+            {
+                "id": "save001.c",
+                "value": "c",
+                "points": 50
+            },
+            {
+                "id": "save001.d",
+                "value": "d",
+                "points": 25
+            },
+            {
+                "id": "save001.e",
+                "value": "e",
+                "points": 0
+            }
+        ]
+    },
+    {
+        "id": "save002",
+        "pool": "save",
+        "label": true,
+        "description": true,
+        "answers": [
+            {
+                "id": "save002.a",
+                "value": "a",
+                "points": 100
+            },
+            {
+                "id": "save002.b",
+                "value": "b",
+                "points": 75
+            },
+            {
+                "id": "save002.c",
+                "value": "c",
+                "points": 50
+            },
+            {
+                "id": "save002.d",
+                "value": "d",
+                "points": 25
+            },
+            {
+                "id": "save002.e",
+                "value": "e",
+                "points": 0
+            }
+        ]
+    },
+    {
+        "id": "borrow001",
+        "pool": "borrow",
+        "label": true,
+        "description": true,
+        "answers": [
+            {
+                "id": "borrow001.a",
+                "value": "a",
+                "points": 100
+            },
+            {
+                "id": "borrow001.b",
+                "value": "b",
+                "points": 85
+            },
+            {
+                "id": "borrow001.c",
+                "value": "c",
+                "points": 45
+            },
+            {
+                "id": "borrow001.d",
+                "value": "d",
+                "points": 0
+            }
+        ]
+    },
+    {
+        "id": "borrow002",
+        "pool": "borrow",
+        "label": true,
+        "description": true,
+        "answers": [
+            {
+                "id": "borrow002.a",
+                "value": "a",
+                "points": 100
+            },
+            {
+                "id": "borrow002.b",
+                "value": "b",
+                "points": 85
+            },
+            {
+                "id": "borrow002.c",
+                "value": "c",
+                "points": 45
+            },
+            {
+                "id": "borrow002.d",
+                "value": "d",
+                "points": 0
+            }
+        ]
+    },
+    {
+        "id": "plan001",
+        "pool": "plan",
+        "label": true,
+        "description": true,
+        "answers": [
+            {
+                "id": "plan001.a",
+                "value": "a",
+                "points": 100
+            },
+            {
+                "id": "plan001.b",
+                "value": "b",
+                "points": 75
+            },
+            {
+                "id": "plan001.c",
+                "value": "c",
+                "points": 50
+            },
+            {
+                "id": "plan001.d",
+                "value": "d",
+                "points": 25
+            },
+            {
+                "id": "plan001.e",
+                "value": "e",
+                "points": 0
+            }
+        ]
+    },
+    {
+        "id": "plan002",
+        "pool": "plan",
+        "label": true,
+        "description": true,
+        "answers": [
+            {
+                "id": "plan002.a",
+                "value": "a",
+                "points": 100
+            },
+            {
+                "id": "plan002.b",
+                "value": "b",
+                "points": 65
+            },
+            {
+                "id": "plan002.c",
+                "value": "c",
+                "points": 35
+            },
+            {
+                "id": "plan002.d",
+                "value": "d",
+                "points": 15
+            },
+            {
+                "id": "plan002.e",
+                "value": "e",
+                "points": 0
+            }
+        ]
+    }
+]

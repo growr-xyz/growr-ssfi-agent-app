@@ -32,11 +32,13 @@ export const findBestOffer = async (provider, account, userInputParams) => {
 	const res = await Promise.allSettled(
 		allPondAddresses.map(async (pondAddress) => {
 			const Pond = new ethers.Contract(pondAddress, PondABI, provider);
-			const amount = ethers.utils.parseEther(userInputParams.amount);
-			const duration = userInputParams.duration;
+			const { match, containsAll } = await filterOnlyPondCredentials(provider, account, { pondAddress, credentials })
+			if (!containsAll) {
+				throw Error(`Not all credentials are passed to this pond ${pondAddress}`);
+			}
 			return {
 				pondAddress,
-				details: await Pond.getLoanOffer(amount, duration, userInputParams.credentials),
+				details: await Pond.getLoanOffer(ethers.utils.parseEther(amount), duration, match.arrays),
 			};
 		})
 	);
@@ -103,10 +105,16 @@ export const findBestOffer = async (provider, account, userInputParams) => {
 	return bestOffersDuration.length > 0 ? bestOffersDuration[0] : null;
 };
 
-export const verifyCredentials = async (provider, account, { pondAddress, credentials }) => {
+export const getPondCriteriaNames = async (provider, account, { pondAddress }) => {
 	const Pond = new ethers.Contract(pondAddress, PondABI, provider);
 
 	const criteriaNames = await Pond.getCriteriaNames();
+
+	return criteriaNames;
+}
+
+export const filterOnlyPondCredentials = async (provider, account, { pondAddress, credentials }) => {
+	const criteriaNames = await getPondCriteriaNames(provider, account, { pondAddress });
 
 	const userValidCredentials = Object.fromEntries(
 		Object.entries(credentials).filter(([name, value]) => criteriaNames.includes(name))
@@ -115,11 +123,28 @@ export const verifyCredentials = async (provider, account, { pondAddress, creden
 	const names = Object.keys(userValidCredentials);
 	const contents = Object.values(userValidCredentials);
 
-	if (names.length != criteriaNames.length) {
+	const containsAll = names.length === criteriaNames.length;
+
+	return {
+		neededNames: criteriaNames,
+		match: {
+			json: userValidCredentials,
+			arrays: { names, contents }
+		},
+		containsAll,
+	}
+};
+
+export const verifyCredentials = async (provider, account, { pondAddress, credentials }) => {
+	const { match, containsAll } = await filterOnlyPondCredentials(provider, account, { pondAddress, credentials });
+
+	if (!containsAll) {
 		return false;
 	}
 
-	const valid = await Pond.verifyCredentials({ names, contents });
+	const Pond = new ethers.Contract(pondAddress, PondABI, provider);
+
+	const valid = await Pond.verifyCredentials(match.arrays);
 
 	return valid && criteriaNames;
 };

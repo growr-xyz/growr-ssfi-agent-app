@@ -1,28 +1,30 @@
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useTranslations } from 'next-intl';
-import { useMutation, gql } from '@apollo/client';
-import { v4 as uuidv4 } from 'uuid';
-import { setGoal, setOffer } from '../../../redux/user';
-import BaseContentLayout from '../../../components/BaseContentLayout/BaseContentLayout';
-import Input from '../../Input/Input';
-import { useWeb3React } from '@web3-react/core';
-import { injected } from '../../../utils/connectors';
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useTranslations } from "next-intl";
+import { v4 as uuidv4 } from "uuid";
+import { setGoal, setOffer } from "../../../redux/user";
+import BaseContentLayout from "../../../components/BaseContentLayout/BaseContentLayout";
+import Input from "../../Input/Input";
+import { useWeb3React } from "@web3-react/core";
+import { injected } from "../../../utils/connectors";
 import {
-	findBestOffer,
-	// verifyCredentials,
-	// registerVerification,
-	// borrow,
-	// repay,
-	// fetchRepaymentHistory,
-	// getLoanDetails,
+  findBestOffer,
+  // verifyCredentials,
+  // registerVerification,
+  // borrow,
+  // repay,
+  // fetchRepaymentHistory,
+  // getLoanDetails,
 } from "../../../utils/contractHelper.js";
-import styles from './GoalStep.module.css';
+import styles from "./GoalStep.module.css";
+import useDataVault from "hooks/useDataVault";
+import { dataVaultKeys } from "../../../config/getConfig";
+const { ethers } = require("ethers");
 
-const { ethers } = require('ethers');
-
-function GoalStep ({ onNext }) {
-  const walletId = useSelector((state) => state.user.walletId);
+function GoalStep({ onNext }) {
+  const user = useSelector((state) => state.user);
+  const offer = useSelector((state) => state.user.goals[0].offer);
+  const dataVault = useDataVault();
 
   const { activate, library } = useWeb3React();
 
@@ -34,15 +36,31 @@ function GoalStep ({ onNext }) {
     }
   }, []);
 
-	// useEffect(() => {
-	// 	const init = async () => {
-	// 		try {
-	// 			const offer = await findBestOffer(library, account, {
-	// 				amount: "10",
-	// 				duration: 5,
-	// 				credentials: { names: ["citizenship"], contents: ["SV"] },
-	// 			});
-	// 			console.log('Offer found ', offer);
+  useEffect(() => {
+    if (offer.pondAddress) {
+      (async () => {
+        try {
+          await dataVault.create({
+            key: dataVaultKeys.onboarding,
+            content: JSON.stringify(user),
+          });
+          onNext();
+        } catch (err) {
+          onNext();
+        }
+      })();
+    }
+  }, [offer]);
+
+  // useEffect(() => {
+  // 	const init = async () => {
+  // 		try {
+  // 			const offer = await findBestOffer(library, account, {
+  // 				amount: "10",
+  // 				duration: 5,
+  // 				credentials: { names: ["citizenship"], contents: ["SV"] },
+  // 			});
+  // 			console.log('Offer found ', offer);
   //       if (offer) {
   //         // const BigNumber = require('bignumber.js');
   //         // let num=BigNumber.from(pondOffer.details.amount); //.mul(etherDecimals);;
@@ -54,62 +72,66 @@ function GoalStep ({ onNext }) {
   //         // console.log(ethers.utils.formatUnits(pondOffer.details.amount, 2));
   //         // console.log(ethers.utils.formatUnits(pondOffer.details.installmentAmount, 2));
   //       }
-	// 			// const verifiedCredentialNames = await verifyCredentials(library, account, {
-	// 			// 	pondAddress: pondOffer.pondAddress,
-	// 			// 	credentials: { citizenship: "SV" },
-	// 			// });
-	// 			// if (!verifiedCredentialNames) throw new Error("Not eligible");
-	// 			// await registerVerification(library, account, {
-	// 			// 	borrower: account,
-	// 			// 	pondAddress: pondOffer.pondAddress,
-	// 			// });
-	// 			// console.log(`Borrower is verified`);
-	// 			// await borrow(library, account, {
-	// 			// 	amount: pondOffer.details.amount,
-	// 			// 	duration: pondOffer.details.duration,
-	// 			// 	pondAddress: pondOffer.pondAddress,
-	// 			// });
-	// 			// console.log(`Borrower got the money`);
-	// 			// const loanDetailsBefore = await getLoanDetails(library, account, { pondAddress: pondOffer.pondAddress });
-	// 			// console.log("Next installment", loanDetailsBefore._receipt.nextInstallment.total.toString());
-	// 			// await repay(library, account, { pondAddress: pondOffer.pondAddress, amount: "50" });
-	// 			// console.log(`Repaid ${50}`);
-	// 			// const loanDetailsAfter = await getLoanDetails(library, account, { pondAddress: pondOffer.pondAddress });
-	// 			// console.log("Next installment", loanDetailsAfter._receipt.nextInstallment.total.toString());
-	// 			// const history = await fetchRepaymentHistory(library, account, {
-	// 			// 	pondAddress: pondOffer.pondAddress,
-	// 			// });
-	// 			// console.log(`Repayment history`, history);
-	// 		} catch (error) {
-	// 			console.log(error.message);
-	// 		}
-	// 	};
+  // 			// const verifiedCredentialNames = await verifyCredentials(library, account, {
+  // 			// 	pondAddress: pondOffer.pondAddress,
+  // 			// 	credentials: { citizenship: "SV" },
+  // 			// });
+  // 			// if (!verifiedCredentialNames) throw new Error("Not eligible");
+  // 			// await registerVerification(library, account, {
+  // 			// 	borrower: account,
+  // 			// 	pondAddress: pondOffer.pondAddress,
+  // 			// });
+  // 			// console.log(`Borrower is verified`);
+  // 			// await borrow(library, account, {
+  // 			// 	amount: pondOffer.details.amount,
+  // 			// 	duration: pondOffer.details.duration,
+  // 			// 	pondAddress: pondOffer.pondAddress,
+  // 			// });
+  // 			// console.log(`Borrower got the money`);
+  // 			// const loanDetailsBefore = await getLoanDetails(library, account, { pondAddress: pondOffer.pondAddress });
+  // 			// console.log("Next installment", loanDetailsBefore._receipt.nextInstallment.total.toString());
+  // 			// await repay(library, account, { pondAddress: pondOffer.pondAddress, amount: "50" });
+  // 			// console.log(`Repaid ${50}`);
+  // 			// const loanDetailsAfter = await getLoanDetails(library, account, { pondAddress: pondOffer.pondAddress });
+  // 			// console.log("Next installment", loanDetailsAfter._receipt.nextInstallment.total.toString());
+  // 			// const history = await fetchRepaymentHistory(library, account, {
+  // 			// 	pondAddress: pondOffer.pondAddress,
+  // 			// });
+  // 			// console.log(`Repayment history`, history);
+  // 		} catch (error) {
+  // 			console.log(error.message);
+  // 		}
+  // 	};
 
-	// 	init();
-	// }, [library, account]);
+  // 	init();
+  // }, [library, account]);
 
   const goal = useSelector((state) => state.user?.goals[0]);
-  const offer = useSelector((state) => state.user?.goals[0].offer);
   const dispatch = useDispatch();
 
-  if (!goal.goalId) dispatch(setGoal({...goal, goalId: uuidv4()}));
+  if (!goal.goalId) dispatch(setGoal({ ...goal, goalId: uuidv4() }));
 
   const t = useTranslations("onboarding");
 
-  const inputFields = [{
-    type: 'text',
-    name: 'goalType',
-    placeholder: 'page4.goal_type'
-  }, {
-    name: 'amountSaved',
-    placeholder: 'page4.amount_saved',
-  }, {
-    name: 'amountNeeded',
-    placeholder: 'page4.amount_needed',
-  }, {
-    name: 'loanDuration',
-    placeholder: 'page4.loan_duration',
-  }]
+  const inputFields = [
+    {
+      type: "text",
+      name: "goalType",
+      placeholder: "page4.goal_type",
+    },
+    {
+      name: "amountSaved",
+      placeholder: "page4.amount_saved",
+    },
+    {
+      name: "amountNeeded",
+      placeholder: "page4.amount_needed",
+    },
+    {
+      name: "loanDuration",
+      placeholder: "page4.loan_duration",
+    },
+  ];
 
   // const UPDATE_USER_GOAL = gql`
   //   mutation updateGoal{
@@ -130,37 +152,42 @@ function GoalStep ({ onNext }) {
 
   // const [updateUserGoal] = useMutation(UPDATE_USER_GOAL)
 
-  const updateInput = e => {
-    dispatch(setGoal({
-      ...goal,
-      [e.target.name]: e.target.value
-    }))
-  }
+  const updateInput = (e) => {
+    dispatch(
+      setGoal({
+        ...goal,
+        [e.target.name]: e.target.value,
+      })
+    );
+  };
 
-  const onFormSubmit = async() => {
+  const onFormSubmit = async () => {
     try {
-      const pondOffer = await findBestOffer(library, walletId, {
+      const pondOffer = await findBestOffer(library, user.walletId, {
         amount: goal.amountNeeded,
         duration: goal.loanDuration,
         credentials: { names: ["citizenship"], contents: ["SV"] }, // TODO: Map credentials from store (bankCredentials)
       });
-      console.log('Offer found', pondOffer);
+      console.log("Offer found", pondOffer);
       if (pondOffer) {
         const formattedOffer = {
           pondAddress: pondOffer.pondAddress,
           amount: ethers.utils.formatUnits(pondOffer.details.amount),
-          annualInterestRate: Number(pondOffer.details.annualInterestRate) / 100,
+          annualInterestRate:
+            Number(pondOffer.details.annualInterestRate) / 100,
           approved: pondOffer.details.approved,
           cashBackRate: Number(pondOffer.details.cashBackRate) / 100,
           disbursmentFee: Number(pondOffer.details.disbursmentFee),
           duration: Number(pondOffer.details.duration),
-          installmentAmount: ethers.utils.formatUnits(pondOffer.details.installmentAmount),
+          installmentAmount: ethers.utils.formatUnits(
+            pondOffer.details.installmentAmount
+          ),
           totalAmount: ethers.utils.formatUnits(pondOffer.details.totalAmount),
-          totalInterest: ethers.utils.formatUnits(pondOffer.details.totalInterest)
+          totalInterest: ethers.utils.formatUnits(
+            pondOffer.details.totalInterest
+          ),
         };
         dispatch(setOffer(goal.goalId, formattedOffer));
-        console.log('Formatted offer', formattedOffer);
-        onNext();
       }
     } catch (error) {
       console.log(error.message);
@@ -173,36 +200,39 @@ function GoalStep ({ onNext }) {
     //     onNext()
     // })
     // .catch(err => err)
-  }
+  };
 
   return (
-    <BaseContentLayout  {...{
-      submitButtonProps: {
-        label: t('submitBtn'),
-        onClick: onFormSubmit,
-        disabled: goal.goalType === '' 
-        || goal.amountSaved < 1
-        || goal.amountNeeded < 1
-        || goal.loanDuration < 1
-      }
-    }}>
+    <BaseContentLayout
+      {...{
+        submitButtonProps: {
+          label: t("submitBtn"),
+          onClick: onFormSubmit,
+          disabled:
+            goal.goalType === "" ||
+            goal.amountSaved < 1 ||
+            goal.amountNeeded < 1 ||
+            goal.loanDuration < 1,
+        },
+      }}
+    >
       <div className={styles.wrapper}>
-        <h1>{t('page4.title')}</h1>
+        <h1>{t("page4.title")}</h1>
 
         <div className={styles.formwrapper}>
-          {inputFields.map((f, i) =>
+          {inputFields.map((f, i) => (
             <Input
-              key = {i}
-              name = {f.name}
-              type = {f.type || 'number'}
-              placeholder = {t(f.placeholder)}
+              key={i}
+              name={f.name}
+              type={f.type || "number"}
+              placeholder={t(f.placeholder)}
               onChange={updateInput}
-              />
-            )}
+            />
+          ))}
         </div>
-      </div> 
+      </div>
     </BaseContentLayout>
-  )
+  );
 }
 
 // const mapStateToProps = function(state) {

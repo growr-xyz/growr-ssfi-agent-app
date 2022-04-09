@@ -1,0 +1,88 @@
+{
+    "spend001": {
+        "label": "How do you spend your money?",
+        "description": "Which one of the following best describes how is your household's total spending compared to total income over the last year?",
+        "answers": {
+            "a": "Spending was much less then income",
+            "b": "Spending was a little less then income",
+            "c": "Spending was about equal to income",
+            "d": "Spending was a little more then income",
+            "e": "Spending was much more then income"
+        }
+    },
+    "spend002": {
+        "label": "How do you pay your bills?",
+        "description": "Which one of the following best describes how your household had paid its bills over the last year? My household has beed able to:",
+        "answers": {
+            "a": "Pay all of our bills on time",
+            "b": "Pay nearly all of our bills on time",
+            "c": "Pay most of our bills on time",
+            "d": "Pay some of our bills on time",
+            "e": "Pay very few of our bills on time"
+        }
+    },
+    "save001": {
+        "label": "Do you have money put aside?",
+        "description": "How long could your household afford to cover your expenses if you had to live on money you have readily available, without selling properties or borrowing?",
+        "answers": {
+            "a": "6 months or more",
+            "b": "3-5 months",
+            "c": "1-2 months",
+            "d": "1-3 weeks",
+            "e": "Less than 1 week"
+        }
+    },
+    "save002": {
+        "label": "Are you saving enough?",
+        "description": "How confident are you that your household is doing what it is necessary to achieve your long-term goals such as going on a vacation, buying a home, starting a business, putting money away for retirement, etc.?",
+        "answers": {
+            "a": "Very confident/saving enough for our long-term goals",
+            "b": "Moderately confident",
+            "c": "Somewhat confident",
+            "d": "Slightly confident",
+            "e": "Not at all confident/not able to save for long-term goals"
+        }
+    },
+    "borrow001": {
+        "label": "How manageable is your debt?",
+        "description": "As of today, which of the following best describes how manageable your debt is, including mortgages, consumer loans, credit card balances?",
+        "answers": {
+            "a": "Do not have any debt",
+            "b": "Have a manageable amount of debt",
+            "c": "Have a bit more debt than manageable",
+            "d": "Have far more debt than manageable"
+        }
+    },
+    "borrow002": {
+        "label": "Have you paid your debts on time?",
+        "description": "Have you had any troubles paying your debt in the last 5 years, including your mortgage, consumer loans, credit cards?",
+        "answers": {
+            "a": "Haven't had any debt in the last 5 years",
+            "b": "Have paid always on time",
+            "c": "Have had delays but have sorted them out",
+            "d": "Currently have overdue payments"
+        }
+    },
+    "plan001": {
+        "label": "Are you sufficiently protected?",
+        "description": "How confident are you that the insurance policies you have will provide enough support in case of an emergency such as health issues, car accident, flooding, robbery, disability?",
+        "answers": {
+            "a": "We have insurance against all emergencies we can think of",
+            "b": "Moderately confident",
+            "c": "Somewhat confident",
+            "d": "We only have mandatory insurance (MTPL)",
+            "e": "We do not have any insurance"
+        }
+    },
+    "plan002": {
+        "label": "Do you plan for the future?",
+        "description": "Do you plan ahead your finances?",
+        "answers": {
+            "a": "Agree strongly",
+            "b": "Agree somewhat",
+            "c": "Neither agree nor disagree",
+            "d": "Disagree somewhat",
+            "e": "Disagree strongly"
+        }
+    }
+}

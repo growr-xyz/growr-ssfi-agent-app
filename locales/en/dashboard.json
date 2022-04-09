@@ -1,40 +1,43 @@
 {
     "go_to": "Go to my dashboard",
     "switchLang": "Cambiar a español",
-    "goals":{
-        "title":"Goals",
-        "status":{
-            "funded":"Funded",
-            "progress":"In progress",
-            "due":"due"
+    "goals": {
+        "title": "Goals",
+        "status": {
+            "funded": "Funded",
+            "progress": "In progress",
+            "due": "due"
         },
-        "amount":{
-            "add":"Add",
-            "pay":"Pay",
-            "progress":"Progress:",
-            "of":"out of "
+        "amount": {
+            "add": "Add",
+            "pay": "Pay",
+            "progress": "Progress:",
+            "of": "out of "
         },
-        "add":"New goal",
-        "settings":"Settings"
+        "add": "New goal",
+        "settings": "Settings"
     },
-    "loan":{
-        "title":"Loan",
-        "amount":"outstanding loan amount",
-        "next_inst":"Next installment ",
-        "due":"Due on ",
-        "repay":"Repay"
+    "loan": {
+        "title": "Loan",
+        "amount": "outstanding loan amount",
+        "next_inst": "Next installment ",
+        "due": "Due on ",
+        "repay": "Repay"
     },
-    "trx":{
-        "title":"Transactions"
+    "trx": {
+        "title": "Transactions"
     },
-    "quests":{
-        "title":"Quests",
-        "start":"Click to begin quest",
-        "budget":{
-            "title":"How to make and follow a budget"
+    "quests": {
+        "title": "Quests",
+        "start": "Click to begin quest",
+        "budget": {
+            "title": "How to make and follow a budget"
         },
-        "bitcoin":{
-            "title":"What is Bitcoin, really?"
+        "bitcoin": {
+            "title": "What is Bitcoin, really?"
+        },
+        "finhealth": {
+            "title": "Check your financial health?"
         }
     }
 }

@@ -1,0 +1,47 @@
+.inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.response {
+  color: var(--font-color);
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.consentLink {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.consent {
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+
+@media (min-width: 1080px) {
+  .response {
+    font-size: 2.2rem;
+  }
+
+  .input {
+    font-size: 2.2rem;
+    max-width: 480px;
+  }
+
+  .consent {
+    margin-top: 5px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .response {
+    font-size: 2.6rem;
+  }
+
+  .input {
+    font-size: 2.6rem;
+    max-width: 580px;
+  }
+}

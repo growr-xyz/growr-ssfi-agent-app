@@ -1,7 +1,7 @@
 import styles from "./Box.module.css";
 
-const Box = ({ children, name, details }) => (
-  <div className={styles.wrapper}>
+const Box = ({ children, name, details, onClick = () => {} }) => (
+  <div onClick={onClick} className={styles.wrapper}>
     <div className={styles.container}>
       <div className={styles.childrenWrapper}>{children}</div>
       <div className={styles.info}>
