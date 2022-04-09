@@ -9,7 +9,7 @@ import SimpleConnector from '../../components/WalletConnector/SimpleConnector';
 import { Header, Page, Widget, Section, Goal } from '../../components';
 import HelmetIcon from '../../components/Icons/Helmet';
 import Link from 'next/link';
-import { Bitcoin, Budget } from '../../components/Quests';
+import { Bitcoin, Budget, FinHealth } from '../../components/Quests';
 import { getBalance } from '../../utils/contractHelper';
 import styles from './Dashboard.module.css';
 
@@ -129,7 +129,7 @@ function Dashboard() {
       </Section>
       <Section label={t("quests.title")}>
         <FinHealth />
-        <Budget />
+        {/* <Budget /> */}
         <Bitcoin />
       </Section>
     </Page>
