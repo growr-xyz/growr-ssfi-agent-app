@@ -23,7 +23,8 @@ const PondFactoryAddress = process.env.NEXT_PUBLIC_POND_FACTORY_CONTRACT;
 // console.log(process.env);
 console.log('Addresses', xUSDAddress, VerificationRegistryAddress, PondFactoryAddress)
 
-export const findBestOffer = async (provider, account, userInputParams) => {
+export const findBestOffer = async (provider, account, { amount, duration, credentials }) => {
+	console.log('findBestOffer', { amount, duration, credentials });
 	const signer = provider.getSigner(account);
 
 	const PondFactory = new ethers.Contract(PondFactoryAddress, PondFactoryABI, provider);
@@ -42,6 +43,8 @@ export const findBestOffer = async (provider, account, userInputParams) => {
 			};
 		})
 	);
+	console.log('Ponds', res);
+
 	let bestOffersRate = [];
 	let bestOffersAmount = [];
 	let bestOffersDuration = [];
@@ -209,10 +212,10 @@ export const getLoanDetails = async (provider, borrower, { pondAddress }) => {
 };
 
 export const getBalance = async (provider, account) => {
-	const signer = provider.getSigner(account);
+	// const signer = provider.getSigner(account);
 
-	const xUSDContract = new ethers.Contract(xUSDAddress, ERC20ABI, signer);
-	const balance = await xUSDContract.balanceOf(signer.getAddress());
+	const xUSDContract = new ethers.Contract(xUSDAddress, ERC20ABI, provider);
+	const balance = await xUSDContract.balanceOf(account);
 	console.log('xUSD balance', ethers.utils.formatUnits(balance));
 
 	return ethers.utils.formatUnits(balance);

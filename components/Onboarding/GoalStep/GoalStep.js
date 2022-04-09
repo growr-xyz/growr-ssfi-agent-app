@@ -166,9 +166,9 @@ function GoalStep({ onNext }) {
       const pondOffer = await findBestOffer(library, user.walletId, {
         amount: goal.amountNeeded,
         duration: goal.loanDuration,
-        credentials: { names: ["citizenship"], contents: ["SV"] }, // TODO: Map credentials from store (bankCredentials)
+        credentials: { citizenship: "SV" }, // TODO: Map credentials from store (bankCredentials)
       });
-      console.log("Offer found", pondOffer);
+      console.log("Offer found?", pondOffer);
       if (pondOffer) {
         const formattedOffer = {
           pondAddress: pondOffer.pondAddress,
