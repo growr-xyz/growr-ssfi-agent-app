@@ -9,6 +9,7 @@ import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout';
 import styles from "./BankAccountConnector.module.css";
 import { parse } from '@ethersproject/transactions';
 import { createDidFormat, parseJwt } from '../../../utils/vcUtils';
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const BankAccountConnector = ({ onNext }) => {
   const walletId = useSelector((state) => state.user.walletId);
@@ -17,6 +18,10 @@ const BankAccountConnector = ({ onNext }) => {
   const dispatch = useDispatch();
 
   const t = useTranslations("onboarding");
+
+  const { data: session } = useSession();
+  console.log('session', session);
+  // const { accessToken } = session;
 
   const [user, setUser] = useState({
     username: '',
@@ -133,12 +138,15 @@ const BankAccountConnector = ({ onNext }) => {
       <div className={styles.wrapper}>
         <h1>{t('page2.title')}</h1>
 
-        <Image
+        {/* <div>Access Token: {accessToken}</div> */}
+        <button onClick={() => signIn('finastra')}>Sign in with Finastra</button>
+
+        {/* <Image
           src="/bank.svg"
           height={143}
           width={315}
           alt="Banco Hipotecario"
-        />
+        /> */}
 
         <h4>{t('page2.access_note')}</h4>
 

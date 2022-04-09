@@ -110,7 +110,8 @@ export const findBestOffer = async (provider, account, { amount, duration, crede
 
 export const getPondCriteriaNames = async (provider, account, { pondAddress }) => {
 	const Pond = new ethers.Contract(pondAddress, PondABI, provider);
-
+  console.log('Pond contract', Pond);
+	
 	const criteriaNames = await Pond.getCriteriaNames();
 
 	return criteriaNames;
