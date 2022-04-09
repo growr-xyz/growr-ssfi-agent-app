@@ -8,6 +8,7 @@ const Loan = ({
   totalAmount,
   totalInterest,
   repaidAmount,
+  repaidInterest,
   nextInstallmentAmount,
   nextInstallmentTimestamp,
   repay
@@ -19,7 +20,7 @@ const Loan = ({
     <div className={styles.container}>
       <h3>{t("loan.title")}</h3>
       <div className={styles.loanCard}>
-        <h1>${parseFloat(totalAmount - totalInterest - repaidAmount).toFixed(2)}</h1>
+        <h1>${parseFloat(totalAmount - totalInterest - (repaidAmount - repaidInterest)).toFixed(2)}</h1>
         <h4>{t("loan.amount")}</h4>
         <h4>
           {t("loan.next_inst")} ${parseFloat(nextInstallmentAmount).toFixed(2)}
