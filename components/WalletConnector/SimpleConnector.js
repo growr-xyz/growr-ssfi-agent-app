@@ -38,12 +38,7 @@ function SimpleConnector() {
 
   return (
     <div className={styles.wrapper}>
-      <Image
-        src="/logo.svg"
-        height={56}
-        width={195}
-        alt="Logo"
-      />
+      <Image src="/logo.svg" height={100} width={250} alt="Logo" />
 
       { active ?
         <div

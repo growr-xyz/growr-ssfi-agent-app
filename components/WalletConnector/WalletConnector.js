@@ -114,7 +114,7 @@ function WalletConnector({ onNext }) {
     >
       <div className={styles.wrapper}>
         <div className={styles.logo}>
-          <Image src="/logo.svg" height={56} width={195} alt="Logo" />
+          <Image src="/logo.svg" height={100} width={250} alt="Logo" />
         </div>
 
         <h1 className={styles.title}>{t("page1.title")}</h1>

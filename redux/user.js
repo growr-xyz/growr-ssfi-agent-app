@@ -1,60 +1,35 @@
-// import { bindActionCreators } from "redux";
-import ERC20 from "../abi/ERC20.json";
-
 // Actions
 export const SET_USER_ID = "SET_USER_ID";
 export const SET_WALLET_ID = "SET_WALLET_ID";
+export const SET_BALANCE = "SET_BALANCE";
 export const SET_BANK_USER_ID = "SET_BANK_USER_ID";
 export const SET_VERIFIABLE_CREDENTIAL = "SET_VERIFIABLE_CREDENTIAL";
 export const SET_BANK_CREDENTIAL = "SET_BANK_CREDENTIAL";
 export const SET_FINANCES = "SET_FINANCES";
 export const SET_GOAL = "SET_GOAL";
 export const SET_OFFER = "SET_OFFER";
+export const SET_LOAN = "SET_LOAN";
 export const ACCEPT_TERMS = "ACCEPT_TERMS";
 export const REJECT_TERMS = "REJECT_TERMS";
 export const ACCEPT_GROWR_TERMS = "ACCEPT_GROWR_TERMS";
 export const REJECT_GROWR_TERMS = "REJECT_GROWR_TERMS";
 export const UPDATE_USER = "UPDATE_USER";
 
-const xUSDAddress = process.env.NEXT_PUBLIC_XUSD_ADDRESS;
-
 // Action Creators
 export const setUserId = (query) => ({ type: SET_USER_ID, query });
-
-export const setWalletId = (walletId, chainId) => ({
-  type: SET_WALLET_ID,
-  query: { walletId, chainId },
-});
-
-export const setBankUserId = (query) => ({ type: SET_BANK_USER_ID, query });
-
-export const setVerifiableCredential = (query) => ({
-  type: SET_VERIFIABLE_CREDENTIAL,
-  query,
-});
-
-export const setBankCredential = (query) => ({
-  type: SET_BANK_CREDENTIAL,
-  query,
-});
-
+export const setWalletId = (walletId, chainId) => ({ type: SET_WALLET_ID, query: { walletId, chainId } });
+export const setBalance = (balance) => ({ type: SET_BALANCE, query: balance });
+export const setBankUserId = (bankUserId) => ({ type: SET_BANK_USER_ID, query: bankUserId });
+export const setVerifiableCredential = (query) => ({ type: SET_VERIFIABLE_CREDENTIAL, query });
+export const setBankCredential = (query) => ({ type: SET_BANK_CREDENTIAL, query });
 export const setFinances = (query) => ({ type: SET_FINANCES, query });
-
 export const setGoal = (query) => ({ type: SET_GOAL, query });
-
-export const setOffer = (goalId, offer) => ({
-  type: SET_OFFER,
-  query: { goalId, offer },
-});
-
+export const setOffer = (goalId, offer) => ({ type: SET_OFFER, query: { goalId, offer } });
+export const setLoan = (goalId, loan) => ({ type: SET_LOAN, query: { goalId, loan } });
 export const acceptTerms = () => ({ type: ACCEPT_TERMS });
-
 export const rejectTerms = () => ({ type: REJECT_TERMS });
-
 export const acceptGrowrTerms = () => ({ type: ACCEPT_GROWR_TERMS });
-
 export const rejectGrowrTerms = () => ({ type: REJECT_GROWR_TERMS });
-
 export const updateUserState = (query) => ({ type: UPDATE_USER, query });
 
 // Reducer
@@ -62,6 +37,7 @@ export const initialState = {
   userId: "",
   walletId: "",
   chainId: 0,
+  balance: 0,
   bankUserId: "",
   termsAccepted: false,
   growrTermsAccepted: false,
@@ -95,6 +71,7 @@ export const initialState = {
         totalInterest: 0,
       },
       loan: {
+        pondAddress: "",
         amount: 0,
         annualPercentageRate: 0,
         duration: 0,
@@ -112,11 +89,17 @@ export const initialState = {
 const userReducer = (state = initialState, { type, query }) => {
   switch (type) {
     case SET_WALLET_ID:
-      console.log("SET_WALLET_ID", query);
+      // console.log("SET_WALLET_ID", query);
       return {
         ...state,
         walletId: query.walletId,
         chainId: query.chainId,
+      };
+    case SET_BALANCE:
+      console.log('SET_BALANCE', query);
+      return {
+        ...state,
+        balance: query,
       };
     case SET_USER_ID:
       return {
@@ -151,22 +134,37 @@ const userReducer = (state = initialState, { type, query }) => {
         goals: [query],
       };
     case SET_OFFER:
-      console.log("SET_OFFER", query.goalId, query.offer);
+      // console.log("SET_OFFER", query.goalId, query.offer);
       return {
         ...state,
         goals: state.goals.map((goal) => {
           if (goal.goalId !== query.goalId) return goal;
 
-          // We found the goal => update the pondAddress
-          console.log("update goal", goal.goalId);
+          // We found the goal => update the offer
+          // console.log("update goal", goal.goalId);
           const newGoal = {
             ...goal,
             offer: query.offer,
           };
-          console.log("newGoal", newGoal);
+          // console.log("newGoal", newGoal);
           return newGoal;
         }),
       };
+    case SET_LOAN:
+      // console.log("SET_LOAN", query.goalId, query.loan);
+      return {
+        ...state,
+        goals: state.goals.map((goal) => {
+          if (goal.goalId !== query.goalId) return goal;
+
+          // We found the goal => update the loan
+          const newGoal = {
+            ...goal,
+            loan: query.loan,
+          };
+          return newGoal;
+        }),
+      };    
     case ACCEPT_TERMS:
       return {
         ...state,

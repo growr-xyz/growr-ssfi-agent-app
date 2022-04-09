@@ -197,7 +197,9 @@ export const fetchRepaymentHistory = async (provider, borrower, { pondAddress })
 	const filter = Pond.filters.RepayLoan(loanAddress, borrower);
 	const events = await Pond.queryFilter(filter);
 
-	return events.map((event) => iface.decodeEventLog("RepayLoan", event.data));
+	return events.map((event) => {
+		return iface.decodeEventLog("RepayLoan", event.data)
+	});
 };
 
 export const getLoanDetails = async (provider, borrower, { pondAddress }) => {
@@ -216,7 +218,7 @@ export const getBalance = async (provider, account) => {
 
 	const xUSDContract = new ethers.Contract(xUSDAddress, ERC20ABI, provider);
 	const balance = await xUSDContract.balanceOf(account);
-	console.log('xUSD balance', ethers.utils.formatUnits(balance));
+	// console.log('xUSD balance', ethers.utils.formatUnits(balance));
 
 	return ethers.utils.formatUnits(balance);
 };
