@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslations } from "next-intl";
 import { v4 as uuidv4 } from "uuid";
@@ -7,54 +7,20 @@ import BaseContentLayout from "../../../components/BaseContentLayout/BaseContent
 import Input from "../../Input/Input";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../../utils/connectors";
-import {
-  findBestOffer,
-  // verifyCredentials,
-  // registerVerification,
-  // borrow,
-  // repay,
-  // fetchRepaymentHistory,
-  // getLoanDetails,
-} from "../../../utils/contractHelper.js";
+import { findBestOffer } from "../../../utils/contractHelper.js";
 import styles from "./GoalStep.module.css";
 import useDataVault from "hooks/useDataVault";
 import { dataVaultKeys } from "../../../config/getConfig";
 const { ethers } = require("ethers");
 
-function GoalStep({ onNext }) {
+function GoalStep({ onNext, isLoading, setIsLoading }) {
   const user = useSelector((state) => state.user);
+  const goal = useSelector((state) => state.user.goals[0]);
   const offer = useSelector((state) => state.user.goals[0].offer);
   const bankCredentials = useSelector((state) => state.user.bankCredentials);
   const dataVault = useDataVault();
-
-  const { activate, library } = useWeb3React();
-
-  useEffect(() => {
-    try {
-      activate(injected, undefined, true);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (offer.pondAddress) {
-      (async () => {
-        try {
-          await dataVault.create({
-            key: dataVaultKeys.onboarding,
-            content: JSON.stringify(user),
-          });
-          onNext();
-        } catch (err) {
-          onNext();
-        }
-      })();
-    }
-  }, [offer]);
-
-  const goal = useSelector((state) => state.user?.goals[0]);
   const dispatch = useDispatch();
+  const { activate, library } = useWeb3React();
 
   if (!goal.goalId) dispatch(setGoal({ ...goal, goalId: uuidv4() }));
 
@@ -80,6 +46,30 @@ function GoalStep({ onNext }) {
     },
   ];
 
+  useEffect(() => {
+    try {
+      activate(injected, undefined, true);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (offer.pondAddress) {
+      (async () => {
+        try {
+          await dataVault.create({
+            key: dataVaultKeys.onboarding,
+            content: JSON.stringify(user),
+          });
+          onNext();
+        } catch (err) {
+          onNext();
+        }
+      })();
+    }
+  }, [offer]);
+
   const updateInput = (e) => {
     dispatch(
       setGoal({
@@ -91,8 +81,11 @@ function GoalStep({ onNext }) {
 
   const onFormSubmit = async () => {
     try {
-      const myCredentials = bankCredentials.map(credential => credential.vc.credentialSubject);
+      // Get credentials, TODO: Handle composite VCs (just one item per VC currently supported by the line below)
+      // const myCredentials = bankCredentials.map(credential => Object.keys(credential.vc.credentialSubject)[0]);
+      const myCredentials = bankCredentials.reduce((prev, item) => ({...prev, [Object.keys(item.vc.credentialSubject)[0]]: Object.values(item.vc.credentialSubject)[0]}), {});
       console.log('myCredentials', myCredentials);
+      // Find the best offer from the Pond factory contract
       const pondOffer = await findBestOffer(library, user.walletId, {
         amount: goal.amountNeeded,
         duration: goal.loanDuration,
@@ -125,14 +118,6 @@ function GoalStep({ onNext }) {
     } catch (error) {
       console.log(error.message);
     }
-    // TODO: Get offers from pond factory: list of VCs => provide details => OK/NOK
-    // dispatch(setGoal(goals));
-    // updateUserGoal()
-    //   .then(res => {
-    //     res.data.updateGoal._id && setGoalId(res.data.updateGoal._id)
-    //     onNext()
-    // })
-    // .catch(err => err)
   };
 
   return (
@@ -158,13 +143,14 @@ function GoalStep({ onNext }) {
               key={i}
               name={f.name}
               type={f.type || "number"}
+              value={goal[f.name]}
               placeholder={t(f.placeholder)}
               onChange={updateInput}
             />
           ))}
         </div>
 
-        {!offer?.found ? <h4 style={{color: '#B14365'}}>No offer was found, please try again</h4> : <></>}
+        {(offer?.found === false) ? <h4 style={{color: '#B14365'}}>No offer was found, please try again</h4> : <></>}
       </div>
     </BaseContentLayout>
   );

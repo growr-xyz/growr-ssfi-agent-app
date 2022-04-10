@@ -9,10 +9,16 @@ import FinancialStep from "../components/Onboarding/FinancialStep/FinancialStep"
 import GoalStep from "../components/Onboarding/GoalStep/GoalStep";
 import ApprovedStep from "../components/Onboarding/ApprovedStep/ApprovedStep";
 import LastStep from "../components/Onboarding/LastStep/LastStep";
+import { useState } from "react";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const nextStep = () => dispatch(incrementStep());
+  const nextStep = () => {
+    setIsLoading(false);
+    dispatch(incrementStep());
+  };
+
   const step = useSelector((state) => state.steps.step);
   const total = useSelector((state) => state.steps.total);
   const hidden = step < 1 || step > 3;
@@ -24,11 +30,12 @@ export default function Home() {
   return (
     <Page>
       <ProgressHeader {...{ progress, hidden }} />
-      {step === 0 && <WalletConnector {...{ onNext: nextStep }} />}
-      {step === 1 && <BankAccountConnector {...{ onNext: nextStep }} />}
-      {step === 2 && <FinancialStep {...{ onNext: nextStep }} />}
-      {step === 3 && <GoalStep {...{ onNext: nextStep }} />}
-      {step === 4 && <ApprovedStep {...{ onNext: nextStep }} />}
+      {/* {isLoading && <p>Loading...</p>} */}
+      {step === 0 && <WalletConnector {...{ onNext: nextStep, isLoading, setIsLoading }} />}
+      {step === 1 && <BankAccountConnector {...{ onNext: nextStep, isLoading, setIsLoading }} />}
+      {step === 2 && <FinancialStep {...{ onNext: nextStep, isLoading, setIsLoading }} />}
+      {step === 3 && <GoalStep {...{ onNext: nextStep, isLoading, setIsLoading }} />}
+      {step === 4 && <ApprovedStep {...{ onNext: nextStep, isLoading, setIsLoading }} />}
       {step === 5 && <LastStep />}
     </Page>
   );

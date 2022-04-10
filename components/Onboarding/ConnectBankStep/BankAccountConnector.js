@@ -4,28 +4,26 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useMutation, useLazyQuery, gql } from '@apollo/client';
 import { setBankUserId, setVerifiableCredentials, setBankCredentials } from '../../../redux/user';
-import Input from '../../Input/Input';
+// import Input from '../../Input/Input';
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout';
 import styles from "./BankAccountConnector.module.css";
-// import { parse } from '@ethersproject/transactions';
 import { createDidFormat, parseJwt } from '../../../utils/vcUtils';
 import { useSession, signIn, signOut } from "next-auth/react";
 
-const BankAccountConnector = ({ onNext }) => {
+const BankAccountConnector = ({ onNext, isLoading, setIsLoading }) => {
   const walletId = useSelector((state) => state.user.walletId);
   const chainId = useSelector((state) => state.user.chainId);
-  // const bankUserId = useSelector((state) => state.user.bankUserId);
   const dispatch = useDispatch();
-
-  const t = useTranslations("onboarding");
 
   const { data: session } = useSession();
   const username = session?.user;
   const accessToken = useMemo(() => session?.accessToken);
 
+  const t = useTranslations("onboarding");
+
   const REQUEST_VERIFICATION = gql`
     mutation requestVC {
-      requestVerification(did:"${createDidFormat(walletId)}", type:bankVCs, username:"${username}")
+      requestVerification(did:"${createDidFormat(walletId, chainId)}", type:bankVCs, username:"${username}")
     }  
   `;
 
@@ -35,7 +33,7 @@ const BankAccountConnector = ({ onNext }) => {
     }
   `;
 
-  const [requestVerificationMutation, { verificationData, loading, error }] = useMutation(REQUEST_VERIFICATION); //, {errorPolicy: 'all'})
+  const [requestVerificationMutation, { verificationData, loading, error }] = useMutation(REQUEST_VERIFICATION);
   const [requestBankVC, { bankVCData, bankVCLoading, bankVCError }] = useLazyQuery(REQUEST_BANK_VC, {
     onCompleted: (data) => {
       console.log('onCompleted data', data);
@@ -44,6 +42,7 @@ const BankAccountConnector = ({ onNext }) => {
 
   useEffect(() => {
     if (accessToken) {
+      setIsLoading(true);
       console.log('next-auth session => accessToken!!!', accessToken);
       requestVerificationMutation()
       .then(res => {
@@ -57,7 +56,6 @@ const BankAccountConnector = ({ onNext }) => {
         console.log('Encrypted salt', salted);
         console.log('DID', createDidFormat(walletId, chainId));
 
-        // TODO: Array of VCs
         requestBankVC({ variables: {
           "parameters": salted,
           "did": createDidFormat(walletId, chainId),
@@ -66,6 +64,7 @@ const BankAccountConnector = ({ onNext }) => {
         }})
           .then(resVC =>
             {
+              console.log(resVC);
               let vcJwtArray = resVC.data.bankVC;
               console.log('vcJwtArray', vcJwtArray);
               const vcArray = vcJwtArray.map(vcJwt => parseJwt(vcJwt));
@@ -73,18 +72,20 @@ const BankAccountConnector = ({ onNext }) => {
               dispatch(setBankUserId(username));
               dispatch(setVerifiableCredentials(vcJwtArray));
               dispatch(setBankCredentials(vcArray));
+              // signOut();
               onNext();
             })
           .catch(err => {
             console.error('ERROR2', err);
             dispatch(setBankUserId('ERROR2'));
+            signOut();
             return err
           })
         })
       .catch(err => {
         console.error('ERROR1', err);
-
         dispatch(setBankUserId('ERROR1'));
+        signOut();
         return err
       })
     }
@@ -108,31 +109,24 @@ const BankAccountConnector = ({ onNext }) => {
     signIn('finastra');
   }
 
-  const onRetry = () => {
-    setUser({
-      ...user,
-      connectionError: false
-    })
-  }
+  // const onRetry = () => {
+  //   setUser({
+  //     ...user,
+  //     connectionError: false
+  //   })
+  // }
 
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
-        label: connectionError ? t('page2.try_again') : t('submitBtn'),
-        onClick: connectionError ? onRetry : onContinue,
+        label: t('submitBtn'), // connectionError ? t('page2.try_again') : 
+        onClick: onContinue, // connectionError ? onRetry : 
         disabled: !!accessToken,
-        style: connectionError ? styles.customButton : null
+        style: null // connectionError ? styles.customButton : null
       }
     }} >
       <div className={styles.wrapper}>
         <h1>{t('page2.title')}</h1>
-
-        {/* <Image
-          src="/bank.svg"
-          height={143}
-          width={315}
-          alt="Banco Hipotecario"
-        /> */}
 
         <h4>{t('page2.access_note')}</h4>
 
@@ -147,18 +141,17 @@ const BankAccountConnector = ({ onNext }) => {
           />
         </div>
 
-        {session ?
+        {/* {session ?
           <div className={styles.grid}>
-            {/* You are signed in! */}
             <button onClick={() => signOut()}>Sign out</button>
           </div>
           : 
           <div>
-            {/* You are not signed in! 
-            <button onClick={() => signIn('finastra')}>Sign in with Finastra</button> */}
+            You are not signed in! 
+            <button onClick={() => signIn('finastra')}>Sign in with Finastra</button>
           </div>
         }
-        {/* <div>Access Token: {accessToken}</div> */}
+        <div>Access Token: {accessToken}</div> */}
 
         {/* { user.connectionError ? 
           <div className={styles.errorconnecting}>
@@ -180,18 +173,20 @@ const BankAccountConnector = ({ onNext }) => {
               onChange={updateInput}
             />
           </div>
-        }
+        }*/}
 
-      { !user.connectionError && */}
-          <div
-            className={styles.skip}
-            onClick={() => onNext()}
-          >
-            {t('page2.skip')}
-          </div>
-        {/* } */}
-    </div> 
-  </BaseContentLayout>
+        {session ? <div
+          className={styles.skip}
+          onClick={() => signOut()}
+        >Logout
+        </div> :
+        <div
+          className={styles.skip}
+          onClick={() => onNext()}>
+          {t('page2.skip')}
+        </div>}
+      </div> 
+    </BaseContentLayout>
   )
 }
 
