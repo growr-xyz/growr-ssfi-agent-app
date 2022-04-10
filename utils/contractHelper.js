@@ -27,8 +27,11 @@ export const findBestOffer = async (provider, account, { amount, duration, crede
 	console.log('findBestOffer', { amount, duration, credentials });
 	const signer = provider.getSigner(account);
 
+	console.log('got the signer');
 	const PondFactory = new ethers.Contract(PondFactoryAddress, PondFactoryABI, provider);
+	console.log('PondFactory', PondFactory);
 	const allPondAddresses = await PondFactory.connect(signer).getAllPonds();
+	console.log('allPondAddresses', allPondAddresses);
 
 	const res = await Promise.allSettled(
 		allPondAddresses.map(async (pondAddress) => {
@@ -110,12 +113,15 @@ export const findBestOffer = async (provider, account, { amount, duration, crede
 
 export const getPondCriteriaNames = async (provider, account, { pondAddress }) => {
 	const Pond = new ethers.Contract(pondAddress, PondABI, provider);
-
+  console.log('Pond contract', Pond);
+	
 	const criteriaNames = await Pond.getCriteriaNames();
 
 	return criteriaNames;
 }
 
+// TODO: Known issue – only filtering by credential name, but not by value. 
+// This may select ponds that the borrower is not eligible for.
 export const filterOnlyPondCredentials = async (provider, account, { pondAddress, credentials }) => {
 	const criteriaNames = await getPondCriteriaNames(provider, account, { pondAddress });
 

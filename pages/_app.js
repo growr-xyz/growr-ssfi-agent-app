@@ -12,6 +12,7 @@ import CustomHead from "../components/CustomHead/CustomHead";
 import "../styles/globals.css";
 import getConfig from "next/config";
 import DVContextElement from "contexts/dvContext";
+import { SessionProvider } from "next-auth/react";
 
 function getLibrary(provider) {
   return new ethers.providers.Web3Provider(provider, "any"); //new Web3(provider)
@@ -24,21 +25,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
 	const store = useStore((state) => state);
-
-	// const web3 = useWeb3React();
-
-	// useEffect(() => {
-	// 	try {
-	// 		web3.activate(injected, undefined, true);
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 	}
-  // }, [web3]);
-
-	// const { Component, pageProps, store } = props;
-	// console.log('!!!!!!!! Store:', store.getState());
 
   return process.browser ? (
     <NextIntlProvider messages={pageProps.messages}>
@@ -48,10 +36,12 @@ function MyApp({ Component, pageProps }) {
       >
         <ApolloProvider client={client}>
           <Web3ReactProvider getLibrary={getLibrary}>
-            <DVContextElement>
-              <CustomHead />
-              <Component {...pageProps} />
-            </DVContextElement>
+            <SessionProvider session={session}>
+              <DVContextElement>
+                <CustomHead />
+                <Component {...pageProps} />
+              </DVContextElement>
+            </SessionProvider>
           </Web3ReactProvider>
         </ApolloProvider>
       </PersistGate>
@@ -61,8 +51,10 @@ function MyApp({ Component, pageProps }) {
       <PersistGate persistor={store}>
         <ApolloProvider client={client}>
           <Web3ReactProvider getLibrary={getLibrary}>
-            <CustomHead />
-            <Component {...pageProps} />
+            <SessionProvider session={session}>
+              <CustomHead />
+              <Component {...pageProps} />
+            </SessionProvider>
           </Web3ReactProvider>
         </ApolloProvider>
       </PersistGate>
@@ -71,4 +63,3 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default wrapper.withRedux(MyApp);
-//export default withRedux(reduxStore)(MyApp)
