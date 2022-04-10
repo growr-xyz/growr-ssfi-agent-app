@@ -57,7 +57,7 @@ function WalletConnector({ onNext }) {
 
   const onSubmit = () => {
     if (active && account) {
-      dispatch(setWalletId(account));
+      dispatch(setWalletId(account, chainId));
 
       onNext(); // .catch((err) => err);
       // createWallet().then(() =>
@@ -75,12 +75,13 @@ function WalletConnector({ onNext }) {
 
   const onCustonButtonClick = async () => {
     let result = await dataVault.get({ key: dataVaultKeys.onboarding });
-    console.log(result);
+    console.log('dataVault result', result);
     try {
       if (result.length) {
         const latestState = result.pop();
         // something metamask don't ask the user to decrypt and davaVault returns encrypted
         // when we try to JSON.parse the data it throws an error, so we try-catch it to move to the next step
+        console.log('dataVault latest state', latestState);
         dispatch(updateUserState(JSON.parse(latestState.content)));
         dispatch(goToStep(4));
       } else {
@@ -114,7 +115,7 @@ function WalletConnector({ onNext }) {
     >
       <div className={styles.wrapper}>
         <div className={styles.logo}>
-          <Image src="/logo.svg" height={100} width={250} alt="Logo" />
+          <Image src="/logo.svg" height={100} width={250} alt="Logo" priority />
         </div>
 
         <h1 className={styles.title}>{t("page1.title")}</h1>

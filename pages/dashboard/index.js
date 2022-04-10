@@ -13,6 +13,7 @@ import { Bitcoin, Budget, FinHealth } from '../../components/Quests';
 import { getBalance, getLoanDetails, fetchRepaymentHistory } from '../../utils/contractHelper';
 import styles from './Dashboard.module.css';
 import { setBalance, setLoan } from "../../redux/user";
+import { execute } from 'graphql';
 // import { isCommunityResourcable } from '@ethersproject/providers';
 const { ethers } = require("ethers");
 
@@ -38,8 +39,14 @@ function Dashboard() {
 
         const loanDetailsRaw = await getLoanDetails(library, walletId, { pondAddress });
         console.log('loanDetailsRaw', loanDetailsRaw);
-        const history = await fetchRepaymentHistory(library, walletId, { pondAddress });
-  			console.log('Repayment history', history);
+
+        let history;
+        try {
+          history = await fetchRepaymentHistory(library, walletId, { pondAddress });
+          console.log('Repayment history', history);
+        } catch {
+          e => console.error(e);
+        } 
 
         const loanDetails = {
           pondAddress: pondAddress,
@@ -60,7 +67,7 @@ function Dashboard() {
           nextInstallmentInterest: ethers.utils.formatUnits(loanDetailsRaw._receipt.nextInstallment.interest),
           // Timestamp in smart contract is in UNIX format, multiply by 1000
           nextInstallmentTimestamp: new Date(Number(loanDetailsRaw._receipt.nextInstallment.timestamp) * 1000),
-          repaymentHistory: history.map(transaction => ({
+          repaymentHistory: history?.map(transaction => ({
             timestamp: new Date(Number(transaction.timestamp) * 1000),
             amount: ethers.utils.formatUnits(transaction.amount),
           }))

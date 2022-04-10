@@ -16,7 +16,8 @@ const useDataVault = () => {
   useEffect(() => {
     if (!active) return;
     (async () => {
-      let did = createDidFormat(account, chainId);
+      let did = createDidFormat(account, chainId); //.toLowerCase();
+      console.log('Data Vault DID', did);
 
       const encryptionManager =
         await AsymmetricEncryptionManager.fromWeb3Provider(window.ethereum);
