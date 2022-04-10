@@ -120,19 +120,59 @@ export const getPondCriteriaNames = async (provider, account, { pondAddress }) =
 	return criteriaNames;
 }
 
-// TODO: Known issue – only filtering by credential name, but not by value. 
-// This may select ponds that the borrower is not eligible for.
+export const getPondCriteria = async (provider, account, { pondAddress }) => {
+	const Pond = new ethers.Contract(pondAddress, PondABI, provider);
+	
+	const { _criteria } = await Pond.getDetails();
+	// console.log(`Pond ${pondAddress}} criteria:`, _criteria);
+
+	const criteria = _criteria.map(criterion => ({ name: criterion._name, operator: criterion._operator, content: criterion._content, type: criterion._type }));
+
+	return criteria;
+}
+
+// TODO: Known issue – 1 criteria per attribute is only supported
 export const filterOnlyPondCredentials = async (provider, account, { pondAddress, credentials }) => {
 	const criteriaNames = await getPondCriteriaNames(provider, account, { pondAddress });
+	// console.log('filterOnlyPondCredentials', criteriaNames);
 
-	const userValidCredentials = Object.fromEntries(
-		Object.entries(credentials).filter(([name, value]) => criteriaNames.includes(name))
-	);
+	const pondCriteria = await getPondCriteria(provider, account, { pondAddress });
+	console.log('=============================================');
+	console.log(`Pond ${pondAddress}} criteria:`, pondCriteria);
+
+	console.log('credentials', credentials);
+	// const userValidCredentials = Object.fromEntries(
+	// 	Object.entries(credentials).filter(([name, value]) => criteriaNames.includes(name))
+	// );
+	let userValidCredentials = {};
+	let pondUniqueCriteriaNames = [];
+	pondCriteria.forEach(criteria => {
+		console.log('Evaluating', (criteria.type === 'string' ? '"' : '') + String(credentials[criteria.name]) + (criteria.type === 'string' ? '"' : '') + ' ' + 
+		criteria.operator.replace('=', '==') + ' ' + (criteria.type === 'string' ? '"' : '') + String(criteria.content) + (criteria.type === 'string' ? '"' : ''));
+		console.log('Result =', eval((criteria.type === 'string' ? '"' : '') + String(credentials[criteria.name]) + (criteria.type === 'string' ? '"' : '') + ' ' + 
+			criteria.operator.replace('=', '==') + ' ' + (criteria.type === 'string' ? '"' : '') + String(criteria.content) + (criteria.type === 'string' ? '"' : '')));
+		if (!pondUniqueCriteriaNames.find(element => element === criteria.name)) pondUniqueCriteriaNames.push(criteria.name);
+		if (eval((criteria.type === 'string' ? '"' : '') + String(credentials[criteria.name]) + (criteria.type === 'string' ? '"' : '') + ' ' + 
+			criteria.operator.replace('=', '==') + ' ' + (criteria.type === 'string' ? '"' : '') + String(criteria.content) + (criteria.type === 'string' ? '"' : ''))) {
+			console.log('Evaluation successful');
+			// Append to the valid credentials if not already present
+			if (userValidCredentials[criteria.name] === undefined) userValidCredentials = {...userValidCredentials, [criteria.name]: credentials[criteria.name]};
+		} else {
+			console.log('Evaluation failed');
+			// Delete from the valid credentials, in case another condition was previously evaluated successfully
+			delete userValidCredentials[criteria.name];
+		}
+	});
+	console.log('userValidCredentials', userValidCredentials);
+	console.log('pondUniqueCriteriaNames', pondUniqueCriteriaNames);
 
 	const names = Object.keys(userValidCredentials);
 	const contents = Object.values(userValidCredentials);
 
-	const containsAll = names.length === criteriaNames.length;
+	const containsAll = names.length === pondUniqueCriteriaNames.length;
+
+	console.log('Contains all?', containsAll);
+	console.log('=============================================');
 
 	return {
 		neededNames: criteriaNames,
