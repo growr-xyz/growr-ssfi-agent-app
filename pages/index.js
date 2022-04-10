@@ -29,6 +29,11 @@ export default function Home() {
 
   return (
     <Page>
+      {isLoading && <div className="overlay">
+        <div className="overlay__inner">
+          <div className="overlay__content"><span className="spinner"></span></div>
+        </div>
+      </div>}
       <ProgressHeader {...{ progress, hidden }} />
       {/* {isLoading && <p>Loading...</p>} */}
       {step === 0 && <WalletConnector {...{ onNext: nextStep, isLoading, setIsLoading }} />}

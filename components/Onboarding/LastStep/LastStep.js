@@ -28,6 +28,7 @@ const LastStep = () => {
             height={98}
             width={98}
             alt="Finished"
+            priority
           />
         </div>
 

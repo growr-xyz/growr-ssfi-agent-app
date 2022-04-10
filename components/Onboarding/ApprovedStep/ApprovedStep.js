@@ -14,7 +14,7 @@ import {
 
 const { ethers } = require("ethers");
 
-function ApprovedStep({ onNext }) {
+function ApprovedStep({ onNext, setIsLoading }) {
   const { activate, library } = useWeb3React();
 
   useEffect(() => {
@@ -58,6 +58,7 @@ function ApprovedStep({ onNext }) {
 
   const onSubmit = async () => {
     // try {
+    setIsLoading(true);
     console.log("creating presentation...", walletId, jwt);
     let vpJwt = await createPresentation(library, walletId, jwt);
     console.log("vpJwt", vpJwt);
@@ -82,9 +83,11 @@ function ApprovedStep({ onNext }) {
         })
         .catch((err) => {
           console.error(err);
+          setIsLoading(false);
         })
         .catch((err) => {
           console.error(err);
+          setIsLoading(false);
         });
     }
     // } catch (error) {
