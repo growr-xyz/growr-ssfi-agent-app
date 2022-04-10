@@ -211,7 +211,7 @@ const Score = ({ data, lang }) => {
           );
         })}
         <h4>{t("inviteToAction")}</h4>
-        <h4 className={styles.consent}>
+        {/* <h4 className={styles.consent}>
           {t("consent")
             ?.split(":")
             .map((text, index, array) => {
@@ -233,7 +233,7 @@ const Score = ({ data, lang }) => {
                 return <span key={"span" + index}>{text}</span>;
               }
             })}
-        </h4>
+        </h4> */}
         {/* <SocialMediaGroup
           {...{
             providers: ["discord", "facebook", "google"],

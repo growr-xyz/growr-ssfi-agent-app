@@ -83,6 +83,7 @@ function GoalStep({ onNext, isLoading, setIsLoading }) {
     try {
       // Get credentials, TODO: Handle composite VCs (just one item per VC currently supported by the line below)
       // const myCredentials = bankCredentials.map(credential => Object.keys(credential.vc.credentialSubject)[0]);
+      setIsLoading(true);
       const myCredentials = bankCredentials.reduce((prev, item) => ({...prev, [Object.keys(item.vc.credentialSubject)[0]]: Object.values(item.vc.credentialSubject)[0]}), {});
       console.log('myCredentials', myCredentials);
       // Find the best offer from the Pond factory contract
@@ -117,6 +118,7 @@ function GoalStep({ onNext, isLoading, setIsLoading }) {
       }
     } catch (error) {
       console.log(error.message);
+      setIsLoading(false);
     }
   };
 

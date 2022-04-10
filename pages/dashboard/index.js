@@ -40,13 +40,13 @@ function Dashboard() {
         const loanDetailsRaw = await getLoanDetails(library, walletId, { pondAddress });
         console.log('loanDetailsRaw', loanDetailsRaw);
 
-        let history;
-        try {
-          history = await fetchRepaymentHistory(library, walletId, { pondAddress });
-          console.log('Repayment history', history);
-        } catch {
-          e => console.error(e);
-        } 
+        let history = [];
+        // try {
+        //   history = await fetchRepaymentHistory(library, walletId, { pondAddress });
+        //   console.log('Repayment history', history);
+        // } catch {
+        //   e => console.error(e);
+        // } 
 
         const loanDetails = {
           pondAddress: pondAddress,
