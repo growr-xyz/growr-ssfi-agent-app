@@ -121,13 +121,13 @@ div#__next > div {
 
 /* @media (prefers-color-scheme: light) { */
 body {
-  --accent-color: #53AF57;
+  --accent-color: #18D0BA;
   --background-color: #ffffff;
   --font-color: #000000;
   --button-color: #646464;
   --button-border-color: #ebebeb;
   --button-background: #f5f5f5;
-  --lock-icon-base: #53AF57;
+  --lock-icon-base: #18D0BA;
   --lock-icon-lock: #455a64;
   --submit-button-color: #ebebeb;
   --submit-button-background: #d5d5d5;

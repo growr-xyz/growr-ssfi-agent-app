@@ -1,13 +1,13 @@
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useMutation, useLazyQuery, gql } from '@apollo/client';
-import { setBankUserId, setVerifiableCredential, setBankCredential } from '../../../redux/user';
+import { setBankUserId, setVerifiableCredentials, setBankCredentials } from '../../../redux/user';
 import Input from '../../Input/Input';
 import BaseContentLayout from '../../BaseContentLayout/BaseContentLayout';
 import styles from "./BankAccountConnector.module.css";
-import { parse } from '@ethersproject/transactions';
+// import { parse } from '@ethersproject/transactions';
 import { createDidFormat, parseJwt } from '../../../utils/vcUtils';
 import { useSession, signIn, signOut } from "next-auth/react";
 
@@ -20,32 +20,12 @@ const BankAccountConnector = ({ onNext }) => {
   const t = useTranslations("onboarding");
 
   const { data: session } = useSession();
-  console.log('session', session);
-  // const { accessToken } = session;
-
-  const [user, setUser] = useState({
-    username: '',
-    password: '',
-    connectionError: false
-  });
-
-  const updateInput = e => {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value
-    })
-  };
-
-  // const CONNECT_BANK = gql`
-  //   mutation connectBank {
-  //     connectBank(, username:"${user.username}", password:"${user.password}", wallet:"${walletId}"){success}
-  //   }
-  // `
-  // const [connectBankMutation, { data, loading, error }] = useMutation(CONNECT_BANK) //, {errorPolicy: 'all'})
+  const username = session?.user;
+  const accessToken = useMemo(() => session?.accessToken);
 
   const REQUEST_VERIFICATION = gql`
     mutation requestVC {
-      requestVerification(did:"${createDidFormat(walletId)}", type:citizenship, username:"${user.username}")
+      requestVerification(did:"${createDidFormat(walletId)}", type:bankVCs, username:"${username}")
     }  
   `;
 
@@ -62,61 +42,70 @@ const BankAccountConnector = ({ onNext }) => {
     }    
   });
 
-  const onContinue = () => {
-    // dispatch(setBankUserId(user.username));
-    // onNext();
-    requestVerificationMutation()
+  useEffect(() => {
+    if (accessToken) {
+      console.log('next-auth session => accessToken!!!', accessToken);
+      requestVerificationMutation()
       .then(res => {
+        // Get the salt from the VC issuer
         let salt = res.data.requestVerification;
         console.log('Returned salt', salt);
 
+        // Encrypt the Finastra access token with the salt from the VC issuer
         var CryptoJS = require('crypto-js');
-        const salted = CryptoJS.AES.encrypt(user.password, salt).toString();
+        const salted = CryptoJS.AES.encrypt(accessToken, salt).toString();
         console.log('Encrypted salt', salted);
         console.log('DID', createDidFormat(walletId, chainId));
 
-        // var jsonData = pm.response.json();
-        // pm.environment.set('salt', jsonData.data.requestVerification)
         // TODO: Array of VCs
         requestBankVC({ variables: {
           "parameters": salted,
           "did": createDidFormat(walletId, chainId),
           "message": "test", // To be signed with DID (wallet)
-          "type": "citizenship"
+          "type": "bankVCs"
         }})
           .then(resVC =>
             {
-              let vcJwt = resVC.data.bankVC;
-              console.log('vcJwt', vcJwt);
-              let vc = parseJwt(vcJwt);
-              console.log('vc', vc);
-              
-              dispatch(setBankUserId(user.username));
-              dispatch(setVerifiableCredential(vcJwt));
-              dispatch(setBankCredential(vc));
+              let vcJwtArray = resVC.data.bankVC;
+              console.log('vcJwtArray', vcJwtArray);
+              const vcArray = vcJwtArray.map(vcJwt => parseJwt(vcJwt));
+              console.log('vcArray', vcArray);
+              dispatch(setBankUserId(username));
+              dispatch(setVerifiableCredentials(vcJwtArray));
+              dispatch(setBankCredentials(vcArray));
               onNext();
             })
-          // .catch(err => {
-          //   console.log('ERROR2', err);
-          //   dispatch(setBankUserId('ERROR2'));
-          //   return err
-          // })
+          .catch(err => {
+            console.error('ERROR2', err);
+            dispatch(setBankUserId('ERROR2'));
+            return err
+          })
         })
-      // .catch(err => {
-      //   console.log('ERROR1', err);
+      .catch(err => {
+        console.error('ERROR1', err);
 
-      //   dispatch(setBankUserId('ERROR1'));
-      //   return err
-      // })
-    // connectBankMutation()
-    //   .then(() => onNext())
-    //   .catch(err => {
-    //     setUser({
-    //       ...user,
-    //       connectionError: true
-    //     })
-    //     return err
-    //   })
+        dispatch(setBankUserId('ERROR1'));
+        return err
+      })
+    }
+  }, [accessToken])
+  
+  const [connectionError, setConnectionError] = useState(false);
+  // const [user, setUser] = useState({
+  //   username: '',
+  //   password: '',
+  //   connectionError: false
+  // });
+
+  // const updateInput = e => {
+  //   setUser({
+  //     ...user,
+  //     [e.target.name]: e.target.value
+  //   })
+  // };
+
+  const onContinue = () => {
+    signIn('finastra');
   }
 
   const onRetry = () => {
@@ -129,17 +118,14 @@ const BankAccountConnector = ({ onNext }) => {
   return (
     <BaseContentLayout  {...{
       submitButtonProps: {
-        label: user.connectionError ? t('page2.try_again') : t('submitBtn'),
-        onClick: user.connectionError ? onRetry : onContinue,
-        disabled: !user.username || !user.password || !walletId,
-        style: user.connectionError ? styles.customButton : null
+        label: connectionError ? t('page2.try_again') : t('submitBtn'),
+        onClick: connectionError ? onRetry : onContinue,
+        disabled: !!accessToken,
+        style: connectionError ? styles.customButton : null
       }
     }} >
       <div className={styles.wrapper}>
         <h1>{t('page2.title')}</h1>
-
-        {/* <div>Access Token: {accessToken}</div> */}
-        <button onClick={() => signIn('finastra')}>Sign in with Finastra</button>
 
         {/* <Image
           src="/bank.svg"
@@ -157,11 +143,24 @@ const BankAccountConnector = ({ onNext }) => {
             className={styles.bar}
             height={160}
             width={80}
-            alt="Banco Hipotecario"
+            alt="Security"
           />
         </div>
 
-        { user.connectionError ? 
+        {session ?
+          <div className={styles.grid}>
+            {/* You are signed in! */}
+            <button onClick={() => signOut()}>Sign out</button>
+          </div>
+          : 
+          <div>
+            {/* You are not signed in! 
+            <button onClick={() => signIn('finastra')}>Sign in with Finastra</button> */}
+          </div>
+        }
+        {/* <div>Access Token: {accessToken}</div> */}
+
+        {/* { user.connectionError ? 
           <div className={styles.errorconnecting}>
             <div className={styles.errorcircle} />
             {t('page2.connection_error')}
@@ -183,24 +182,17 @@ const BankAccountConnector = ({ onNext }) => {
           </div>
         }
 
-        { !user.connectionError &&
+      { !user.connectionError && */}
           <div
             className={styles.skip}
             onClick={() => onNext()}
           >
             {t('page2.skip')}
           </div>
-        }
+        {/* } */}
     </div> 
   </BaseContentLayout>
   )
 }
 
-// const mapStateToProps = function(state) {
-//   return {
-//     wallet: state.user.walletId
-//   }
-// }
-
-// export default connect(mapStateToProps)(BankAccountConnector)
 export default BankAccountConnector;

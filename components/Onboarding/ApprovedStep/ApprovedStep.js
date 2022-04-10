@@ -9,13 +9,7 @@ import styles from "./ApprovedStep.module.css";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../../utils/connectors";
 import {
-  // findBestOffer,
-  // verifyCredentials,
-  // registerVerification,
   borrow,
-  // repay,
-  // fetchRepaymentHistory,
-  // getLoanDetails,
 } from "../../../utils/contractHelper.js";
 
 const { ethers } = require("ethers");
@@ -63,7 +57,6 @@ function ApprovedStep({ onNext }) {
   });
 
   const onSubmit = async () => {
-    // TODO: Apply to the verifier & get disbursement from the pond
     // try {
     console.log("creating presentation...", walletId, jwt);
     let vpJwt = await createPresentation(library, walletId, jwt);

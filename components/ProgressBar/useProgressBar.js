@@ -15,7 +15,7 @@ const useProgressBar = () => {
         strokeWidth: 2,
         easing: "easeInOut",
         duration: 500,
-        color: '#53AF57',
+        color: '#18D0BA',
         trailColor: "#EDEDED",
         trailWidth: 2,
         svgStyle: { width: "100%", height: "100%" },

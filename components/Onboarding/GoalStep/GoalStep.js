@@ -24,6 +24,7 @@ const { ethers } = require("ethers");
 function GoalStep({ onNext }) {
   const user = useSelector((state) => state.user);
   const offer = useSelector((state) => state.user.goals[0].offer);
+  const bankCredentials = useSelector((state) => state.user.bankCredentials);
   const dataVault = useDataVault();
 
   const { activate, library } = useWeb3React();
@@ -90,14 +91,17 @@ function GoalStep({ onNext }) {
 
   const onFormSubmit = async () => {
     try {
+      const myCredentials = bankCredentials.map(credential => credential.vc.credentialSubject);
+      console.log('myCredentials', myCredentials);
       const pondOffer = await findBestOffer(library, user.walletId, {
         amount: goal.amountNeeded,
         duration: goal.loanDuration,
-        credentials: { citizenship: "SV" }, // TODO: Map credentials from store (bankCredentials)
+        credentials: myCredentials,
       });
       console.log("Offer found?", pondOffer);
       if (pondOffer) {
         const formattedOffer = {
+          found: true,
           pondAddress: pondOffer.pondAddress,
           amount: ethers.utils.formatUnits(pondOffer.details.amount),
           annualInterestRate:
@@ -115,6 +119,8 @@ function GoalStep({ onNext }) {
           ),
         };
         dispatch(setOffer(goal.goalId, formattedOffer));
+      } else {
+        dispatch(setOffer(goal.goalId, { found: false }));
       }
     } catch (error) {
       console.log(error.message);
@@ -157,6 +163,8 @@ function GoalStep({ onNext }) {
             />
           ))}
         </div>
+
+        {!offer?.found ? <h4 style={{color: '#B14365'}}>No offer was found, please try again</h4> : <></>}
       </div>
     </BaseContentLayout>
   );

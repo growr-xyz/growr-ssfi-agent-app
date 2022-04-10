@@ -10,7 +10,7 @@ import styles from './SimpleConnector.module.css';
 
 function SimpleConnector() {
   const t = useTranslations("dashboard")
-  const { active, account, activate, library } = useWeb3React()
+  const { active, account, activate, chainId, library } = useWeb3React()
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function SimpleConnector() {
 
   const onProceed = async() => {
     if (active && account) {
-      const { chainId } = await library.getNetwork();
+      // const { chainId } = await library.getNetwork();
       dispatch(setWalletId(account, chainId));
     }
   }

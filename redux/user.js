@@ -1,10 +1,10 @@
 // Actions
 export const SET_USER_ID = "SET_USER_ID";
-export const SET_WALLET_ID = "SET_WALLET_ID";
+export const SET_WALLET_AND_CHAIN = "SET_WALLET_AND_CHAIN";
 export const SET_BALANCE = "SET_BALANCE";
 export const SET_BANK_USER_ID = "SET_BANK_USER_ID";
-export const SET_VERIFIABLE_CREDENTIAL = "SET_VERIFIABLE_CREDENTIAL";
-export const SET_BANK_CREDENTIAL = "SET_BANK_CREDENTIAL";
+export const SET_VERIFIABLE_CREDENTIALS = "SET_VERIFIABLE_CREDENTIALS";
+export const SET_BANK_CREDENTIALS = "SET_BANK_CREDENTIALS";
 export const SET_FINANCES = "SET_FINANCES";
 export const SET_GOAL = "SET_GOAL";
 export const SET_OFFER = "SET_OFFER";
@@ -17,11 +17,11 @@ export const UPDATE_USER = "UPDATE_USER";
 
 // Action Creators
 export const setUserId = (query) => ({ type: SET_USER_ID, query });
-export const setWalletId = (walletId, chainId) => ({ type: SET_WALLET_ID, query: { walletId, chainId } });
+export const setWalletId = (walletId, chainId) => ({ type: SET_WALLET_AND_CHAIN, query: { walletId, chainId } });
 export const setBalance = (balance) => ({ type: SET_BALANCE, query: balance });
 export const setBankUserId = (bankUserId) => ({ type: SET_BANK_USER_ID, query: bankUserId });
-export const setVerifiableCredential = (query) => ({ type: SET_VERIFIABLE_CREDENTIAL, query });
-export const setBankCredential = (query) => ({ type: SET_BANK_CREDENTIAL, query });
+export const setVerifiableCredentials = (verifiableCredentials) => ({ type: SET_VERIFIABLE_CREDENTIALS, query: verifiableCredentials });
+export const setBankCredentials = (bankCredentials) => ({ type: SET_BANK_CREDENTIALS, query: bankCredentials });
 export const setFinances = (query) => ({ type: SET_FINANCES, query });
 export const setGoal = (query) => ({ type: SET_GOAL, query });
 export const setOffer = (goalId, offer) => ({ type: SET_OFFER, query: { goalId, offer } });
@@ -36,7 +36,7 @@ export const updateUserState = (query) => ({ type: UPDATE_USER, query });
 export const initialState = {
   userId: "",
   walletId: "",
-  chainId: 0,
+  chainId: "",
   balance: 0,
   bankUserId: "",
   termsAccepted: false,
@@ -88,8 +88,8 @@ export const initialState = {
 
 const userReducer = (state = initialState, { type, query }) => {
   switch (type) {
-    case SET_WALLET_ID:
-      // console.log("SET_WALLET_ID", query);
+    case SET_WALLET_AND_CHAIN:
+      console.log("SET_WALLET_AND_CHAIN", query);
       return {
         ...state,
         walletId: query.walletId,
@@ -111,17 +111,17 @@ const userReducer = (state = initialState, { type, query }) => {
         ...state,
         bankUserId: query,
       };
-    case SET_VERIFIABLE_CREDENTIAL:
+    case SET_VERIFIABLE_CREDENTIALS:
       return {
         ...state,
         // TODO: Handle add/replace
-        verifiableCredentials: [query],
+        verifiableCredentials: query,
       };
-    case SET_BANK_CREDENTIAL:
+    case SET_BANK_CREDENTIALS:
       return {
         ...state,
         // TODO: Handle add/replace
-        bankCredentials: [query],
+        bankCredentials: query,
       };
     case SET_FINANCES:
       return {
