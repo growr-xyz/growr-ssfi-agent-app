@@ -16,7 +16,7 @@ export default NextAuth({
       },
       // token: "https://api.fusionfabric.cloud/login/v1/sandbox/oidc/token",
       idToken: true,
-      // state: false,
+      state: false,
       // checks: ["pkce", "state"],
       clientId: process.env.FINASTRA_CLIENT_ID,
       clientSecret: process.env.FINASTRA_CLIENT_SECRET,

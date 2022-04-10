@@ -78,14 +78,14 @@ const BankAccountConnector = ({ onNext, isLoading, setIsLoading }) => {
           .catch(err => {
             console.error('ERROR2', err);
             dispatch(setBankUserId('ERROR2'));
-            signOut();
+            // signOut();
             return err
           })
         })
       .catch(err => {
         console.error('ERROR1', err);
         dispatch(setBankUserId('ERROR1'));
-        signOut();
+        // signOut();
         return err
       })
     }
