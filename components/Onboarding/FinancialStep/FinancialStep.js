@@ -56,10 +56,10 @@ function FinancialStep({ onNext }) {
 					onClick: onFormSubmit,
 					disabled:
 						finances?.income < 1 ||
-						finances?.other < 1 ||
-						finances?.unofficial < 1 ||
+						finances?.other < 0 ||
+						finances?.unofficial < 0 ||
 						finances?.expenses < 1 ||
-						finances?.dependants < 1,
+						finances?.dependants < 0,
 				},
 			}}
 		>
