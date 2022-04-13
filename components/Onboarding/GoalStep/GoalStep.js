@@ -115,6 +115,7 @@ function GoalStep({ onNext, isLoading, setIsLoading }) {
         dispatch(setOffer(goal.goalId, formattedOffer));
       } else {
         dispatch(setOffer(goal.goalId, { found: false }));
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error.message);
