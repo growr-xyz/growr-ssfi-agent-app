@@ -98,6 +98,10 @@ label {
   font-size: 1.6rem;
 }
 
+p {
+  font-size: 1.6rem;
+}
+
 .score-bar-text {
   color: var(--font-color) !important;
   font-weight: 600;

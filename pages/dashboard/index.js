@@ -1,19 +1,23 @@
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import Image from "next/image";
+import { useEffect, useState } from "react";
 // import { useQuery, gql } from '@apollo/client';
-import { useSelector, useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
-import { useWeb3React } from '@web3-react/core';
-import { useTranslations } from 'next-intl';
-import SimpleConnector from '../../components/WalletConnector/SimpleConnector';
-import { Header, Page, Widget, Section, Goal } from '../../components';
-import HelmetIcon from '../../components/Icons/Helmet';
-import Link from 'next/link';
-import { Bitcoin, Budget, FinHealth } from '../../components/Quests';
-import { getBalance, getLoanDetails, fetchRepaymentHistory } from '../../utils/contractHelper';
-import styles from './Dashboard.module.css';
+import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { useWeb3React } from "@web3-react/core";
+import { useTranslations } from "next-intl";
+import SimpleConnector from "../../components/WalletConnector/SimpleConnector";
+import { Header, Page, Widget, Section, Goal } from "../../components";
+import HelmetIcon from "../../components/Icons/Helmet";
+import Link from "next/link";
+import { Bitcoin, Budget, FinHealth } from "../../components/Quests";
+import {
+  getBalance,
+  getLoanDetails,
+  fetchRepaymentHistory,
+} from "../../utils/contractHelper";
+import styles from "./Dashboard.module.css";
 import { setBalance, setLoan } from "../../redux/user";
-import { execute } from 'graphql';
+import { execute } from "graphql";
 // import { isCommunityResourcable } from '@ethersproject/providers';
 const { ethers } = require("ethers");
 
@@ -32,13 +36,15 @@ function Dashboard() {
     const fetchBalace = async () => {
       if (library !== undefined) {
         let balance_ = await getBalance(library, walletId);
-        console.log('balance ===>', balance_);
+        console.log("balance ===>", balance_);
         dispatch(setBalance(balance_));
 
         const pondAddress = goals[0].offer.pondAddress;
 
-        const loanDetailsRaw = await getLoanDetails(library, walletId, { pondAddress });
-        console.log('loanDetailsRaw', loanDetailsRaw);
+        const loanDetailsRaw = await getLoanDetails(library, walletId, {
+          pondAddress,
+        });
+        console.log("loanDetailsRaw", loanDetailsRaw);
 
         let history = [];
         // try {
@@ -46,7 +52,7 @@ function Dashboard() {
         //   console.log('Repayment history', history);
         // } catch {
         //   e => console.error(e);
-        // } 
+        // }
 
         const loanDetails = {
           pondAddress: pondAddress,
@@ -57,28 +63,46 @@ function Dashboard() {
           disbursmentFee: Number(loanDetailsRaw._params.disbursmentFee),
           duration: Number(loanDetailsRaw._params.duration),
           token: loanDetailsRaw._params.token,
-          totalAmount: ethers.utils.formatUnits(loanDetailsRaw._receipt.totalAmount),
-          totalInterest: ethers.utils.formatUnits(loanDetailsRaw._receipt.totalInterest),
-          repaidAmount: ethers.utils.formatUnits(loanDetailsRaw._receipt.repaidTotalAmount),
-          repaidInterest: ethers.utils.formatUnits(loanDetailsRaw._receipt.repaidInterestAmount),
-          installmentAmount: ethers.utils.formatUnits(loanDetailsRaw._receipt.installmentAmount),
-          nextInstallmentAmount: ethers.utils.formatUnits(loanDetailsRaw._receipt.nextInstallment.total),
-          nextInstallmentPrincipal: ethers.utils.formatUnits(loanDetailsRaw._receipt.nextInstallment.principal),
-          nextInstallmentInterest: ethers.utils.formatUnits(loanDetailsRaw._receipt.nextInstallment.interest),
+          totalAmount: ethers.utils.formatUnits(
+            loanDetailsRaw._receipt.totalAmount
+          ),
+          totalInterest: ethers.utils.formatUnits(
+            loanDetailsRaw._receipt.totalInterest
+          ),
+          repaidAmount: ethers.utils.formatUnits(
+            loanDetailsRaw._receipt.repaidTotalAmount
+          ),
+          repaidInterest: ethers.utils.formatUnits(
+            loanDetailsRaw._receipt.repaidInterestAmount
+          ),
+          installmentAmount: ethers.utils.formatUnits(
+            loanDetailsRaw._receipt.installmentAmount
+          ),
+          nextInstallmentAmount: ethers.utils.formatUnits(
+            loanDetailsRaw._receipt.nextInstallment.total
+          ),
+          nextInstallmentPrincipal: ethers.utils.formatUnits(
+            loanDetailsRaw._receipt.nextInstallment.principal
+          ),
+          nextInstallmentInterest: ethers.utils.formatUnits(
+            loanDetailsRaw._receipt.nextInstallment.interest
+          ),
           // Timestamp in smart contract is in UNIX format, multiply by 1000
-          nextInstallmentTimestamp: new Date(Number(loanDetailsRaw._receipt.nextInstallment.timestamp) * 1000),
-          repaymentHistory: history?.map(transaction => ({
+          nextInstallmentTimestamp: new Date(
+            Number(loanDetailsRaw._receipt.nextInstallment.timestamp) * 1000
+          ),
+          repaymentHistory: history?.map((transaction) => ({
             timestamp: new Date(Number(transaction.timestamp) * 1000),
             amount: ethers.utils.formatUnits(transaction.amount),
-          }))
-        }
-        console.log('loanDetails', loanDetails);
+          })),
+        };
+        console.log("loanDetails", loanDetails);
         dispatch(setLoan(goals[0].goalId, loanDetails));
       }
-    }
+    };
 
     fetchBalace();
-  }, [library, walletId])
+  }, [library, walletId]);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter();
@@ -90,7 +114,7 @@ function Dashboard() {
   };
 
   if (!walletId) {
-    router.push('/');
+    router.push("/");
   }
 
   // const printBalance = value => console.log('Wallet balance:', value);
@@ -117,7 +141,7 @@ function Dashboard() {
             alt="Helmet"
             onClick={goToDashboard}
           /> */}
-          <Link href="/dashboard">
+          <Link href="/profile">
             <a className={styles.link}>
               <HelmetIcon />
             </a>
@@ -158,13 +182,16 @@ function Dashboard() {
                   goal.isAchieved
                     ? t("goals.status.funded")
                     : t("goals.status.progress")
-                }, $${Math.round(goal.loan.totalAmount - goal.loan.totalInterest - (goal.loan.repaidAmount - goal.loan.repaidInterest))} ${t(
-                  "goals.status.due"
-                )}`,
+                }, $${Math.round(
+                  goal.loan.totalAmount -
+                    goal.loan.totalInterest -
+                    (goal.loan.repaidAmount - goal.loan.repaidInterest)
+                )} ${t("goals.status.due")}`,
                 progress:
                   balance /
                   // The total goal amount is amountNeeded (from the loan) + amountSaved
-                  (parseFloat(goal.amountNeeded) + parseFloat(goal.amountSaved)),
+                  (parseFloat(goal.amountNeeded) +
+                    parseFloat(goal.amountSaved)),
                 value: parseFloat(balance).toFixed(0),
               }}
             />

@@ -1,6 +1,7 @@
 import styles from "./Input.module.css";
 
 const Input = ({
+  id,
   error,
   name,
   value,
@@ -15,6 +16,7 @@ const Input = ({
         className: `${styles.input} ${error && styles.error} ${
           disabled && styles.disabled
         }`,
+        id,
         name,
         value,
         type,
