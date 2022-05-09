@@ -4,7 +4,43 @@
 
 ## Getting Started
 
-First, run the development server:
+1. Install the dependencies:
+
+```bash
+yarn install
+# or
+npm i
+```
+
+2. Run build
+
+```bash
+yarn build
+# or
+npm run build
+```
+
+3. Setup environment
+
+This version of the Growr SSFI Agent is developed as a winning pariticipant in the Finastra Hack to the Future 4 Hackathon and is integrated with Fusion cloud for gathering data to issue Verifiable Credentials. For that reason, we need Client ID and Secret for the Fusion Fabric Cloud.
+To register:
+
+- go to  [Developer's portal of Fusion Fabric Cloud](https://developer.fusionfabric.cloud/)
+- Register application and add [Account Information](https://developer.fusionfabric.cloud/api/b2c-account-v1-fc77362a-c2ee-4b23-b20e-5621249eb7a4/docs) and [Consumer Profile](https://developer.fusionfabric.cloud/api/b2c-profile-v1-93a6ef22-0aa6-43f1-9624-f33ee8022e49/docs) APIs to the application
+- create `.env` file with following data:
+```bash
+FINASTRA_CLIENT_ID=client_id # client id
+FINASTRA_CLIENT_SECRET=secret # client secret
+BACKEND_URL=http://localhost:4000 # backend of the issuer and risk assessment service is running: https://github.com/growr-xyz/vc-issuer/tree/release-httf4
+NEXT_PUBLIC_RPC_URL=https://public-node.testnet.rsk.co # RSK testnet node
+NEXT_PUBLIC_XUSD_CONTRACT=0xAb32F4D4b0A57C0B0F1e1600B8B89896d3a886eC # Growr testnet XUSD token contract
+NEXT_PUBLIC_POND_FACTORY_CONTRACT=0x3d56294133C83C1c887Cb6C0CC35AdF81593a0f1 # Growr testnet pond factory token contract
+NEXT_PUBLIC_VERIFICATION_REGISTRY_CONTRACT=0x29Fa7b0eBA146176d39531f564751DE3E9583080 # Growr testnet Verification Registry
+```
+- you need to have [VC Issuer and Risk Assessment](https://github.com/growr-xyz/vc-issuer/tree/release-httf4) service running as well.
+
+
+4. run the development server:
 
 ```bash
 npm run dev
@@ -12,25 +48,5 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
