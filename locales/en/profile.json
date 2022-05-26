@@ -6,5 +6,6 @@
     "other_label": "Other official household income (USD)",
     "unofficial_label": "Household unofficial income (USD)",
     "expenses_label": "Household expenses (USD)",
-    "refresh_button": "Refresh"
+    "refresh_button": "Refresh",
+    "update_button": "Update"
 }

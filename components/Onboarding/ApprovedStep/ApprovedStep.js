@@ -8,9 +8,7 @@ import { createDidFormat, createPresentation } from "../../../utils/vcUtils";
 import styles from "./ApprovedStep.module.css";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../../utils/connectors";
-import {
-  borrow,
-} from "../../../utils/contractHelper.js";
+import { borrow } from "../../../utils/contractHelper.js";
 
 const { ethers } = require("ethers");
 

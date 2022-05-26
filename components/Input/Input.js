@@ -7,9 +7,14 @@ const Input = ({
   value,
   type,
   placeholder,
-  onChange,
+  onChange = () => {},
   disabled,
+  prefix = "",
 }) => {
+  const onLocalChange = (e) => {
+    e.target.value = e.target.value.replace(prefix, "");
+    onChange(e);
+  };
   return (
     <input
       {...{
@@ -18,10 +23,10 @@ const Input = ({
         }`,
         id,
         name,
-        value,
+        value: `${prefix}${value}`,
         type,
         placeholder,
-        onChange,
+        onChange: onLocalChange,
         disabled,
       }}
     />

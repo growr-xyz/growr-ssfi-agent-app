@@ -64,6 +64,7 @@ function GoalStep({ onNext, isLoading, setIsLoading }) {
           });
           onNext();
         } catch (err) {
+          console.log("dataVault create err: ", err);
           onNext();
         }
       })();
@@ -84,8 +85,16 @@ function GoalStep({ onNext, isLoading, setIsLoading }) {
       // Get credentials, TODO: Handle composite VCs (just one item per VC currently supported by the line below)
       // const myCredentials = bankCredentials.map(credential => Object.keys(credential.vc.credentialSubject)[0]);
       setIsLoading(true);
-      const myCredentials = bankCredentials.reduce((prev, item) => ({...prev, [Object.keys(item.vc.credentialSubject)[0]]: Object.values(item.vc.credentialSubject)[0]}), {});
-      console.log('myCredentials', myCredentials);
+      const myCredentials = bankCredentials.reduce(
+        (prev, item) => ({
+          ...prev,
+          [Object.keys(item.vc.credentialSubject)[0]]: Object.values(
+            item.vc.credentialSubject
+          )[0],
+        }),
+        {}
+      );
+      console.log("myCredentials", myCredentials);
       // Find the best offer from the Pond factory contract
       const pondOffer = await findBestOffer(library, user.walletId, {
         amount: goal.amountNeeded,
@@ -153,7 +162,13 @@ function GoalStep({ onNext, isLoading, setIsLoading }) {
           ))}
         </div>
 
-        {(offer?.found === false) ? <h4 style={{color: '#B14365'}}>No offer was found, please try again</h4> : <></>}
+        {offer?.found === false ? (
+          <h4 style={{ color: "#B14365" }}>
+            No offer was found, please try again
+          </h4>
+        ) : (
+          <></>
+        )}
       </div>
     </BaseContentLayout>
   );

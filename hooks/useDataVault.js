@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { createDidFormat } from "@/utils/vcUtils";
-import DataVaultWebClient, {
-  // AuthManager,
-  AsymmetricEncryptionManager,
-} from "@rsksmart/ipfs-cpinner-client";
-import AuthManager from "../AuthManager";
+import DataVaultWebClient from "@rsksmart/ipfs-cpinner-client"; // AsymmetricEncryptionManager, // AsymmetricEncryptionManager, // AuthManager,
+import AuthManager from "../DataVault/AuthManager";
+
+import { AsymmetricEncryptionManager } from "../DataVault/DataVault";
 
 const serviceUrl = "https://data-vault.identity.rifos.org";
 
@@ -17,7 +16,7 @@ const useDataVault = () => {
     if (!active) return;
     (async () => {
       let did = createDidFormat(account, chainId); //.toLowerCase();
-      console.log('Data Vault DID', did);
+      console.log("Data Vault DID", did);
 
       const encryptionManager =
         await AsymmetricEncryptionManager.fromWeb3Provider(window.ethereum);

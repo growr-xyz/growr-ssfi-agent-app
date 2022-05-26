@@ -17,15 +17,33 @@ export const UPDATE_USER = "UPDATE_USER";
 
 // Action Creators
 export const setUserId = (query) => ({ type: SET_USER_ID, query });
-export const setWalletId = (walletId, chainId) => ({ type: SET_WALLET_AND_CHAIN, query: { walletId, chainId } });
+export const setWalletId = (walletId, chainId) => ({
+  type: SET_WALLET_AND_CHAIN,
+  query: { walletId, chainId },
+});
 export const setBalance = (balance) => ({ type: SET_BALANCE, query: balance });
-export const setBankUserId = (bankUserId) => ({ type: SET_BANK_USER_ID, query: bankUserId });
-export const setVerifiableCredentials = (verifiableCredentials) => ({ type: SET_VERIFIABLE_CREDENTIALS, query: verifiableCredentials });
-export const setBankCredentials = (bankCredentials) => ({ type: SET_BANK_CREDENTIALS, query: bankCredentials });
+export const setBankUserId = (bankUserId) => ({
+  type: SET_BANK_USER_ID,
+  query: bankUserId,
+});
+export const setVerifiableCredentials = (verifiableCredentials) => ({
+  type: SET_VERIFIABLE_CREDENTIALS,
+  query: verifiableCredentials,
+});
+export const setBankCredentials = (bankCredentials) => ({
+  type: SET_BANK_CREDENTIALS,
+  query: bankCredentials,
+});
 export const setFinances = (query) => ({ type: SET_FINANCES, query });
 export const setGoal = (query) => ({ type: SET_GOAL, query });
-export const setOffer = (goalId, offer) => ({ type: SET_OFFER, query: { goalId, offer } });
-export const setLoan = (goalId, loan) => ({ type: SET_LOAN, query: { goalId, loan } });
+export const setOffer = (goalId, offer) => ({
+  type: SET_OFFER,
+  query: { goalId, offer },
+});
+export const setLoan = (goalId, loan) => ({
+  type: SET_LOAN,
+  query: { goalId, loan },
+});
 export const acceptTerms = () => ({ type: ACCEPT_TERMS });
 export const rejectTerms = () => ({ type: REJECT_TERMS });
 export const acceptGrowrTerms = () => ({ type: ACCEPT_GROWR_TERMS });
@@ -34,33 +52,33 @@ export const updateUserState = (query) => ({ type: UPDATE_USER, query });
 
 // Reducer
 export const initialState = {
-  userId: '',
-  walletId: '',
-  chainId: '',
+  userId: "",
+  walletId: "",
+  chainId: "",
   balance: 0,
-  bankUserId: '',
+  bankUserId: "",
   termsAccepted: false,
   growrTermsAccepted: false,
   verifiableCredentials: [],
   bankCredentials: [],
   finances: {
-    income: '',
-    other: '',
-    unofficial: '',
-    expenses: '',
-    dependants: '',
+    income: "",
+    other: "",
+    unofficial: "",
+    expenses: "",
+    dependants: "",
   },
   goals: [
     {
-      goalId: '',
-      goalType: '',
-      loanDuration: '',
-      amountSaved: '',
-      amountNeeded: '',
+      goalId: "",
+      goalType: "",
+      loanDuration: "",
+      amountSaved: "",
+      amountNeeded: "",
       isAchieved: false,
       offer: {
         found: undefined,
-        pondAddress: '',
+        pondAddress: "",
         amount: 0,
         annualInterestRate: 0,
         approved: false,
@@ -72,13 +90,13 @@ export const initialState = {
         totalInterest: 0,
       },
       loan: {
-        pondAddress: '',
+        pondAddress: "",
         amount: 0,
         annualPercentageRate: 0,
         duration: 0,
         instalment: 0,
-        nextInstalment: '2022-01-01',
-        lastInstalment: '2022-01-01',
+        nextInstalment: "2022-01-01",
+        lastInstalment: "2022-01-01",
         totalToRepay: 0,
         totalInterest: 0,
         outstanding: 0,
@@ -97,7 +115,7 @@ const userReducer = (state = initialState, { type, query }) => {
         chainId: query.chainId,
       };
     case SET_BALANCE:
-      console.log('SET_BALANCE', query);
+      console.log("SET_BALANCE", query);
       return {
         ...state,
         balance: query,
@@ -127,7 +145,10 @@ const userReducer = (state = initialState, { type, query }) => {
     case SET_FINANCES:
       return {
         ...state,
-        finances: query,
+        finances: {
+          ...state.finances,
+          ...query,
+        },
       };
     case SET_GOAL:
       return {
@@ -165,7 +186,7 @@ const userReducer = (state = initialState, { type, query }) => {
           };
           return newGoal;
         }),
-      };    
+      };
     case ACCEPT_TERMS:
       return {
         ...state,
