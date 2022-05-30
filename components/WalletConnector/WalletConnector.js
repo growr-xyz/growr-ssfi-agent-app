@@ -237,17 +237,19 @@ function WalletConnector({ onNext }) {
 
   const onCustonButtonClick = async () => {
     try {
+      let result = await dataVault.get({ key: dataVaultKeys.onboarding });
       if (result.length) {
-        let result = await dataVault.get({ key: dataVaultKeys.onboarding });
         const latestState = result.pop();
         // something metamask don't ask the user to decrypt and davaVault returns encrypted
         // when we try to JSON.parse the data it throws an error, so we try-catch it to move to the next step
         dispatch(updateUserState(JSON.parse(latestState.content)));
-        dispatch(goToStep(4));
+        // dispatch(goToStep(4));
+        router.replace("/dashboard");
       } else {
-        throw new Error();
+        // throw new Error();
       }
     } catch (err) {
+      console.log("err:", err);
       onSubmit();
     }
   };
