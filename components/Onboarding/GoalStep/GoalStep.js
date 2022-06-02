@@ -85,6 +85,10 @@ function GoalStep({ onNext, isLoading, setIsLoading }) {
       // Get credentials, TODO: Handle composite VCs (just one item per VC currently supported by the line below)
       // const myCredentials = bankCredentials.map(credential => Object.keys(credential.vc.credentialSubject)[0]);
       setIsLoading(true);
+      // return {
+      //   ...acc,
+      //   ...item.vc.credentialSubject
+      // }
       const myCredentials = bankCredentials.reduce(
         (prev, item) => ({
           ...prev,

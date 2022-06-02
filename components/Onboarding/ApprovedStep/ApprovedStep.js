@@ -4,13 +4,35 @@ import { useTranslations } from "next-intl";
 import { useMutation, gql } from "@apollo/client";
 import { acceptGrowrTerms, rejectGrowrTerms } from "../../../redux/user";
 import BaseContentLayout from "../../BaseContentLayout/BaseContentLayout";
-import { createDidFormat, createPresentation } from "../../../utils/vcUtils";
+import {
+  createDidFormat,
+  createPresentation,
+  parseJwt,
+} from "../../../utils/vcUtils";
 import styles from "./ApprovedStep.module.css";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../../utils/connectors";
-import { borrow } from "../../../utils/contractHelper.js";
+import { borrow, getPondCriteria } from "../../../utils/contractHelper.js";
 
 const { ethers } = require("ethers");
+
+const findCriterias = (requiredCriterias, allVcs) => {
+  const foundVcs = [];
+  requiredCriterias.forEach(({ name }) => {
+    let foundVc = allVcs.find((vc) => {
+      let parsedVc = parseJwt(vc);
+      return !!parsedVc.vc.credentialSubject[name];
+    });
+
+    if (!foundVc) {
+      console.error(
+        `VC with name: ${name} that is required is not available for this user`
+      );
+    }
+    foundVcs.push(foundVc);
+  });
+  return foundVcs;
+};
 
 function ApprovedStep({ onNext, setIsLoading }) {
   const { activate, library } = useWeb3React();
@@ -27,7 +49,9 @@ function ApprovedStep({ onNext, setIsLoading }) {
   const chainId = useSelector((state) => state.user.chainId);
   const offer = useSelector((state) => state.user.goals[0].offer);
   // const loan = useSelector((state) => state.user.goals[0].loan);
-  const jwt = useSelector((state) => state.user.verifiableCredentials[0]);
+  const verifiableCredentials = useSelector(
+    (state) => state.user.verifiableCredentials
+  );
   const growrTermsAccepted = useSelector(
     (state) => state.user.growrTermsAccepted
   );
@@ -57,14 +81,24 @@ function ApprovedStep({ onNext, setIsLoading }) {
   const onSubmit = async () => {
     // try {
     setIsLoading(true);
-    console.log("creating presentation...", walletId, jwt);
-    let vpJwt = await createPresentation(library, walletId, jwt);
-    console.log("vpJwt", vpJwt);
 
-    if (vpJwt) {
+    const pondCriteria = await getPondCriteria(library, walletId, {
+      pondAddress: offer.pondAddress,
+    });
+
+    const allRequiredVcs = findCriterias(pondCriteria, verifiableCredentials);
+    console.log("allRequiredVcs", allRequiredVcs);
+
+    const allVpJwts = await Promise.all(
+      allRequiredVcs.map((verifiableCredential) => {
+        return createPresentation(library, walletId, verifiableCredential);
+      })
+    );
+
+    if (allVpJwts.length) {
       verifyVCs({
         variables: {
-          vps: [vpJwt],
+          vps: allVpJwts,
           pondAddress: offer.pondAddress,
         },
       })
