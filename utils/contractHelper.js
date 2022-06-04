@@ -7,6 +7,7 @@ const ERC20ABI = require("../abi/ERC20.json");
 const PondABI = require("../abi/Pond.json");
 const PondFactoryABI = require("../abi/PondFactory.json");
 const VerificationRegistryABI = require("../abi/VerificationRegistry.json");
+import increaseGasLimit from "./increaseGasLimit";
 
 // const { publicRuntimeConfig } = getConfig();
 // console.log('config', publicRuntimeConfig);
@@ -335,9 +336,28 @@ export const repay = async (provider, borrower, { pondAddress, amount }) => {
     }
   );
 
-  await xUSD.connect(signer).approve(pondAddress, repayAmount);
-  const tx = await Pond.connect(signer).repay(repayAmount, loanAddress);
-  return await tx.wait();
+  const connectedXUSD = xUSD.connect(signer);
+
+  let increasedApproveGasLimit = await increaseGasLimit(
+    () => connectedXUSD.estimateGas.approve(pondAddress, repayAmount),
+    {
+      multiplier: 1.2,
+    }
+  );
+  await xUSD.connect(signer).approve(pondAddress, repayAmount, {
+    gasLimit: increasedApproveGasLimit,
+  });
+
+  const connectedPond = Pond.connect(signer);
+
+  const increasedReplayGasLimit = await increaseGasLimit(
+    () => connectedPond.estimateGas.repay(repayAmount, loanAddress),
+    { multiplier: 1.2 }
+  );
+  const tx = await connectedPond.repay(repayAmount, loanAddress, {
+    gasLimit: increasedReplayGasLimit,
+  });
+  // return await tx.wait();
 };
 
 export const fetchRepaymentHistory = async (

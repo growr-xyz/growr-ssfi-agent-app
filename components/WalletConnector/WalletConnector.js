@@ -243,7 +243,7 @@ function WalletConnector({ onNext }) {
         // something metamask don't ask the user to decrypt and davaVault returns encrypted
         // when we try to JSON.parse the data it throws an error, so we try-catch it to move to the next step
         dispatch(updateUserState(JSON.parse(latestState.content)));
-        // dispatch(goToStep(4));
+        dispatch(goToStep(5));
         router.replace("/dashboard");
       } else {
         // throw new Error();
