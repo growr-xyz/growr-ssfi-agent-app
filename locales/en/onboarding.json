@@ -16,8 +16,8 @@
     },
     "page3": {
         "title": "Then, some financial details.",
-        "official_income": "Your official income (USD)",
-        "other_income": "Other official household income (USD)",
+        "official_income": "Your regular official income (USD)",
+        "other_income": "Other household official income (USD)",
         "unofficial_income": "Household unofficial income (USD)",
         "expenses": "Household expenses (USD)",
         "dependants": "Dependants"
@@ -52,13 +52,13 @@
         "button_label": "Go to my dashboard"
     },
     "page7": {
-        "title":"Now, some personal details.",
-        "full_name":"Full name",
-        "birth_date":"Date of birth",
-        "education":"Education",
-        "family_status":"Family status",
-        "location":"Location",
-        "confirmCheck":"I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy",
+        "title": "Now, some personal details.",
+        "full_name": "Full name",
+        "birth_date": "Date of birth",
+        "education": "Education",
+        "family_status": "Family status",
+        "location": "Location",
+        "confirmCheck": "I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy",
         "switchLang": "Cambiar a español"
     }
 }
