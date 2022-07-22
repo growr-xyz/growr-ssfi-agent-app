@@ -9,7 +9,7 @@
 }
 
 .backButton {
-  display: none;
+  display: block;
   margin-right: 10px;
   cursor: pointer;
 }

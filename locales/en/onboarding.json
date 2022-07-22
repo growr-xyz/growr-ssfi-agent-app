@@ -6,8 +6,8 @@
     },
     "page2": {
         "title": "Please connect your bank account.",
-        "access_note": "Please enter your access credentials for the e-banking, in order to connect your bank account to Growr.",
-        "data_note": "We use your transactional data to perform risk scoring on the fly and we do not store any of this data. So your data remains yours.",
+        "access_note": "You will be redirected to your bank to sign in. We will then retrieve your bank account data into your self-sovereign ID.",
+        "data_note": "We use your transactional data to perform privacy-preserving risk assessment. Your data remains yours, securely stored only within your self-sovereign ID.",
         "username": "User name",
         "password": "Password",
         "skip": "Skip for now",
@@ -16,8 +16,8 @@
     },
     "page3": {
         "title": "Then, some financial details.",
-        "official_income": "Your official income (USD)",
-        "other_income": "Other official household income (USD)",
+        "official_income": "Your regular official income (USD)",
+        "other_income": "Other household official income (USD)",
         "unofficial_income": "Household unofficial income (USD)",
         "expenses": "Household expenses (USD)",
         "dependants": "Dependants"
@@ -46,19 +46,19 @@
         "button_label": "Apply"
     },
     "page6": {
-        "title": "You can receive up to $101.73 back on your loan! 🤑",
+        "title": "You can receive cash back on your loan! 🤑",
         "subtitle": "Get on just 1 learning quest per week throughout the duration of the loan, and you can earn up 50% of the total interest paid.",
         "start_learning": "Start learning today and earn!",
         "button_label": "Go to my dashboard"
     },
     "page7": {
-        "title":"Now, some personal details.",
-        "full_name":"Full name",
-        "birth_date":"Date of birth",
-        "education":"Education",
-        "family_status":"Family status",
-        "location":"Location",
-        "confirmCheck":"I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy",
+        "title": "Now, some personal details.",
+        "full_name": "Full name",
+        "birth_date": "Date of birth",
+        "education": "Education",
+        "family_status": "Family status",
+        "location": "Location",
+        "confirmCheck": "I agree that my data will be processed according to the Growr Terms of Use and Privacy Policy",
         "switchLang": "Cambiar a español"
     }
 }

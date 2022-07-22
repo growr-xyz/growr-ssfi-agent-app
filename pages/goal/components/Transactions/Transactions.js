@@ -7,7 +7,7 @@ const Transactions = (loan) => {
   return (
     <div className={styles.container}>
       <h3>Transactions</h3>
-      {(!loan?.repaymentHistory || loan.repaymentHistory.length === 0) ? <p>No repayment transactions.</p> :
+      {(!loan?.repaymentHistory || loan.repaymentHistory.length === 0) ? <h4>No repayment transactions.</h4> :
       loan.repaymentHistory?.map((transaction, index) => (
         <div key={index} className={styles.transactions}>
           <h4>{moment(transaction.timestamp).format('DD/MM/YYYY')}</h4>
