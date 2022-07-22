@@ -28,7 +28,7 @@ export const createDidMethod = (chainId) => {
     case 42: return 'ethr:kovan'
     case 5777: return 'ethr:development'
     case 31337: return 'ethr:rsk:testnet'
-    default: return 'ethr:rsk'
+    default: return 'ethr:rsk:testnet'
   }
 };
 

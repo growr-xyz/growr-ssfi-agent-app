@@ -1,0 +1,11 @@
+{
+    "label": "¡Hola!",
+    "description": "Tus datos personales se almacenan encriptados en IPFS, un sistema de archivos distribuido. Por lo tanto, ni esta aplicación ni ninguna otra parte puede acceder a él de ninguna manera, excepto con su consentimiento explícito para descifrarlo y compartirlo. A continuación se muestra una copia local de los datos en su dispositivo. Haga clic en el botón Actualizar para recuperar y modificar los datos en IPFS.",
+    "financial_details": "Detalles financieros",
+    "income_label": "Tus ingresos oficiales regulares (USD)",
+    "other_label": "Otros ingresos oficiales familiares (USD)",
+    "unofficial_label": "Ingresos no oficiales familiares (USD)",
+    "expenses_label": "Gastos del hogar (USD)",
+    "refresh_button": "Recargar",
+    "update_button": "Actualizar"
+}
